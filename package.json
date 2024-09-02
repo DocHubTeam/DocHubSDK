@@ -1,0 +1,36 @@
+{
+  "name": "DocHubSDK",
+  "version": "0.1.0",
+  "description": "The DocHub System Development Kit.",
+  "private": false,
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "."
+  ],
+  "homepage": "https://dochub.info",
+  "bin": {
+    "archpkg": "cli/main.js"
+  },
+  "repository": "git+https://github.com/rpiontik/archpkg.git",
+  "scripts": {
+    "start": "PUBLIC_URL=/ ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "DocHub",
+    "AaaC",
+    "Metamodels",
+    "Architecture"
+  ],
+  "author": "R.Piontik",
+  "license": "GPLV3",
+  "dependencies": {
+    "archpkg": "^1.0.17",
+    "request": "^2.88.2",
+    "semver": "^7.5.4",
+    "tar": "^6.2.0",
+    "yaml": "^2.3.4",
+    "zlib": "^1.0.5"
+  }
+}
