@@ -1,1 +1,0 @@
-console.info('Hello! I am DocHub System Development Kit!');

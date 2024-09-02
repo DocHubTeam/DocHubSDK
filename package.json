@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "The DocHub System Development Kit.",
   "private": false,
-  "main": "index.js",
-  "module": "index.js",
+  "main": "index.ts",
+  "module": "index.ts",
   "files": [
     "."
   ],
@@ -26,5 +26,6 @@
   "author": "R.Piontik",
   "license": "GPLV3",
   "dependencies": {
+    "axios": "0.21.4"
   }
 }
