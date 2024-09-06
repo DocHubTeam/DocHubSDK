@@ -2,7 +2,9 @@ import { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { IDocHubContext } from './context';
 
 // Прослойка интерфейсов Axios для последующей кастомизации и поддержания совместимости
-export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {};
+export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {
+    decoder?: Function;  // Декодировщик ответа
+};
 export interface IDocHubProtocolResponse extends AxiosResponse {};
 
 // Методы доступные над ресурсом
@@ -19,7 +21,7 @@ export enum IDocHubProtocolMethods {
 // Интерфейс транспортного протокола
 export interface IDocHubProtocol {
     // Признак активности протокола
-    isActive(): Boolean;
+    isActive(): boolean;
     // Метод инициализации протокола
     bootstrap(context: IDocHubContext);
     // Разрешение ссылок
