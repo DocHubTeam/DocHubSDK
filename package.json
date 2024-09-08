@@ -1,13 +1,10 @@
 {
   "name": "dochub-sdk",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "The DocHub System Development Kit.",
   "private": false,
   "main": "index.ts",
   "module": "index.ts",
-  "files": [
-    "."
-  ],
   "homepage": "https://dochub.info",
   "bin": {
     "dochub-cli": "cli/main.js"
