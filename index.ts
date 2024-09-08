@@ -8,6 +8,6 @@ export * from './interfaces/protocol';
 export * from './interfaces/uicomponent';
 
 export const DocHub: IDocHubCore = window['DocHub'];
-export const Vue2: IDocHubCore = window['Vue'];
+export const Vue2: any = window['Vue'];
 
 if (!DocHub) throw new Error('!!!!!!!! No found DocHub core! !!!!!!!!!');
