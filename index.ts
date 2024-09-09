@@ -6,6 +6,7 @@ export * from './interfaces/core';
 export * from './interfaces/document';
 export * from './interfaces/protocol';
 export * from './interfaces/uicomponent';
+export * from './interfaces/editor';
 
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2: any = window['Vue'];
