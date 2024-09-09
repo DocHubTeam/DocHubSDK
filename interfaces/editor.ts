@@ -8,7 +8,6 @@ export enum EditorEvents {
 }
 
 export interface IDocHubEditor {
-    open(): Promise<boolean>;     // Требует открыть редактор
     close(): Promise<boolean>;    // Требует закрыть редактор
     save(): Promise<boolean>;     // Требует произвести сохранение 
     create(): Promise<boolean>;   // Требует создать новый документ
@@ -16,7 +15,7 @@ export interface IDocHubEditor {
 }
 
 export interface IDocHubEditAPI {
-    mountEditor(editor: IDocHubEditor);
+    mountEditor(editor: IDocHubEditor, propsData: any);
     unmountEditor(editor: IDocHubEditor);
 }
 
