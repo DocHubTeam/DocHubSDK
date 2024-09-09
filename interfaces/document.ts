@@ -1,4 +1,4 @@
-export enum Events {
+export enum DocumentEvents {
     onEditOpen = 'on-edit-open',
     onEditClose = 'on-edit-close',
     onEditSave = 'on-edit-save',
