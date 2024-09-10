@@ -1,7 +1,10 @@
+export enum EditorEvents {
+    close = '$close',               // Требует закрыть редактор
+    save = '$save',                 // Требует произвести сохранение 
+    create = '$create',             // Требует создать новый документ
+    delete = '$delete'              // Требует удалить документ
+};
+
 export interface IDocHubEditor {
     title: string;                // Заголовок для закладки в редакторе  
-    close(): Promise<boolean>;    // Требует закрыть редактор
-    save(): Promise<boolean>;     // Требует произвести сохранение 
-    create(): Promise<boolean>;   // Требует создать новый документ
-    delete(): Promise<boolean>;   // Требует удалить документ
 }
