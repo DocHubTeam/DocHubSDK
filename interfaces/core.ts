@@ -1,8 +1,8 @@
 import { IDocHubContentProvider } from './content';
 import { IDocHubProtocol } from './protocol';
 import { IDocHubDocument } from './document';
+import { IDocHubEditor } from './editor';
 import { IDocHubUIComponent } from './uicomponent';
-
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -65,6 +65,13 @@ export interface IDocHubDocuments {
     fetch(): string[];
 }
 
+export interface IDocHubEditors {
+    // Регистрирует редактор на тип документа
+    register(type: string, document: IDocHubEditor);
+    // Возвращает массив зарегистрированных редакторов 
+    fetch(): string[];
+}
+
 export interface IDocHubUI {
     // Регистрирует UI компонент в слоте
     register(slot: string, component: IDocHubUIComponent);
@@ -88,11 +95,12 @@ export interface IDocHubDataLake {
 // Главный интерфейс
 export interface IDocHubCore {
     problems: IDocHubProblems;                  // Проблемы
-    settings: IDocHubSettings;                  // Пользовтельские настройки
+    settings: IDocHubSettings;                  // Пользовательские настройки
     router: IDocHubRouter;                      // Работа с UI роутами
     contentProviders: IDocHubContentProviders;  // Провайдеры контента
     protocols: IDocHubProtocols;                // Протоколы доступа к данным
     documents: IDocHubDocuments;                // Документы
+    editors: IDocHubEditors;                    // Редакторы
     ui: IDocHubUI;                              // UI порт
     dataLake: IDocHubDataLake;                  // Интерфейс к архкоду
 }
