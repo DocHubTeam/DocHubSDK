@@ -38,6 +38,8 @@ export interface IDocHubRouter {
     registerRoute(route: object);
     // Регистрирует middleware в формате VUE2
     registerMiddleware(middleware: object);
+    // Указывает на какой роут перейти в DocHub
+    navigate(url: string);
 }
 
 export interface IDocHubContentProviders {
@@ -67,7 +69,7 @@ export interface IDocHubDocuments {
 
 export interface IDocHubEditors {
     // Регистрирует редактор на тип документа
-    register(type: string, document: IDocHubEditor);
+    register(type: string, editor: IDocHubEditor);
     // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
 }
