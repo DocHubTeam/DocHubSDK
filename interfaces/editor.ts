@@ -5,6 +5,12 @@ export enum EditorEvents {
     delete = '$delete'              // Требует удалить документ
 };
 
+// Хранит состояние редактора
+export interface IEditorState {
+    title: string
+}
+
+// Редактор должен реализовывать данный интерфейс
 export interface IDocHubEditor {
-    title: string;                // Заголовок для закладки в редакторе  
+ 
 }

@@ -68,8 +68,8 @@ export interface IDocHubDocuments {
 }
 
 export interface IDocHubEditors {
-    // Регистрирует редактор на тип документа
-    register(type: string, editor: IDocHubEditor);
+    // Регистрирует редактор для типа документа
+    register(type: string, editor: IDocHubEditor, title?: string);
     // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
 }
