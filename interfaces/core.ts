@@ -67,11 +67,17 @@ export interface IDocHubDocuments {
     fetch(): string[];
 }
 
+export interface IEditorParams {
+    [key: string]: string;
+}
+
 export interface IDocHubEditors {
     // Регистрирует редактор для типа документа
     register(type: string, editor: IDocHubEditor, title?: string);
     // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
+    // Открывает редактор
+    openEditor(type: string, params?: IEditorParams, startCommand?: EditorEvents);
 }
 
 export interface IDocHubUI {
