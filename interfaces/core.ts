@@ -1,8 +1,9 @@
 import { IDocHubContentProvider } from './content';
 import { IDocHubProtocol } from './protocol';
 import { IDocHubDocument } from './document';
-import { IDocHubEditor } from './editor';
+import { IDocHubEditor, EditorEvents } from './editor';
 import { IDocHubUIComponent } from './uicomponent';
+import { IDocHubDataLake } from './datalake';
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -76,8 +77,6 @@ export interface IDocHubEditors {
     register(type: string, editor: IDocHubEditor, title?: string);
     // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
-    // Открывает редактор
-    openEditor(type: string, params?: IEditorParams, startCommand?: EditorEvents);
 }
 
 export interface IDocHubUI {
@@ -87,17 +86,14 @@ export interface IDocHubUI {
     get(slot: string): IDocHubUIComponent[];
 }
 
-export interface IDocHubDataLake {
-    // Монтирует источник к загружаемым манифестам озера
-    //  uri: string     - URI монтируемого ресурса
-    mountManifest(uri: string);
-    // Отмонтирует источник к загружаемым манифестам озера
-    //  uri: string     - URI отключаемого ресурса
-    unmountManifest(uri: string);
-    // Требует перезагрузки ресурсов задействованных в озере данных
-    //  uriPattern: array | RegEx | undefined  - Шаблон проверки соответствия URI ресурса
-    //                                           Если undefined - перезагружает все
-    reload(uriPattern?: string | string[] | RegExp);
+// Интерфейс внутренней шины событий 
+export interface IDocHubEventBus {
+    // Отправляет событие в шину
+    $emit(event: string, data: any);
+    // Монтирует слушателя в шину
+    $on(event: string, func: Function);
+    // Отмонтирует слушателя от шины
+    $off(event: string, func: Function);
 }
 
 // Главный интерфейс
@@ -111,4 +107,5 @@ export interface IDocHubCore {
     editors: IDocHubEditors;                    // Редакторы
     ui: IDocHubUI;                              // UI порт
     dataLake: IDocHubDataLake;                  // Интерфейс к архкоду
+    eventBus: IDocHubEventBus;                  // Внутренняя шина событий
 }
