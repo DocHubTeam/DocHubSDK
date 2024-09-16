@@ -29,6 +29,6 @@ export interface IDocHubDataLake {
     reload(uriPattern?: string | string[] | RegExp);
     // Внесение изменений в DataLake
     //  changes     - Массив изменений в DataLake 
-    pushChanges(changes: IDataLakeChange);
+    pushChanges(changes: IDataLakeChange[]);
 }
 

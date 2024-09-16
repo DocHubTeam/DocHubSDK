@@ -4,6 +4,7 @@ import { IDocHubDocument } from './document';
 import { IDocHubEditor, EditorEvents } from './editor';
 import { IDocHubUIComponent } from './uicomponent';
 import { IDocHubDataLake } from './datalake';
+import { IDocHubConstructors } from './constructors';
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -72,6 +73,7 @@ export interface IEditorParams {
     [key: string]: string;
 }
 
+// Редакторы документов
 export interface IDocHubEditors {
     // Регистрирует редактор для типа документа
     register(type: string, editor: IDocHubEditor, title?: string);
@@ -105,6 +107,7 @@ export interface IDocHubCore {
     protocols: IDocHubProtocols;                // Протоколы доступа к данным
     documents: IDocHubDocuments;                // Документы
     editors: IDocHubEditors;                    // Редакторы
+    constructors: IDocHubConstructors;          // Конструкторы
     ui: IDocHubUI;                              // UI порт
     dataLake: IDocHubDataLake;                  // Интерфейс к архкоду
     eventBus: IDocHubEventBus;                  // Внутренняя шина событий
