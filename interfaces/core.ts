@@ -76,7 +76,7 @@ export interface IEditorParams {
 // Редакторы документов
 export interface IDocHubEditors {
     // Регистрирует редактор для типа документа
-    register(type: string, editor: IDocHubEditor, title?: string);
+    register(type: string, editor: IDocHubEditor);
     // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
 }
