@@ -35,13 +35,19 @@ export interface IDocHubSettings {
     pull(fields: IDocHubSettingsCollection | string[]): IDocHubSettingsCollection;
 }
 
+export enum DocHubNavigateCommands {
+    back = '$_back_$',
+    forward = '$_back_$',
+    root = '$_root_$'
+}
+
 export interface IDocHubRouter {
     // Регистрирует роут в формате VUE2
     registerRoute(route: object);
     // Регистрирует middleware в формате VUE2
     registerMiddleware(middleware: object);
     // Указывает на какой роут перейти в DocHub
-    navigate(url: string);
+    navigate(url: string | DocHubNavigateCommands);
 }
 
 export interface IDocHubContentProviders {

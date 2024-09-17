@@ -38,6 +38,6 @@ export interface IDocHubDataLake {
     //  expression  - JSONata выражение
     //  params      - коллекция параметров (необязательно)
     //  context     - контекст исполнения запроса (необязательно)
-    pull(expression: string, params?: IDocHubPullDataParams, context?: any);
+    pull(expression: string, params?: IDocHubPullDataParams, context?: any): Promise<any>;
 }
 
