@@ -37,7 +37,6 @@ export interface IDocHubSettings {
 
 export enum DocHubNavigateCommands {
     back = '$_back_$',
-    forward = '$_back_$',
     root = '$_root_$'
 }
 

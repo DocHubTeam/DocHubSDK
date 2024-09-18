@@ -32,8 +32,9 @@ export interface IDocHubDataLake {
     //                Если undefined - перезагружает все
     reload(uriPattern?: string | string[] | RegExp);
     // Внесение изменений в DataLake
-    //  changes     - Массив изменений в DataLake 
-    push(changes: IDataLakeChange[]);
+    //  changes     - Массив изменений в DataLake
+    // В результате возвращает список выполненных преобразований
+    push(changes: IDataLakeChange[]): Promise<IDataLakeChange[]>;
     // Получение данных из DataLake
     //  expression  - JSONata выражение
     //  params      - коллекция параметров (необязательно)
