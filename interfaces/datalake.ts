@@ -49,5 +49,7 @@ export interface IDocHubDataLake {
     //  uri         - URI файла во внутреннем формате DocHub
     // В результате возвращает статус выполненного запроса
     pullFile(uri: string): Promise<any>;
+    // Возвращает конечный URI на основании массива относительных и прямых URI
+    resolveURI(...uri: string[]): string;
 }
 
