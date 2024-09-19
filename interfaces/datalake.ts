@@ -34,11 +34,20 @@ export interface IDocHubDataLake {
     // Внесение изменений в DataLake
     //  changes     - Массив изменений в DataLake
     // В результате возвращает список выполненных преобразований
-    push(changes: IDataLakeChange[]): Promise<IDataLakeChange[]>;
+    pushData(changes: IDataLakeChange[]): Promise<IDataLakeChange[]>;
     // Получение данных из DataLake
     //  expression  - JSONata выражение
     //  params      - коллекция параметров (необязательно)
     //  context     - контекст исполнения запроса (необязательно)
-    pull(expression: string, params?: IDocHubPullDataParams, context?: any): Promise<any>;
+    pullData(expression: string, params?: IDocHubPullDataParams, context?: any): Promise<any>;
+    // Сохраняет файла в DataLake
+    //  uri         - URI файла во внутреннем формате DocHub
+    //  context     - данные, которые требуется сохранить как файл
+    // В результате возвращает статус выполненного запроса
+    pushFile(uri: string, content: any): Promise<any>;
+    // Получает файла из DataLake
+    //  uri         - URI файла во внутреннем формате DocHub
+    // В результате возвращает статус выполненного запроса
+    pullFile(uri: string): Promise<any>;
 }
 

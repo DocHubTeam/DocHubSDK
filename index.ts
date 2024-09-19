@@ -9,6 +9,7 @@ export * from './interfaces/uicomponent';
 export * from './interfaces/editor';
 export * from './interfaces/datalake';
 export * from './interfaces/constructors';
+export * from './interfaces/content';
 
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2: any = window['Vue'];
