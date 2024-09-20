@@ -9,10 +9,16 @@ export interface IDocHubConstructorItem {
     title: string;
 }
 
+// Дополнительная метаинформация о конструкторе
+export interface IDocHubConstructorMeta {
+    description?: string;   // Описание смысла конструктора
+    img?: string;           // Картинка для пользователя
+}
+
 // Интерфейс конструкторов
 export interface IDocHubConstructors {
     // Регистрирует конструктор
-    register(uid: string, title: string, component: IDocHubConstructorComponent);
+    register(uid: string, title: string, component: IDocHubConstructorComponent, meta?: IDocHubConstructorMeta);
     // Возвращает список конструкторов
     fetch():IDocHubConstructorItem[];
     // Возвращает запись коллекции по идентификатору 
