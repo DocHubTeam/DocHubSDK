@@ -1,10 +1,10 @@
 import { IDocHubContentProvider } from './content';
 import { IDocHubProtocol } from './protocol';
 import { IDocHubDocument } from './document';
-import { IDocHubEditor, EditorEvents } from './editor';
+import { IDocHubEditors } from './editor';
 import { IDocHubUIComponent } from './uicomponent';
 import { IDocHubDataLake } from './datalake';
-import { IDocHubConstructors } from './constructors';
+import { IDocHubConstructors } from './constructor';
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -71,18 +71,6 @@ export interface IDocHubDocuments {
     // Регистрирует тип документа
     register(type: string, document: IDocHubDocument);
     // Возвращает массив зарегистрированных типов документов 
-    fetch(): string[];
-}
-
-export interface IEditorParams {
-    [key: string]: string;
-}
-
-// Редакторы документов
-export interface IDocHubEditors {
-    // Регистрирует редактор для типа документа
-    register(type: string, editor: IDocHubEditor);
-    // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
 }
 

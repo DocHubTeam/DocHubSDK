@@ -8,7 +8,7 @@ export * from './interfaces/protocol';
 export * from './interfaces/uicomponent';
 export * from './interfaces/editor';
 export * from './interfaces/datalake';
-export * from './interfaces/constructors';
+export * from './interfaces/constructor';
 export * from './interfaces/content';
 
 export const DocHub: IDocHubCore = window['DocHub'];
