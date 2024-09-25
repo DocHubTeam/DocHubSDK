@@ -11,8 +11,8 @@ export interface IDocHubObjectMeta {
 // Редакторы документов
 export interface IDocHubObjects {
     // Возвращает коллекцию задекларированных объектов
-    fetch(): IDocHubObjectMeta[];
+    fetch(): Promise<IDocHubObjectMeta[]>;
     // Возвращает объект по идентификатору
-    get(uid: string): IDocHubObjectMeta;
+    get(uid: string): Promise<IDocHubObjectMeta>;
 }
 
