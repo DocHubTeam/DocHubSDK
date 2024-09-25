@@ -1,15 +1,16 @@
 import { IDocHubCore } from './interfaces/core';
 
-export * from './interfaces/context';
-export * from './interfaces/protocol';
+export * from './interfaces/contexts';
+export * from './interfaces/protocols';
 export * from './interfaces/core';
-export * from './interfaces/document';
-export * from './interfaces/protocol';
-export * from './interfaces/uicomponent';
-export * from './interfaces/editor';
+export * from './interfaces/documents';
+export * from './interfaces/protocols';
+export * from './interfaces/uicomponents';
+export * from './interfaces/editors';
 export * from './interfaces/datalake';
-export * from './interfaces/constructor';
-export * from './interfaces/content';
+export * from './interfaces/constructors';
+export * from './interfaces/contents';
+export * from './interfaces/objects';
 
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2: any = window['Vue'];

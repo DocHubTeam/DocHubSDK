@@ -10,17 +10,23 @@ export interface IEditorState {
     title: string
 }
 
-// Редактор должен реализовывать данный интерфейс
-export interface IDocHubEditor {
+// VUE компонент редактора
+export interface IDocHubEditorComponent {
+}
+
+// Метаинформация о редакторе
+export interface IDocHubEditorItem {
+    component: IDocHubEditorComponent;
+    uid: string;
 }
 
 // Редакторы документов
 export interface IDocHubEditors {
     // Регистрирует редактор для типа документа
-    register(type: string, editor: IDocHubEditor);
+    register(uid: string, component: IDocHubEditorComponent);
     // Возвращает массив зарегистрированных редакторов 
     fetch(): string[];
     // Возвращает компонент редактора по идентификатору
-    get(uid: string): IDocHubEditor;
+    get(uid: string): IDocHubEditorItem;
 }
 

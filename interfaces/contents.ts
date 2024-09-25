@@ -1,4 +1,4 @@
-import { IDocHubContext } from './context';
+import { IDocHubContext } from './contexts';
 import { IDataLakeChange } from './datalake';
 export interface IDocHubContentProvider {
     // Флаг активности провайдера

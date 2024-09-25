@@ -1,5 +1,5 @@
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
-import { IDocHubContext } from './context';
+import { IDocHubContext } from './contexts';
 
 // Прослойка интерфейсов Axios для последующей кастомизации и поддержания совместимости
 export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {

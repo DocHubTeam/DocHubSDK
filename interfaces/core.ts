@@ -1,10 +1,11 @@
-import { IDocHubContentProvider } from './content';
-import { IDocHubProtocol } from './protocol';
-import { IDocHubDocument } from './document';
-import { IDocHubEditors } from './editor';
-import { IDocHubUIComponent } from './uicomponent';
+import { IDocHubContentProvider } from './contents';
+import { IDocHubProtocol } from './protocols';
+import { IDocHubDocument } from './documents';
+import { IDocHubEditors } from './editors';
+import { IDocHubUIComponent } from './uicomponents';
 import { IDocHubDataLake } from './datalake';
-import { IDocHubConstructors } from './constructor';
+import { IDocHubConstructors } from './constructors';
+import { IDocHubObjects } from './objects';
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -103,5 +104,6 @@ export interface IDocHubCore {
     constructors: IDocHubConstructors;          // Конструкторы
     ui: IDocHubUI;                              // UI порт
     dataLake: IDocHubDataLake;                  // Интерфейс к архкоду
+    objects: IDocHubObjects;                    // Задекларированные объекты сущностей 
     eventBus: IDocHubEventBus;                  // Внутренняя шина событий
 }
