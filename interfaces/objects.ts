@@ -2,6 +2,7 @@
 export interface IDocHubObjectMeta {
     uid: string;            // Идентификатор объекта
     entity: string;         // Идентификатор сущности
+    presentation: string;   // Идентификатор презентации объекта
     route: string;          // Параметризируемый путь к объекту в DataLake
     symbol?: string;        // Символ объекта для визуализации на диаграммах
     title?: string;         // Название объекта
