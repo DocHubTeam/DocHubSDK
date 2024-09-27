@@ -10,11 +10,13 @@ export interface IDocHubObjectMeta {
     constructor?: string;   // RegEx паттерн конструктора объектов
 }
 
-// Редакторы документов
+// Интерфейс доступа к задекларированным объектам в DataLake
 export interface IDocHubObjects {
     // Возвращает коллекцию задекларированных объектов
     fetch(): Promise<IDocHubObjectMeta[]>;
     // Возвращает объект по идентификатору
     get(uid: string): Promise<IDocHubObjectMeta>;
+    // Возвращает метаданные декларированного объекта для указанного пути
+    getMetaObjectByPath(): Promise<IDocHubObjectMeta>;
 }
 
