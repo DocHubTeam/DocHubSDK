@@ -29,10 +29,10 @@ export interface IDocHubConstructors {
     //  meta        - Мета-информация о конструкторе
     register(uid: string, title: string, component: IDocHubConstructorComponent, meta?: IDocHubConstructorMeta);
     // Возвращает список конструкторов
-    fetch():IDocHubConstructorItem[];
+    fetch():Promise<IDocHubConstructorItem[]>;
     // Возвращает запись коллекции по идентификатору 
     //  uid         - Идентификатор конструктора
-    get(uid: string): IDocHubConstructorItem;
+    get(uid: string):Promise<IDocHubConstructorItem>;
     // Вызывает магазин выбора конструкторов по указанному шаблону идентификаторов
     //  pattern     - шаблон идентификаторов по которому отбираются конструкторы
     //  target      - Целевое пространство для создания объекта

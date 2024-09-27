@@ -7,6 +7,7 @@ export interface IDocHubObjectMeta {
     symbol?: string;        // Символ объекта для визуализации на диаграммах
     title?: string;         // Название объекта
     description?: string;   // Описание объекта
+    constructor?: string;   // RegEx паттерн конструктора объектов
 }
 
 // Редакторы документов

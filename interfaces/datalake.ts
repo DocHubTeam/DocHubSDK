@@ -3,6 +3,19 @@ export enum DataLakeChange {
     remove = 'remove',          // Удаляет данные по указанному пути
 };
 
+// Паттерн изменившихся файлов в DataLake 
+export type DocHubDataLakeChangeItem = RegExp;
+
+//Массив изменений в DataLake передающийся с событием DataLakeEvents.onChanged
+export type DocHubDataLakeChanges = DocHubDataLakeChangeItem[];
+
+// События DataLake
+export enum DataLakeEvents {
+    reloadingStart = 'datalake.reloading.start',        // Начало обновления 
+    reloadingFinish = 'datalake.reloading.finish',      // Завершение обновления
+    onChanged = 'datalake.reloading.onChange'           // В DataLake произошли изменения
+}
+
 // Хранит состояние редактора
 export interface IDataLakeChange {
     // Действие над DataLake
