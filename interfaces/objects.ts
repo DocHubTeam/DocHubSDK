@@ -17,6 +17,7 @@ export interface IDocHubObjects {
     // Возвращает объект по идентификатору
     get(uid: string): Promise<IDocHubObjectMeta>;
     // Возвращает метаданные декларированного объекта для указанного пути
-    getMetaObjectByPath(): Promise<IDocHubObjectMeta>;
+    //  path    - путь к объекту 
+    getMetaObjectByPath(path: string): Promise<IDocHubObjectMeta | null>;
 }
 

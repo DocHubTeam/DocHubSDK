@@ -2,10 +2,10 @@ import { IDocHubContentProvider } from './contents';
 import { IDocHubProtocol } from './protocols';
 import { IDocHubDocument } from './documents';
 import { IDocHubEditors } from './editors';
-import { IDocHubUIComponent } from './uicomponents';
 import { IDocHubDataLake } from './datalake';
 import { IDocHubConstructors } from './constructors';
 import { IDocHubObjects } from './objects';
+import { IDocHubUI } from './ui';
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -80,13 +80,6 @@ export interface IDocHubDocuments {
     register(type: string, document: IDocHubDocument);
     // Возвращает массив зарегистрированных типов документов 
     fetch(): string[];
-}
-
-export interface IDocHubUI {
-    // Регистрирует UI компонент в слоте
-    register(slot: string, component: IDocHubUIComponent);
-    // Возвращает зарегистрированный компонент по слоту
-    get(slot: string): IDocHubUIComponent[];
 }
 
 // Интерфейс внутренней шины событий 
