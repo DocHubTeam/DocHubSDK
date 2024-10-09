@@ -12,6 +12,7 @@ export * from './interfaces/constructors';
 export * from './interfaces/contents';
 export * from './interfaces/objects';
 export * from './interfaces/ui';
+export * from './interfaces/localstorage';
 
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2 = () => window['Vue'];

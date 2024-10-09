@@ -6,6 +6,7 @@ import { IDocHubDataLake } from './datalake';
 import { IDocHubConstructors } from './constructors';
 import { IDocHubObjects } from './objects';
 import { IDocHubUI } from './ui';
+import { IDocHubLocalStorage } from './localstorage';
 
 export interface IDocHubEnv {
     [id: string]: string
@@ -96,6 +97,7 @@ export interface IDocHubEventBus {
 export interface IDocHubCore {
     problems: IDocHubProblems;                  // Проблемы
     settings: IDocHubSettings;                  // Пользовательские настройки
+    localStore: IDocHubLocalStorage;            // Интерфейс локального хранилища
     router: IDocHubRouter;                      // Работа с UI роутами
     contentProviders: IDocHubContentProviders;  // Провайдеры контента
     protocols: IDocHubProtocols;                // Протоколы доступа к данным
