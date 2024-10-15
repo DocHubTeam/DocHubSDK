@@ -108,4 +108,5 @@ export interface IDocHubCore {
     dataLake: IDocHubDataLake;                  // Интерфейс к архкоду
     objects: IDocHubObjects;                    // Задекларированные объекты сущностей 
     eventBus: IDocHubEventBus;                  // Внутренняя шина событий
+    version(): string;                          // Версия ядра
 }
