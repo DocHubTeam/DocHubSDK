@@ -32,8 +32,29 @@ export interface IDocHubPullDataParams  {
     [key: string]: any;
 }
 
+// Контекст транзации
+export interface IDocHubTransaction {
+
+}
+
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
+    /**
+     * Открывает транзакцию на изменения в DataLake
+     * @returns             - Объект транзакции
+     */
+    beginTransaction(): Promise<IDocHubTransaction>;
+    /**
+     * Отправляет транзакцию в DataLake
+     * @param transaction   - Объект транзакции
+     */
+    commitTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
+    /**
+     * Отменяет транзакцию
+     * @param transaction   - Объект транзакции
+     */
+    rollbackTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
+
     // Монтирует ресурс в озера
     //  uri         - URI монтируемого ресурса
     mount(uri: string);

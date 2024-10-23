@@ -9,10 +9,14 @@ export * from './interfaces/uicomponents';
 export * from './interfaces/editors';
 export * from './interfaces/datalake';
 export * from './interfaces/constructors';
-export * from './interfaces/contents';
+export * from './interfaces/providers';
 export * from './interfaces/objects';
 export * from './interfaces/ui';
 export * from './interfaces/localstorage';
+export * from './interfaces/eventbus';
+export * from './interfaces/router';
+export * from './interfaces/settings';
+export * from './interfaces/problems';
 
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2 = () => window['Vue'];

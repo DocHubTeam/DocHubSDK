@@ -7,7 +7,9 @@ export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {
 };
 export interface IDocHubProtocolResponse extends AxiosResponse {};
 
-// Методы доступные над ресурсом
+/**
+ * Методы доступные над ресурсом
+ */
 export enum IDocHubProtocolMethods {
     GET = 'GET',
     POST = 'POST',
@@ -30,4 +32,27 @@ export interface IDocHubProtocol {
     request(config: IDocHubProtocolRequestConfig): Promise<IDocHubProtocolResponse>;
     // Возвращает список методов доступных для указанного ресурса
     availableMethodsFor(uri: string): Promise<IDocHubProtocolMethods[]>;
+}
+
+/**
+ * Интерфейс управления транспортными протоколами ресурсов
+ */
+export interface IDocHubProtocols {
+    /**
+     * Возвращает драйвер протокола по идентификатору
+     * @param protocol  - Идентификатор протокола. Например, "gitlab"
+     * @returns         - Возвращает драйвер протокола
+     */
+    get(protocol: string): IDocHubProtocol;
+    /**
+     * Регистрирует драйвер протокола
+     * @param protocol  - Идентификатор протокола. Например, "gitlab"
+     * @param driver    - Объект драйвера протокола
+     */
+    register(protocol: string, driver: IDocHubProtocol);
+    /**
+     * Возвращает массив зарегистрированных протоколов 
+     * @returns         - Массив идентификаторов протоколов
+     */
+    fetch(): string[];
 }
