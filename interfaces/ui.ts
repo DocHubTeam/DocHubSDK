@@ -1,4 +1,5 @@
 import { IDocHubUIComponent } from './uicomponents';
+import { }
 
 export enum DocHubUISlot {
     avatar = 'avatar',

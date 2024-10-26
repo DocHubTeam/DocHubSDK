@@ -1,3 +1,15 @@
+/**
+ * Режим функционирования 
+ */
+export enum DocHubEditMode {
+    editWeb = 'edit-web',
+    editIDE = 'edit-ide',
+    view = 'view'
+}
+
+/**
+ * События, которые должен обрабатывать редактор
+ */
 export enum EditorEvents {
     close = '$close',               // Требует закрыть редактор
     save = '$save',                 // Требует произвести сохранение 
