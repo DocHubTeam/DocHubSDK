@@ -54,11 +54,22 @@ export interface IDocHubDataLake {
      * @param transaction   - Объект транзакции
      */
     rollbackTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
-
-    // Монтирует ресурс в озера
-    //  uri         - URI монтируемого ресурса
+    /**
+     * Устанавливает корневой манифест. С него начинается построение DataLake.
+     * @param uri           - URI корневого манифеста. Если URI отличается от текущего, DataLake полностью перезагружается
+     */
+    setRootManifest(uri: string);
+    /**
+     * Возвращает URI текущего корневого манифеста
+     * @returns             - URI корневого манифеста
+     */
+    getRootManifest(): string;
+    /**
+     * Монтирует произвольный ресурс в DataLake
+     * @param uri   - URI монтируемого ресурса
+     */
     mount(uri: string);
-    // Демонтирует ресурс от озера
+    // Демонтирует ресурс из DataLake
     //  uri         - URI демонтируемого ресурса
     unmount(uri: string);
     // Требует перезагрузки ресурсов задействованных в озере данных
