@@ -1,5 +1,5 @@
 import { IDocHubUIComponent } from './uicomponents';
-import { }
+import { DocHubEditMode } from './editors';
 
 export enum DocHubUISlot {
     avatar = 'avatar',
@@ -8,7 +8,15 @@ export enum DocHubUISlot {
 }
 
 export interface IDocHubUISlotOptions {
+    /**
+     * Заголовок компонента
+     */
     title?: string;
+    /**
+     * Режимы, в которых данный компонент актуален
+     * Если пусто, то во всех
+     */
+    modes?: DocHubEditMode[];
 }
 
 /**
