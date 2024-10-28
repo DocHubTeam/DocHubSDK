@@ -37,6 +37,20 @@ export interface IDocHubTransaction {
 
 }
 
+/**
+ * VUE компонент редактора ресурса
+ */
+export interface IDocHubResourceEditorComponent {
+}
+
+/**
+ * Метаинформация о редакторе ресурса
+ */
+export interface IDocHubResourceEditorItem {
+    component: IDocHubResourceEditorComponent;
+    pattern: string;
+}
+
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
     /**
@@ -54,11 +68,6 @@ export interface IDocHubDataLake {
      * @param transaction   - Объект транзакции
      */
     rollbackTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
-    /**
-     * Устанавливает корневой манифест. С него начинается построение DataLake.
-     * @param uri           - URI корневого манифеста. Если URI отличается от текущего, DataLake полностью перезагружается
-     */
-    setRootManifest(uri: string);
     /**
      * Возвращает URI текущего корневого манифеста
      * @returns             - URI корневого манифеста
@@ -96,5 +105,21 @@ export interface IDocHubDataLake {
     pullFile(uri: string): Promise<any>;
     // Возвращает конечный URI на основании массива относительных и прямых URI
     resolveURI(...uri: string[]): string;
+    /**
+     * Регистрирует редактор ресурсов
+     * @param pattern       - RegExp contentType ресурса
+     * @param component     - VUE компонент для редактирования ресурса
+     */
+    registerEditor(pattern: string, component: IDocHubResourceEditorItem);
+    /**
+     * Возвращает массив зарегистрированных редакторов ресурсов
+     * @returns             - Массив зарегистрированных редакторов объектов
+     */
+    fetchEditors(): Promise<IDocHubResourceEditorItem[]>;
+    /**
+     * Возвращает актуальный редактор для ресурса по contentType
+     * @param contentType   - Тип ресурса
+     */
+    getEditor(contentType: string): Promise<IDocHubResourceEditorItem>;    
 }
 

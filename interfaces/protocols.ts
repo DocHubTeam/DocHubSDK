@@ -9,13 +9,6 @@ export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {
 export interface IDocHubProtocolResponse extends AxiosResponse {};
 
 /**
- * Предопределенные типы контентов
- */
-export enum DocHubContentType {
-    folder = 'dochub/folder'
-}
-
-/**
  * Тип ресурса
  */
 export enum DocHubResourceType {
@@ -29,8 +22,10 @@ export enum DocHubResourceType {
  */
 export type DocHubResourceMetaFile = {
     type: DocHubResourceType.file,
-    name: string,
-    contentType: DocHubContentType | string
+    uri: string,
+    contentType?: string,
+    size?: number,
+    sha?: string
 }
 
 /**
@@ -38,7 +33,8 @@ export type DocHubResourceMetaFile = {
  */
 export type DocHubResourceMetaFolder = {
     type: DocHubResourceType.folder,
-    files: DocHubResourceMetaFile[]
+    uri: string,
+    files: DocHubResourceMetaFile[] | null // Если null - статус содержания файлов не определен
 }
 
 /**
@@ -46,15 +42,16 @@ export type DocHubResourceMetaFolder = {
  */
 export type DocHubResourceMetaOther = {
     type: DocHubResourceType.other,
+    uri: string,
     [prop: string]: any
 }
 
-type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder | DocHubResourceMetaOther;
+export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder | DocHubResourceMetaOther;
 
 /**
  * Методы доступные над ресурсом
  */
-export enum IDocHubProtocolMethods {
+export enum DocHubProtocolMethods {
     // Classic
     GET = 'GET',
     POST = 'POST',
@@ -99,7 +96,7 @@ export interface IDocHubProtocol {
      * @param uri        - Идентификатор ресурса
      * @returns          - Массив доступных методов для ресурса
      */
-    availableMethodsFor(uri: string): Promise<IDocHubProtocolMethods[]>;
+    availableMethodsFor(uri: string): Promise<DocHubProtocolMethods[]>;
 }
 
 /**
@@ -123,4 +120,12 @@ export interface IDocHubProtocols {
      * @returns         - Массив идентификаторов протоколов
      */
     fetch(): string[];
+    /**
+     * Выполняет запрос идентифицируя протокол протокол по URL.
+     * Берет на себя некоторую сервисную работу по подготовке запроса 
+     * в протокол и обработке ошибок.
+     * Рекомендуется использовать именно этот метод для запросов к ресурсам.
+     * @param config    - Параметры запроса
+     */
+    request(config: IDocHubProtocolRequestConfig): Promise<IDocHubProtocolResponse>;
 }
