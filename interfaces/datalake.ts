@@ -16,7 +16,9 @@ export enum DataLakeEvents {
     onChanged = 'datalake.reloading.onChange'           // В DataLake произошли изменения
 }
 
-// Хранит состояние редактора
+/**
+ * Запись об изменении DataLake
+ */
 export interface IDataLakeChange {
     // Действие над DataLake
     action: DataLakeChange;
@@ -38,17 +40,16 @@ export interface IDocHubTransaction {
 }
 
 /**
- * VUE компонент редактора ресурса
+ * VUE компонент редактора файла
  */
-export interface IDocHubResourceEditorComponent {
-}
+export interface IDocHubFileEditorComponent {}
 
 /**
- * Метаинформация о редакторе ресурса
+ * Метаинформация о редакторе файла
  */
-export interface IDocHubResourceEditorItem {
-    component: IDocHubResourceEditorComponent;
-    pattern: string;
+export interface IDocHubFileEditorItem {
+    component: IDocHubFileEditorComponent;
+    pattern: RegExp;
     title: string;
 }
 
@@ -75,15 +76,15 @@ export interface IDocHubDataLake {
      */
     getRootManifest(): string;
     /**
-     * Монтирует произвольный ресурс в DataLake
-     * @param uri   - URI монтируемого ресурса
+     * Монтирует произвольный файл в DataLake
+     * @param uri   - URI монтируемого файла
      */
     mount(uri: string);
-    // Демонтирует ресурс из DataLake
-    //  uri         - URI демонтируемого ресурса
+    // Демонтирует файл из DataLake
+    //  uri         - URI демонтируемого файла
     unmount(uri: string);
-    // Требует перезагрузки ресурсов задействованных в озере данных
-    //  uriPattern  - Шаблон проверки соответствия URI ресурса
+    // Требует перезагрузки файла задействованных в озере данных
+    //  uriPattern  - Шаблон проверки соответствия URI файла
     //                Если undefined - перезагружает все
     reload(uriPattern?: string | string[] | RegExp);
     // Внесение изменений в DataLake
@@ -107,22 +108,37 @@ export interface IDocHubDataLake {
     // Возвращает конечный URI на основании массива относительных и прямых URI
     resolveURI(...uri: string[]): string;
     /**
-     * Регистрирует редактор ресурсов
-     * @param pattern       - RegExp contentType ресурса. Например: ^.*\/markdown($|;.*$)
-     * @param component     - VUE компонент для редактирования ресурса
-     * @param title         - Название редактора ресурса
+     * Регистрирует редактор файлов
+     * @param pattern       - RegExp contentType файла. Например: ^.*\/markdown($|;.*$)
+     * @param component     - VUE компонент для редактирования файла
+     * @param title         - Название редактора файла
      */
-    registerEditor(pattern: string, component: IDocHubResourceEditorItem, title?: string);
+    registerFileEditor(pattern: string, component: IDocHubFileEditorComponent, title?: string);
     /**
-     * Возвращает массив зарегистрированных редакторов ресурсов
+     * Возвращает массив зарегистрированных редакторов файлов 
      * @returns             - Массив зарегистрированных редакторов объектов
      */
-    fetchEditors(): Promise<IDocHubResourceEditorItem[]>;
+    fetchFileEditors(): Promise<IDocHubFileEditorItem[]>;
     /**
-     * Возвращает актуальный редактор для ресурса по contentType
+     * Возвращает актуальный редактор для файла по contentType
      * @param contentType   - Тип контента. Например: text/markdown
      */
-    getEditor(contentType: string): Promise<IDocHubResourceEditorItem>;
+    getFileEditor(contentType: string): Promise<IDocHubFileEditorItem | null>;
+
+    /**
+     * Запрос на открытие файла на пользовательское редактирование. Не обязательно будет выполнен.
+     * Если редактор уже открыт, активирует его.
+     * @param uri           - URI файла 
+     * @returns             - Компонент редактора, если открытие оказалось успешным
+     */
+    openFileEditor(uri: string): Promise<IDocHubFileEditorComponent>;
+
+    /**
+     * Запрос на завершение пользовательского редактирования файла. Не обязательно будет выполнен.
+     * @param uri           - URI файла
+     * @returns             - true, если закрытие оказалось успешным
+     */
+    closeFileEditor(uri: string): Promise<boolean>;
 
     /**
      * Регистрирует соответствие шаблона файла типу контента.
