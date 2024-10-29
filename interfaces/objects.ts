@@ -21,9 +21,10 @@ export interface IDocHubObjectEditorComponent {
 /**
  * Метаинформация о редакторе объекта
  */
-export interface IDocHubEditorObjectItem {
+export interface IDocHubObjectEditorItem {
     component: IDocHubObjectEditorComponent;
     uid: string;
+    title: string;
 }
 
 // Интерфейс доступа к задекларированным объектам в DataLake
@@ -47,18 +48,19 @@ export interface IDocHubObjects {
      * Регистрирует редактор объекта
      * @param uid           - Идентификатор типа объекта
      * @param component     - VUE компонент для редактирования объекта
+     * @param title         - Название редактора объекта
      */
-    registerEditor(uid: string, component: IDocHubObjectEditorComponent);
+    registerEditor(uid: string, component: IDocHubObjectEditorComponent, title?: string);
     /**
      * Возвращает массив зарегистрированных редакторов объектов
      * @returns             - Массив зарегистрированных редакторов объектов
      */
-    fetchEditors(): Promise<IDocHubEditorObjectItem[]>;
+    fetchEditors(): Promise<IDocHubObjectEditorItem[]>;
     /**
      * Возвращает компонент редактора объекта
      * @param uid           - Идентификатор типа объекта
      * @returns             - IDocHubEditorItem
      */
-    getEditor(uid: string): Promise<IDocHubEditorObjectItem>;    
+    getEditor(uid: string): Promise<IDocHubObjectEditorItem>;    
 }
 

@@ -49,6 +49,7 @@ export interface IDocHubResourceEditorComponent {
 export interface IDocHubResourceEditorItem {
     component: IDocHubResourceEditorComponent;
     pattern: string;
+    title: string;
 }
 
 // Интерфейс доступа к DataLake
@@ -107,10 +108,11 @@ export interface IDocHubDataLake {
     resolveURI(...uri: string[]): string;
     /**
      * Регистрирует редактор ресурсов
-     * @param pattern       - RegExp contentType ресурса
+     * @param pattern       - RegExp contentType ресурса. Например: ^.*\/markdown($|;.*$)
      * @param component     - VUE компонент для редактирования ресурса
+     * @param title         - Название редактора ресурса
      */
-    registerEditor(pattern: string, component: IDocHubResourceEditorItem);
+    registerEditor(pattern: string, component: IDocHubResourceEditorItem, title?: string);
     /**
      * Возвращает массив зарегистрированных редакторов ресурсов
      * @returns             - Массив зарегистрированных редакторов объектов
@@ -118,8 +120,23 @@ export interface IDocHubDataLake {
     fetchEditors(): Promise<IDocHubResourceEditorItem[]>;
     /**
      * Возвращает актуальный редактор для ресурса по contentType
-     * @param contentType   - Тип ресурса
+     * @param contentType   - Тип контента. Например: text/markdown
      */
-    getEditor(contentType: string): Promise<IDocHubResourceEditorItem>;    
+    getEditor(contentType: string): Promise<IDocHubResourceEditorItem>;
+
+    /**
+     * Регистрирует соответствие шаблона файла типу контента.
+     * Зарегистрированная связь является приоритетной по отношению к возвращаемому заголовку content-type сервера.
+     * @param pathPattern   - RegEx полного пути к файлу. Например: \.md$
+     * @param contentType   - Тип контента, который соответствует шаблону файла. Например: text/markdown
+     */
+    registerFileContentType(pattern: string, contentType: string);
+
+    /**
+     * Возвращает тип контента по названию файла
+     * @param file          - Полный путь к файлу. Например: README.md
+     * @returns             - Тип контента. Например: text/markdown
+     */
+    getContentTypeForFile(file: string): string | null;
 }
 

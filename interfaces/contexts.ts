@@ -9,6 +9,4 @@ export interface IDocHubContextEnv {
 export interface IDocHubContext {
     // Переменные среды
     env: IDocHubContextEnv;
-    // Интерфейс к DocHub
-    dochub: IDocHubCore;
 }

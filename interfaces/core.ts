@@ -1,7 +1,6 @@
 import { IDocHubContentProviders } from './providers';
 import { IDocHubProtocols } from './protocols';
 import { IDocHubDocuments } from './documents';
-import { IDocHubEditors } from './editors';
 import { IDocHubDataLake } from './datalake';
 import { IDocHubConstructors } from './constructors';
 import { IDocHubObjects } from './objects';
@@ -44,10 +43,6 @@ export interface IDocHubCore {
      * Документы
      */
     documents: IDocHubDocuments;
-    /**
-     * Редакторы объектов
-     */
-    editors: IDocHubEditors;
     /**
      * Конструкторы объектов
      */
