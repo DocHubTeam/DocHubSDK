@@ -10,6 +10,7 @@ import { IDocHubEventBus } from './eventbus';
 import { IDocHubRouter } from './router';
 import { IDocHubSettings } from './settings';
 import { IDocHubProblems } from './problems';
+import { DocHubEditMode } from './editors';
 
 /**
  * Интерфейс ядра
@@ -68,4 +69,15 @@ export interface IDocHubCore {
      * @returns     - Версия ядра в формате *.*.*
      */
     version(): string;
+    /**
+     * Возвращает текущий режим портала
+     */
+    getMode(): Promise<DocHubEditMode>;
+    /**
+     * Пытается перевести портал в запрашиваемый режим.
+     * При изменении режима, вызывает событие EditorEvents.modeChanged
+     * @param mode      - Режим в который нужно перевести портал
+     * @returns         - Режим, в который переведен портал в результате выполнения запроса
+     */
+    setMode(mode: DocHubEditMode): Promise<DocHubEditMode>;
 }
