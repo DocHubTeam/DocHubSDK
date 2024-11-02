@@ -19,12 +19,18 @@ export interface IDocHubUISlotOptions {
     modes?: DocHubEditMode[];
 }
 
+export interface IDocHubUISlotItem {
+    slot: DocHubUISlot | string;
+    component: IDocHubUIComponent;
+    options?: IDocHubUISlotOptions;
+}
+
 /**
  * Интерфейс управления UI компонентами для предопределенных слотов
  */
 export interface IDocHubUI {
     // Регистрирует UI компонент в слоте
-    register(slot: DocHubUISlot, component: IDocHubUIComponent, options?: IDocHubUISlotOptions);
-    // Возвращает зарегистрированный компонент по слоту
-    get(slot: string): IDocHubUIComponent[];
+    register(slot: DocHubUISlot | string, component: IDocHubUIComponent, options?: IDocHubUISlotOptions);
+    // Возвращает зарегистрированные компонент по слоту
+    get(slot: DocHubUISlot | string): Promise<IDocHubUISlotItem[]>;
 }

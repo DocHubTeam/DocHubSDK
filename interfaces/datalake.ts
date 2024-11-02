@@ -53,6 +53,17 @@ export interface IDocHubFileEditorItem {
     title: string;
 }
 
+/**
+ * Описывает контекст открытого на редактирования файла
+ */
+export interface IDocHubFileEditorContext {
+    uri?: string;           // URI файла открытого на редактирование. 
+                            // Если не определено берется из параметра openFileEditor
+    contentType: string;    // Тип контента файла. 
+                            // Если не определено берется из данных полученных о файле в процессе открытия.
+    [key: string]: any;     // Произвольные ключи и значения
+}
+
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
     /**
@@ -129,9 +140,10 @@ export interface IDocHubDataLake {
      * Запрос на открытие файла на пользовательское редактирование. Не обязательно будет выполнен.
      * Если редактор уже открыт, активирует его.
      * @param uri           - URI файла 
+     * @param context       - Контекст редактирования файла. Необходим для связных редакторов и конструкторов.
      * @returns             - Компонент редактора, если открытие оказалось успешным
      */
-    openFileEditor(uri: string): Promise<IDocHubFileEditorComponent>;
+    openFileEditor(uri: string, context?: IDocHubFileEditorContext): Promise<IDocHubFileEditorComponent>;
 
     /**
      * Запрос на завершение пользовательского редактирования файла. Не обязательно будет выполнен.
