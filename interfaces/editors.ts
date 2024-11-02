@@ -45,7 +45,7 @@ export type DocHubEditorFileContext = {
 }
 
 /**
- * Метаинформация о папке
+ * Контекст редактора объекта
  */
 export type DocHubEditorObjectContext = {
     type: DocHubEditorType.object,
