@@ -1,3 +1,5 @@
+import { DocHubEditorContext } from './editors';
+
 // Компонент конструктора
 export interface IDocHubConstructorComponent {
 }
@@ -15,11 +17,6 @@ export interface IDocHubConstructorMeta {
     img?: string;           // Картинка для пользователя
 }
 
-// Параметры передаваемые в конструктор для его первичной инициализации
-export interface IDocHubConstructorParams {
-    [key: string]: any;
-}
-
 // Интерфейс конструкторов
 export interface IDocHubConstructors {
     // Регистрирует конструктор
@@ -35,7 +32,7 @@ export interface IDocHubConstructors {
     get(uid: string):Promise<IDocHubConstructorItem>;
     // Вызывает магазин выбора конструкторов по указанному шаблону идентификаторов
     //  pattern     - шаблон идентификаторов по которому отбираются конструкторы
-    //  target      - Целевое пространство для создания объекта
-    showStore(pattern?: RegExp, target?: string, params?:IDocHubConstructorParams);
+    //  context     - Контекст который должен учесть конструктор, если он не определен, контекст будет создан автоматически
+    showStore(pattern?: RegExp, context?: DocHubEditorContext);
 }
 
