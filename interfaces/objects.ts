@@ -27,6 +27,16 @@ export interface IDocHubObjectEditorItem {
     title: string;
 }
 
+/**
+ * Описывает контекст редактируемого объекта
+ */
+export interface IDocHubObjectEditorContext {
+    path?: string;          // Путь к объекту в Data Lake
+                            // Если не определено берется из параметра openObjectEditor
+    [key: string]: any;     // Произвольные ключи и значения
+}
+
+
 // Интерфейс доступа к задекларированным объектам в DataLake
 export interface IDocHubObjects {
     /**

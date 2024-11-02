@@ -1,3 +1,6 @@
+import { IDocHubFileEditorContext } from './datalake';
+import { IDocHubObjectEditorContext } from './objects';
+
 /**
  * Режим функционирования 
  */
@@ -24,9 +27,32 @@ export enum EditorEvents {
     delete = '$delete'              // Требует удалить объект
 };
 
+
 /**
- * Хранит состояние редактора
+ * Тип редактора
  */
-export interface IEditorState {
-    title: string
+export enum DocHubEditorType {
+    file = 'file',
+    object = 'object'
 }
+
+/**
+ * Контекст редактора
+ */
+export type DocHubEditorFileContext = {
+    type: DocHubEditorType.file,
+    meta: IDocHubFileEditorContext
+}
+
+/**
+ * Метаинформация о папке
+ */
+export type DocHubEditorObjectContext = {
+    type: DocHubEditorType.object,
+    meta: IDocHubObjectEditorContext
+}
+
+/**
+ * Универсальный контекст редактора
+ */
+export type DocHubEditorContext = DocHubEditorFileContext | DocHubEditorObjectContext;
