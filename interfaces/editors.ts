@@ -64,3 +64,15 @@ export type DocHubEditorObjectContext = {
  * Универсальный контекст редактора
  */
 export type DocHubEditorContext = DocHubEditorFileContext | DocHubEditorObjectContext;
+
+
+/**
+ * Интерфейс взаимодействия с редакторами
+ */
+export interface IDocHubEditors {
+    /**
+     * Возвращает текущий контекст редактирования
+     * @returns     - Текущий контекст редактирования или null
+     */
+    getCurrentContext(): Promise<DocHubEditorContext | null>;
+}

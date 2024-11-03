@@ -10,7 +10,7 @@ import { IDocHubEventBus } from './eventbus';
 import { IDocHubRouter } from './router';
 import { IDocHubSettings } from './settings';
 import { IDocHubProblems } from './problems';
-import { DocHubEditMode } from './editors';
+import { DocHubEditMode, IDocHubEditors } from './editors';
 
 /**
  * Интерфейс ядра
@@ -64,6 +64,10 @@ export interface IDocHubCore {
      * Внутренняя шина событий
      */
     eventBus: IDocHubEventBus;                 
+    /**
+     * Интерфейс взаимодействия с подсистемой редактирования
+     */
+    editors: IDocHubEditors;
     /**
      * Версия ядра
      * @returns     - Версия ядра в формате *.*.*

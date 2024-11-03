@@ -13,7 +13,11 @@ export type DocHubDataLakeChanges = DocHubDataLakeChangeItem[];
 export enum DataLakeEvents {
     reloadingStart = 'datalake.reloading.start',        // Начало обновления 
     reloadingFinish = 'datalake.reloading.finish',      // Завершение обновления
-    onChanged = 'datalake.reloading.onChange'           // В DataLake произошли изменения
+    onChanged = 'datalake.reloading.onChange',          // В DataLake произошли изменения
+    
+    mountedManifest = 'datalake.manifest.mounted',      // Смонтирован манифест в DataLake
+    unmountedManifest = 'datalake.manifest.unmounted',  // Манифест отключен от DataLake
+    reloadManifests = 'datalake.manifest.reloaded'      // Манифест перезагружен
 }
 
 /**
@@ -137,7 +141,7 @@ export interface IDocHubDataLake {
     getFileEditor(contentType: string): Promise<IDocHubFileEditorItem | null>;
 
     /**
-     * Запрос на открытие файла на пользовательское редактирование. Не обязательно будет выполнен.
+     * Запрос на открытие файла на пользовательское редактирование. Необязательно будет выполнен.
      * Если редактор уже открыт, активирует его.
      * @param uri           - URI файла 
      * @param context       - Контекст редактирования файла. Необходим для связных редакторов и конструкторов.

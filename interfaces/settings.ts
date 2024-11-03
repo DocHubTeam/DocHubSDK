@@ -2,6 +2,13 @@ export interface IDocHubSettingsCollection {
     [id: string]: any;
 }
 
+/**
+ * События работы с настройками
+ */
+export enum SettingsEvents {
+    onChanged = 'settings.changed',        // Настройки изменены
+}
+
 export interface IDocHubSettings {
     // Регистрирует UI компонент настроек
     //  component - VUE компонент
