@@ -19,12 +19,18 @@ export enum EditorEvents {
      */
     modeChanged = '$mode-changed',  // Режим портала изменился
     /**
+     * События контекста редактора
+     */
+    contextAppend  = '$edit-context-append',    // Контекст добавлен 
+    contextUpdated = '$edit-context-updated',   // Контекст претерпел изменения
+    contextRemoved = '$edit-context-removed',   // Контекст удален
+    /**
      * События редактора
      */
-    close = '$close',               // Требует закрыть редактор
-    save = '$save',                 // Требует произвести сохранение 
-    create = '$create',             // Требует создать новый объект
-    delete = '$delete'              // Требует удалить объект
+    close = '$close',                           // Требует закрыть редактор
+    save = '$save',                             // Требует произвести сохранение 
+    create = '$create',                         // Требует создать новый объект
+    delete = '$delete'                          // Требует удалить объект
 };
 
 
@@ -41,6 +47,7 @@ export enum DocHubEditorType {
  */
 export type DocHubEditorFileContext = {
     type: DocHubEditorType.file,
+    title?: string;
     meta: IDocHubFileEditorContext
 }
 
@@ -49,6 +56,7 @@ export type DocHubEditorFileContext = {
  */
 export type DocHubEditorObjectContext = {
     type: DocHubEditorType.object,
+    title?: string;
     meta: IDocHubObjectEditorContext
 }
 
