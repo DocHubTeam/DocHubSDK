@@ -42,10 +42,13 @@ export enum DocHubEditorType {
     object = 'object'
 }
 
+export type DocHubContextUID = string;
+
 /**
  * Контекст редактора
  */
 export type DocHubEditorFileContext = {
+    uid: DocHubContextUID;
     type: DocHubEditorType.file,
     title?: string;
     meta: IDocHubFileEditorContext
@@ -55,6 +58,7 @@ export type DocHubEditorFileContext = {
  * Контекст редактора объекта
  */
 export type DocHubEditorObjectContext = {
+    uid: DocHubContextUID;
     type: DocHubEditorType.object,
     title?: string;
     meta: IDocHubObjectEditorContext
