@@ -9,7 +9,7 @@ export interface IDocHubConstructorComponent {
 /**
  * Функция проверки корректности контекста для работы конструктора
  */
-export type FContextValidator = (context: DocHubEditorContext) => Promise<boolean>;
+export type FContextValidator = (context: DocHubEditorContext | null) => Promise<boolean>;
 
 // Дополнительная информация и опциональные методы конструктора
 export interface IDocHubConstructorOptions {

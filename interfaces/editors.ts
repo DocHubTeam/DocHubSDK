@@ -80,4 +80,9 @@ export interface IDocHubEditors {
      * @returns     - Текущий контекст редактирования или null
      */
     getCurrentContext(): Promise<DocHubEditorContext | null>;
+    /**
+     * Возвращает контекст по UID
+     * @param uid   - Идентификатор контекста
+     */
+    getContextByUID(uid: DocHubContextUID): Promise<DocHubEditorContext | null>;
 }
