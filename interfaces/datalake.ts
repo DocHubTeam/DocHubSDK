@@ -102,10 +102,13 @@ export interface IDocHubDataLake {
     //  uriPattern  - Шаблон проверки соответствия URI файла
     //                Если undefined - перезагружает все
     reload(uriPattern?: string | string[] | RegExp);
-    // Внесение изменений в DataLake
-    //  changes     - Массив изменений в DataLake
-    // В результате возвращает список выполненных преобразований
-    pushData(changes: IDataLakeChange[]): Promise<IDataLakeChange[]>;
+    /**
+     * Внесение изменений в DataLake
+     * @param changes   - Массив изменений вносимых в DataLake
+     * @param fileURI   - Целевой файл для изменений. Если он не указан, система сама его определяет
+     * @returns         - Массив выполненных преобразований
+     */
+    pushData(changes: IDataLakeChange[], fileURI?: string): Promise<IDataLakeChange[]>;
     // Получение данных из DataLake
     //  expression  - JSONata выражение
     //  params      - коллекция параметров (необязательно)
