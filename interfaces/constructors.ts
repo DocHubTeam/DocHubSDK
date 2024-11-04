@@ -28,6 +28,8 @@ export interface IDocHubConstructorItem {
     options?: IDocHubConstructorOptions;
 }
 
+export type DocHubUID = string;
+
 /**
  * Интерфейс конструкторов
  */
@@ -57,5 +59,9 @@ export interface IDocHubConstructors {
      * @param context       - Контекст который должен учесть конструктор, если он не определен, контекст будет создан автоматически
      */
     showStore(pattern?: RegExp, context?: DocHubEditorContext);
+    /**
+     * Создает глобальный уникальный идентификатор
+     */
+    makeUID(): DocHubUID;
 }
 

@@ -1,5 +1,6 @@
 import { IDocHubFileEditorContext } from './datalake';
 import { IDocHubObjectEditorContext } from './objects';
+import { DocHubUID } from './constructors';
 
 /**
  * Режим функционирования 
@@ -42,7 +43,7 @@ export enum DocHubEditorType {
     object = 'object'
 }
 
-export type DocHubContextUID = string;
+export type DocHubContextUID = DocHubUID;
 
 /**
  * Контекст редактора
