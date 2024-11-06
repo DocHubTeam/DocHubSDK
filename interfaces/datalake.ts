@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
     remove = 'remove',          // Удаляет данные по указанному пути
@@ -142,16 +144,17 @@ export interface IDocHubDataLake {
      * Сохраняет файла в DataLake
      * @param uri               - URI файла во внутреннем формате DocHub
      * @param content           - Содержимое файла
+     * @param contentType       - Тип контента
      * @returns                 - Статус выполненного запроса
      */
-    pushFile(uri: string, content: any): Promise<any>;
+    pushFile(uri: string, content: any, contentType: string): Promise<AxiosResponse>;
 
     /**
      * Загружает файл из DataLake
      * @param uri               - URI файла во внутреннем формате DocHub
-     * @returns                 - Результат
+     * @returns                 - Результат выполнения запроса
      */
-    pullFile(uri: string): Promise<any>;
+    pullFile(uri: string): Promise<AxiosResponse>;
 
     /**
      * Возвращает конечный URI на основании массива относительных и прямых URI
