@@ -13,13 +13,17 @@ export type DocHubDataLakeChanges = DocHubDataLakeChangeItem[];
 
 // События DataLake
 export enum DataLakeEvents {
-    reloadingStart = 'datalake.reloading.start',        // Начало обновления 
-    reloadingFinish = 'datalake.reloading.finish',      // Завершение обновления
-    onChanged = 'datalake.reloading.onChange',          // В DataLake произошли изменения
+    reloadingStart = 'datalake.reloading.start',            // Начало обновления 
+    reloadingFinish = 'datalake.reloading.finish',          // Завершение обновления
+    onChanged = 'datalake.reloading.onChange',              // В DataLake произошли изменения
     
-    mountedManifest = 'datalake.manifest.mounted',      // Смонтирован манифест в DataLake
-    unmountedManifest = 'datalake.manifest.unmounted',  // Манифест отключен от DataLake
-    reloadManifests = 'datalake.manifest.reloaded'      // Манифест перезагружен
+    mountedManifest = 'datalake.manifest.mounted',          // Смонтирован манифест в DataLake
+    unmountedManifest = 'datalake.manifest.unmounted',      // Манифест отключен от DataLake
+    reloadManifests = 'datalake.manifest.reloaded',         // Манифест перезагружен
+
+    transactionBegin = 'datalake.transaction.begin',        // Транзакция на изменение DataLake открыта
+    transactionCommit = 'datalake.transaction.commit',      // Транзакция на изменение успешно применена к DataLake
+    transactionRollback = 'datalake.transaction.rollback',  // Транзакция на изменение отменена
 }
 
 /**
@@ -42,9 +46,80 @@ export interface IDocHubPullDataParams  {
     [key: string]: any;
 }
 
-// Контекст транзации
-export interface IDocHubTransaction {
 
+export interface IDocHubTransactionFileHeaders {
+    [key: string]: any;
+}
+
+export enum IDocHubTransactionFileDataType {
+    meta = 'meta',
+    content = 'content'
+}
+
+export enum IDocHubTransactionFileAction {
+    filePut = 'file-put',
+    fileDelete = 'file-delete',
+    fileMove = 'file-move'
+}
+
+export type IDocHubTransactionChangeFilePut = {
+    action: IDocHubTransactionFileAction.filePut;
+    uri: string;
+    contentUID: string;
+}
+
+export type IDocHubTransactionChangeFileDelete = {
+    action: IDocHubTransactionFileAction.fileDelete;
+    uri: string;
+}
+
+export type IDocHubTransactionChangeFileMove = {
+    action: IDocHubTransactionFileAction.fileMove;
+    fromURI: string;
+    toURI: string;
+}
+
+export type IDocHubTransactionChangeFile = IDocHubTransactionChangeFilePut | IDocHubTransactionChangeFileDelete | IDocHubTransactionChangeFileMove;
+
+export interface IDocHubTransactionChangeRecord {
+    uid: string;            // UUID
+    moment: number;         // timestamp
+    change: IDocHubTransactionChangeFile;
+}
+
+/**
+ * Метаданные файла входящего в транзакцию
+ */
+export type IDocHubTransactionFile = {
+    uid: string;                                // UUID записи
+    content: string;
+    headers: IDocHubTransactionFileHeaders;
+}
+
+/**
+ * Транзакция на изменения DataLake
+ */
+export interface IDocHubTransaction {
+    /**
+     * Проверяет, что транзакция содержит файл
+     * @param uri               - URI файла или шаблон поиска
+     * @returns                 - Возвращает массив метаданных найденных файлов
+     */
+    getAffectedFiles(pattern: string | RegExp): Promise<string[]>;
+
+    /**
+     * Проверяет, что транзакция содержит файл
+     * @param uri               - URI файла или шаблон поиска
+     * @returns                 - Возвращает массив содержимое найденных файлов
+     */
+    getChangesForFile(pattern: string | RegExp): Promise<IDocHubTransactionChangeRecord>;
+
+    /**
+     * Удаляет запись об изменении из транзакции
+     * @param uids              - массив идентификаторов изменений
+     * @returns                 - Возвращает массив удаленных изменений
+     */
+    deleteChange(uids: string[]): Promise<IDocHubTransactionChangeRecord[]>;
 }
 
 /**
@@ -91,6 +166,11 @@ export interface IDocHubDataLake {
      * @param transaction   - Объект транзакции
      */
     rollbackTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
+
+    /**
+     * Возвращает актуальную транзакцию
+     */
+    getCurrentTransaction(): Promise<IDocHubTransaction>;
 
     /**
      * Возвращает URI текущего корневого манифеста
