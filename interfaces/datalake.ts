@@ -147,6 +147,11 @@ export interface IDocHubFileEditorContext {
     [key: string]: any;     // Произвольные ключи и значения
 }
 
+/**
+ *  Обработчик событий изменения файла
+ */
+export type DocHubDataLakeFileFollower = () => void;
+
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
     /**
@@ -228,6 +233,20 @@ export interface IDocHubDataLake {
      * @returns                 - Статус выполненного запроса
      */
     pushFile(uri: string, content: any, contentType: string): Promise<AxiosResponse>;
+
+    /**
+     * Устанавливает слежение за изменениями в файле
+     * @param uri               - URI файла
+     * @param handler           - Обработчик события
+     */
+    followFile(uri: string, handler: DocHubDataLakeFileFollower);
+    
+    /**
+     * Отменяет слежение за файлом
+     * @param uri               - URI файла
+     * @param handler           - Обработчик события
+     */
+    unfollowFile(uri: string, handler: DocHubDataLakeFileFollower);
 
     /**
      * Загружает файл из DataLake

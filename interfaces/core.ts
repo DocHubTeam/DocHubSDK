@@ -10,6 +10,7 @@ import { IDocHubEventBus } from './eventbus';
 import { IDocHubRouter } from './router';
 import { IDocHubSettings } from './settings';
 import { IDocHubProblems } from './problems';
+import { IDocHubCollaboration } from './collabarations';
 import { DocHubEditMode, IDocHubEditors } from './editors';
 
 /**
@@ -68,6 +69,10 @@ export interface IDocHubCore {
      * Интерфейс взаимодействия с подсистемой редактирования
      */
     editors: IDocHubEditors;
+    /**
+     * Интерфейс коллаборативного взаимодействия
+     */
+    collaboration: IDocHubCollaboration;
     /**
      * Версия ядра
      * @returns     - Версия ядра в формате *.*.*
