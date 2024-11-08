@@ -240,7 +240,7 @@ export interface IDocHubDataLake {
      * @param handler           - Обработчик события
      */
     followFile(uri: string, handler: DocHubDataLakeFileFollower);
-    
+
     /**
      * Отменяет слежение за файлом
      * @param uri               - URI файла
@@ -261,6 +261,13 @@ export interface IDocHubDataLake {
      * @returns                 - Результирующий URI
      */
     resolveURI(...uri: string[]): string;
+
+    /**
+     * Возвращает URI ресурсов в которых определен данный путь в DataLake
+     * @param path              - Путь к области DataLake через "/"
+     * @returns                 - Массив URI фалов
+     */
+    getURIForPath(path: string): Promise<string[]>;
 
     /**
      * Регистрирует редактор файлов

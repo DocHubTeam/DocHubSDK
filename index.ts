@@ -17,8 +17,10 @@ export * from './interfaces/eventbus';
 export * from './interfaces/router';
 export * from './interfaces/settings';
 export * from './interfaces/problems';
+export * from './interfaces/collabarations';
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
+
 
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2 = () => window['Vue'];
