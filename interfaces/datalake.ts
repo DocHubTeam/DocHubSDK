@@ -153,7 +153,7 @@ export enum DocHubDataLakeInitializedStatus {
     unknown = 'root-manifest-unknown',              // Статус не определен, возможно идет загрузка платформы
     undefRootManifest = 'root-manifest-undef',      // Корневой манифест не задан
     errorRootManifest = 'root-manifest-error',      // В корневом манифесте содержатся критические ошибки не позволяющие загрузить DataLake или он отсутствует
-    missingRootManifest = 'root-manifest-missing',  // В корневом манифесте содержатся критические ошибки не позволяющие загрузить DataLake или он отсутствует
+    missingRootManifest = 'root-manifest-missing',  // Корневой манифест не обнаружен
     other = 'root-manifest-other-error'             // Возникла неопределенная ошибка не позволяющая инициализировать DataLake
 }
 

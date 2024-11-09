@@ -5,7 +5,6 @@ export * from './interfaces/protocols';
 export * from './interfaces/core';
 export * from './interfaces/documents';
 export * from './interfaces/protocols';
-export * from './interfaces/uicomponents';
 export * from './interfaces/editors';
 export * from './interfaces/datalake';
 export * from './interfaces/constructors';
