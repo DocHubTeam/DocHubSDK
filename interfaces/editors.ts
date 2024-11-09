@@ -65,6 +65,8 @@ export type DocHubEditorObjectContext = {
     meta: IDocHubObjectEditorContext
 }
 
+export type DocHubEditorURI = string;
+
 /**
  * Универсальный контекст редактора
  */

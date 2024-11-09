@@ -1,3 +1,4 @@
+import { DocHubEditorURI } from './editors';
 /**
  * Содержит метаданные задекларированного объекта
  */
@@ -71,6 +72,12 @@ export interface IDocHubObjects {
      * @param uid           - Идентификатор типа объекта
      * @returns             - IDocHubEditorItem
      */
-    getEditor(uid: string): Promise<IDocHubObjectEditorItem>;    
+    getEditor(uid: string): Promise<IDocHubObjectEditorItem>;
+
+    /**
+     * Генерирует URL для редактирования объекта по указанному пути
+     * @param path          - Путь к объекту, разделенный "/"
+     */
+    makeEditURLByPath(path: string): Promise<DocHubEditorURI>;
 }
 
