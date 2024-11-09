@@ -1,6 +1,8 @@
-import { IDocHubUIComponent } from './uicomponents';
 import { DocHubEditMode, DocHubEditorURI } from './editors';
 
+export interface IDocHubUIComponent {
+    
+}
 
 export enum DocHubUISlot {
     avatar = 'avatar',
@@ -54,5 +56,5 @@ export interface IDocHubUI {
     /**
      * Обогащает HTML элемент метаданными для контекстного взаимодействия в UI
      */
-    appendMetaToElement(meta:IDocHubHTMLElementMeta);
+    appendMetaToElement(element:any, meta:IDocHubHTMLElementMeta);
 }

@@ -147,6 +147,16 @@ export interface IDocHubFileEditorContext {
     [key: string]: any;     // Произвольные ключи и значения
 }
 
+
+export enum DocHubDataLakeInitializedStatus {
+    success = 'root-manifest-success',              // DataLake инициализирован
+    unknown = 'root-manifest-unknown',              // Статус не определен, возможно идет загрузка платформы
+    undefRootManifest = 'root-manifest-undef',      // Корневой манифест не задан
+    errorRootManifest = 'root-manifest-error',      // В корневом манифесте содержатся критические ошибки не позволяющие загрузить DataLake или он отсутствует
+    missingRootManifest = 'root-manifest-missing',  // В корневом манифесте содержатся критические ошибки не позволяющие загрузить DataLake или он отсутствует
+    other = 'root-manifest-other-error'             // Возникла неопределенная ошибка не позволяющая инициализировать DataLake
+}
+
 /**
  *  Обработчик событий изменения файла
  */
@@ -154,6 +164,13 @@ export type DocHubDataLakeFileFollower = () => void;
 
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
+    /**
+     * Метод определяет был ли DataLake инициализирован.
+     * Возникающие при загрузке ошибки не являются причиной отсутствия инициализации.
+     * DataLake считается неинициализированным, например, при отсутствии указания корневого манифеста. 
+     */
+    isInitialized(): Promise<DocHubDataLakeInitializedStatus>
+    
     /**
      * Открывает транзакцию на изменения в DataLake
      * @returns             - Объект транзакции

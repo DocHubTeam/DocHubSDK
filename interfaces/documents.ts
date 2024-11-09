@@ -6,9 +6,7 @@
 /**
  *  Интерфейс, который требуется реализовать объектам документов
  */
-export interface IDocHubDocument {
-    
-}
+export interface IDocHubDocument {}
 
 /**
  * Интерфейс управления документами
