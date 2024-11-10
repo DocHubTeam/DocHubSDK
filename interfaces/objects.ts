@@ -80,5 +80,14 @@ export interface IDocHubObjects {
      * @param path          - Путь к объекту, разделенный "/"
      */
     makeEditURLByPath(path: DataLakePath): Promise<DocHubEditorURI>;
+    /**
+     * Запрос на открытие объекта на пользовательское редактирование. Необязательно будет выполнен.
+     * Если редактор уже открыт, активирует его.
+     * @param path              - Путь к редактируемому объекту
+     * @param context           - Контекст редактирования объекта. Необходим для связных редакторов и конструкторов.
+     * @returns                 - Компонент редактора, если открытие оказалось успешным
+     */
+    openObjectEditor(path: DataLakePath, context?: IDocHubObjectEditorContext): Promise<IDocHubObjectEditorComponent>;
+
 }
 
