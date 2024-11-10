@@ -1,4 +1,5 @@
 import { DocHubEditorURI } from './editors';
+import { DataLakePath } from './datalake';
 /**
  * Содержит метаданные задекларированного объекта
  */
@@ -32,7 +33,7 @@ export interface IDocHubObjectEditorItem {
  * Описывает контекст редактируемого объекта
  */
 export interface IDocHubObjectEditorContext {
-    path?: string;          // Путь к объекту в Data Lake
+    path?: DataLakePath;    // Путь к объекту в Data Lake
                             // Если не определено берется из параметра openObjectEditor
     [key: string]: any;     // Произвольные ключи и значения
 }
@@ -54,7 +55,7 @@ export interface IDocHubObjects {
      * Возвращает метаданные задекларированного объекта для указанного пути
      * @param path          - Путь к объекту 
      */
-    getMetaObjectByPath(path: string): Promise<IDocHubObjectMeta | null>;
+    getMetaObjectByPath(path: DataLakePath): Promise<IDocHubObjectMeta | null>;
     /**
      * Регистрирует редактор объекта
      * @param uid           - Идентификатор типа объекта
@@ -78,6 +79,6 @@ export interface IDocHubObjects {
      * Генерирует URL для редактирования объекта по указанному пути
      * @param path          - Путь к объекту, разделенный "/"
      */
-    makeEditURLByPath(path: string): Promise<DocHubEditorURI>;
+    makeEditURLByPath(path: DataLakePath): Promise<DocHubEditorURI>;
 }
 

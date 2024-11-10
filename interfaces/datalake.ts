@@ -5,6 +5,15 @@ export enum DataLakeChange {
     remove = 'remove',          // Удаляет данные по указанному пути
 };
 
+/**
+ * Путь к объекту в DataLake.
+ * Последовательность ключей коллекций через "/".
+ * Например: 
+ *  docs/example
+ *  components/dochub.main
+ */
+export type DataLakePath = string;
+
 // Паттерн изменившихся файлов в DataLake 
 export type DocHubDataLakeChangeItem = RegExp;
 
@@ -33,7 +42,7 @@ export interface IDataLakeChange {
     // Действие над DataLake
     action: DataLakeChange;
     // Путь в DataLake куда вносятся изменения
-    path: string;
+    path: DataLakePath;
     // Данные, которые вносятся в DataLake
     data: object | string | number | boolean;
     // Комментарии в манифест, где изменения будут зафиксированы
@@ -280,11 +289,11 @@ export interface IDocHubDataLake {
     resolveURI(...uri: string[]): string;
 
     /**
-     * Возвращает URI ресурсов в которых определен данный путь в DataLake
+     * Возвращает URI файлов в которых определен данный путь в DataLake
      * @param path              - Путь к области DataLake через "/"
      * @returns                 - Массив URI фалов
      */
-    getURIForPath(path: string): Promise<string[]>;
+    getURIForPath(path: DataLakePath): Promise<string[]>;
 
     /**
      * Регистрирует редактор файлов
