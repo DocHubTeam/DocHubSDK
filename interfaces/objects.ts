@@ -11,7 +11,8 @@ export interface IDocHubObjectMeta {
     symbol?: string;        // Символ объекта для визуализации на диаграммах
     title?: string;         // Название объекта
     description?: string;   // Описание объекта
-    constructor?: string;   // RegEx паттерн конструктора объектов
+    constructor?: string;   // Идентификатор конструктора объектов
+    editor?: string;        // Идентификатор редактора объектов
 }
 
 /**
@@ -32,7 +33,7 @@ export interface IDocHubObjectEditorItem {
 /**
  * Описывает контекст редактируемого объекта
  */
-export interface IDocHubObjectEditorContext {
+export interface IDocHubObjectEditorContext extends IDocHubObjectMeta {
     path?: DataLakePath;    // Путь к объекту в Data Lake
                             // Если не определено берется из параметра openObjectEditor
     [key: string]: any;     // Произвольные ключи и значения
@@ -73,7 +74,7 @@ export interface IDocHubObjects {
      * @param uid           - Идентификатор типа объекта
      * @returns             - IDocHubEditorItem
      */
-    getEditor(uid: string): Promise<IDocHubObjectEditorItem>;
+    getObjectEditor(uid: string): Promise<IDocHubObjectEditorItem>;
 
     /**
      * Генерирует URL для редактирования объекта по указанному пути

@@ -166,6 +166,10 @@ export enum DocHubDataLakeInitializedStatus {
     other = 'root-manifest-other-error'             // Возникла неопределенная ошибка не позволяющая инициализировать DataLake
 }
 
+
+export type DocHubDataLakeRequest = string;
+
+
 /**
  *  Обработчик событий изменения файла
  */
@@ -179,6 +183,13 @@ export interface IDocHubDataLake {
      * DataLake считается неинициализированным, например, при отсутствии указания корневого манифеста. 
      */
     isInitialized(): Promise<DocHubDataLakeInitializedStatus>
+
+    /**
+     * Промис вызывает then когда DataLake готов к запросам
+     * или вызывает catch, если immediately === true и DataLake не готов выполнить запрос.
+     * @param immediately    - Если true, то функция не ожидает готовности DataLake к запросам, а генерирует ошибку
+     */
+    whenReady(immediately?:boolean): Promise<void>;
     
     /**
      * Открывает транзакцию на изменения в DataLake
@@ -249,7 +260,7 @@ export interface IDocHubDataLake {
      * @param context           - Контекст исполнения запроса (необязательно)
      * @returns                 - Результат выполненного запроса
      */
-    pullData(expression: string, params?: IDocHubPullDataParams, context?: any): Promise<any>;
+    pullData(expression: DocHubDataLakeRequest, params?: IDocHubPullDataParams, context?: any): Promise<any>;
 
     /**
      * Сохраняет файла в DataLake
@@ -301,7 +312,7 @@ export interface IDocHubDataLake {
      * @param component         - VUE компонент для редактирования файла
      * @param title             - Название редактора файла
      */
-    registerFileEditor(pattern: string, component: IDocHubFileEditorComponent, title?: string);
+    registerFileEditor(pattern: RegExp, component: IDocHubFileEditorComponent, title?: string);
 
     /**
      * Возвращает массив зарегистрированных редакторов файлов 

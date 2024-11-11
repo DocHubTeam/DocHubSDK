@@ -5,7 +5,10 @@
         "задекларированным",
         "задекларированных",
         "Параметризируемый",
+        "basetypes",
         "datalake",
+        "eventbus",
+        "localstorage",
         "PROPFIND"
     ]
 }
