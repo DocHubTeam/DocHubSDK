@@ -10,7 +10,7 @@ import { IDocHubEventBus } from './eventbus';
 import { IDocHubRouter } from './router';
 import { IDocHubSettings } from './settings';
 import { IDocHubProblems } from './problems';
-import { IDocHubCollaboration } from './collabarations';
+import { IDocHubCollaboration } from './collaborations';
 import { DocHubEditMode, IDocHubEditors } from './editors';
 
 /**
