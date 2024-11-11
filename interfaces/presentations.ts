@@ -2,6 +2,16 @@ import { DocHubDataLakeRequest, DataLakePath } from './datalake';
 import { IDocHubSchema } from './../schemas/basetypes';
 
 /**
+ * Идентификатор типа презентации
+ */
+export type DocHubPresentationUID = string;
+
+/**
+ * VUE компонент презентации
+ */
+export interface IDocHubPresentationComponent {}
+
+/**
  * Входящие параметры в презентацию
  */
 export interface IDocHubPresentationsParams {
@@ -28,9 +38,21 @@ export interface IDocHubPresentationProfile {
     $base: DataLakePath
 }
 
-
 /**
  * Интерфейс управления презентациями сущностей
  */
 export interface IDocHubPresentations {
+    /**
+     * Регистрирует тип презентации
+     * @param type          - Тип презентации. Например "markdown"
+     * @param component     - VUE компонент презентации
+     * @param title         - Название типа презентации для пользователя
+     */
+    register(type: DocHubPresentationUID, component: IDocHubPresentationComponent, title?: string);
+    /**
+     * Возвращает компонент презентации по идентификатору типа
+     * @param type          - Тип презентации. Например "markdown"
+     * @returns             - VUE компонент для представления
+     */
+    getComponentByType(type: DocHubPresentationUID): Promise<IDocHubPresentationComponent>;
 }

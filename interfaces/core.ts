@@ -12,6 +12,7 @@ import { IDocHubSettings } from './settings';
 import { IDocHubProblems } from './problems';
 import { IDocHubCollaboration } from './collaborations';
 import { DocHubEditMode, IDocHubEditors } from './editors';
+import { IDocHubPresentations } from './presentations';
 
 /**
  * Интерфейс ядра
@@ -42,9 +43,15 @@ export interface IDocHubCore {
      */
     protocols: IDocHubProtocols;
     /**
+     * !!!!!!!!!!! УСТАРЕЛО !!!!!!!!!!!
+     * См presentations
      * Документы
      */
     documents: IDocHubDocuments;
+    /**
+     * Презентации сущностей
+     */
+    presentations: IDocHubPresentations;
     /**
      * Конструкторы объектов
      */
