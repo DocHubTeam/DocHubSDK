@@ -16,6 +16,22 @@ export interface IDocHubObjectMeta {
 }
 
 /**
+ * Специальный формат адресации к объектам DocHub
+ * Формат:      @<ID объекта>/<путь к объекту>[?<параметр=значение>[&<параметр=значение>]][#<ID презентации>]
+ * Например:    @document/dochub.welcome?username=r.piontik#bio
+ */
+export class DocHubObjectURL extends String {
+    constructor(...args:any) {
+        for (const value of args) {
+            if (!/^\@[a-zA-Z0-9_$]{1,}(\/[a-zA-Z0-9_$]{1,}){1,}(\?[^(#|\/)]*){0,1}(\#[^(#|\/|\?)]*){0,1}$/.test(value))
+                throw new Error(`Incorrect DocHubObjectSrc `, value);
+        }
+        super(...args);
+        return this;
+    }
+}
+
+/**
  * VUE компонент редактора объекта
  */
 export interface IDocHubObjectEditorComponent {
