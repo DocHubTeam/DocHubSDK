@@ -15,7 +15,7 @@ export enum DocHubEditMode {
 /**
  * Если компонент имеет возможность контекстного редактирования, он должен реализовывать данный интерфейс
  */
-export interface DocHubEditableComponent {
+export interface IDocHubEditableComponent {
     /**
      * Указывает на то, что компонент может быть отредактирован
      * @returns         - возвращает true если компонент может быть отредактирован, иначе false

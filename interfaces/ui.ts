@@ -52,9 +52,4 @@ export interface IDocHubUI {
      * @returns                 - Список UI компонентов
      */
     get(slot: DocHubUISlot | string): Promise<IDocHubUISlotItem[]>;
-
-    /**
-     * Обогащает HTML элемент метаданными для контекстного взаимодействия в UI
-     */
-    appendMetaToElement(element:any, meta:IDocHubHTMLElementMeta);
 }

@@ -12,7 +12,16 @@ export enum DataLakeChange {
  *  docs/example
  *  components/dochub.main
  */
-export type DataLakePath = string;
+export class DataLakePath extends String {
+    constructor(...args:any) {
+        for (const value of args) {
+            if (!/^(\/[a-zA-Z0-9_$]{1,}){1,}$/.test(value))
+                throw new Error(`Incorrect DataLakePath `, value);
+        }
+        super(...args);
+        return this;
+    }
+}
 
 // Паттерн изменившихся файлов в DataLake 
 export type DocHubDataLakeChangeItem = RegExp;
