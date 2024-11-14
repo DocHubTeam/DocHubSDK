@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { IProtocolResponseOptions } from "./protocols";
 
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
@@ -183,28 +184,15 @@ export enum DocHubDataLakeInitializedStatus {
 
 export type DocHubDataLakeRequest = string;
 
+export interface IDataLakePullFileOptions extends IProtocolResponseOptions {
+}
+
 
 /**
  *  Обработчик событий изменения файла
  */
 export type DocHubDataLakeFileFollower = () => void;
 
-export enum DataLakePullFileOptionsResponseTypes {
-    arraybuffer = 'arraybuffer',
-    document = 'document',
-    json = 'json',
-    text = 'text',
-    stream = 'stream'
-}
-
-/**
- * Опции получения файла из DataLake
- */
-export interface IDataLakePullFileOptions {
-    responseType?: DataLakePullFileOptionsResponseTypes;
-    responseEncoding?: string;
-    timeout?: number;
-}
 
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {

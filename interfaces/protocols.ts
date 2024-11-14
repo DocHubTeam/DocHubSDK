@@ -1,9 +1,29 @@
 import { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { IDocHubContext } from './contexts';
+import { IDataLakePullFileOptions } from './datalake';
+
+export enum DataLakePullFileOptionsResponseTypes {
+    arraybuffer = 'arraybuffer',
+    document = 'document',
+    json = 'json',
+    text = 'text',
+    stream = 'stream'
+}
+
+/**
+ * Опции получения файла из DataLake
+ */
+export interface IProtocolResponseOptions {
+    responseType?: DataLakePullFileOptionsResponseTypes;
+    responseEncoding?: string;
+    timeout?: number;
+}
+
+export type IDocHubProtocolResponseDecoder = (response: AxiosResponse, options?: IProtocolResponseOptions) => AxiosResponse;
 
 // Прослойка интерфейсов Axios для последующей кастомизации и поддержания совместимости
 export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {
-    decoder?: Function;  // Декодировщик ответа
+    decoder?: IDocHubProtocolResponseDecoder;  // Декодировщик ответа
 };
 
 export interface IDocHubProtocolResponse extends AxiosResponse {};
