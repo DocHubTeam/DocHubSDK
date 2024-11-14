@@ -16,6 +16,11 @@ export interface IDocHubObjectMeta {
 }
 
 /**
+ * RegExp для указания URL объекта в DocHub
+ */
+export const DocHubObjectURLRegExp = '^\\@[a-zA-Z0-9_$\\.]{1,}(\\/[a-zA-Z0-9_$\\.]{1,}){1,}(\\?[^(#|\\/)]*){0,1}(\\#[^(#|\\/|\\?)]*){0,1}$';
+
+/**
  * Специальный формат адресации к объектам DocHub
  * Формат:      @<ID объекта>/<путь к объекту>[?<параметр=значение>[&<параметр=значение>]][#<ID презентации>]
  * Например:    @document/dochub.welcome?username=r.piontik#bio
@@ -23,8 +28,8 @@ export interface IDocHubObjectMeta {
 export class DocHubObjectURL extends String {
     constructor(...args:any) {
         for (const value of args) {
-            if (!/^\@[a-zA-Z0-9_$]{1,}(\/[a-zA-Z0-9_$]{1,}){1,}(\?[^(#|\/)]*){0,1}(\#[^(#|\/|\?)]*){0,1}$/.test(value))
-                throw new Error(`Incorrect DocHubObjectSrc `, value);
+            if (!(new RegExp(DocHubObjectURLRegExp)).test(value))
+                throw new Error(`Incorrect DocHubObjectURL [${value}] The string must be in the following format ${DocHubObjectURLRegExp}`, );
         }
         super(...args);
         return this;
@@ -64,7 +69,7 @@ export interface IDocHubObjects {
      */
     fetch(): Promise<IDocHubObjectMeta[]>;
     /**
-     * Возвращает объект
+     * Возвращает метаинформацию об объекте
      * @param uid           - Идентификатор объекта
      */
     get(uid: string): Promise<IDocHubObjectMeta>;

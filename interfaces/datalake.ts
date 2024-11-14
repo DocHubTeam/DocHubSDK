@@ -6,6 +6,11 @@ export enum DataLakeChange {
 };
 
 /**
+ * RegExp для указания пути в DataLake в DocHub
+ */
+export const DataLakePathRegExp = '^(\\/[a-zA-Z0-9_$\\.]{1,}){1,}$';
+
+/**
  * Путь к объекту в DataLake.
  * Последовательность ключей коллекций через "/".
  * Например: 
@@ -15,8 +20,8 @@ export enum DataLakeChange {
 export class DataLakePath extends String {
     constructor(...args:any) {
         for (const value of args) {
-            if (!/^(\/[a-zA-Z0-9_$]{1,}){1,}$/.test(value))
-                throw new Error(`Incorrect DataLakePath `, value);
+            if (!(new RegExp(DataLakePathRegExp)).test(value))
+                throw new Error(`Incorrect DataLakePath [${value}] The string must be in the following format ${DataLakePathRegExp}`);
         }
         super(...args);
         return this;
@@ -184,6 +189,23 @@ export type DocHubDataLakeRequest = string;
  */
 export type DocHubDataLakeFileFollower = () => void;
 
+export enum DataLakePullFileOptionsResponseTypes {
+    arraybuffer = 'arraybuffer',
+    document = 'document',
+    json = 'json',
+    text = 'text',
+    stream = 'stream'
+}
+
+/**
+ * Опции получения файла из DataLake
+ */
+export interface IDataLakePullFileOptions {
+    responseType?: DataLakePullFileOptionsResponseTypes;
+    responseEncoding?: string;
+    timeout?: number;
+}
+
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
     /**
@@ -299,7 +321,7 @@ export interface IDocHubDataLake {
      * @param uri               - URI файла во внутреннем формате DocHub
      * @returns                 - Результат выполнения запроса
      */
-    pullFile(uri: string): Promise<AxiosResponse>;
+    pullFile(uri: string, options?: IDataLakePullFileOptions): Promise<AxiosResponse>;
 
     /**
      * Возвращает конечный URI на основании массива относительных и прямых URI

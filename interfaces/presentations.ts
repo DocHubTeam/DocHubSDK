@@ -55,4 +55,9 @@ export interface IDocHubPresentations {
      * @returns             - VUE компонент для представления
      */
     getComponentByType(type: DocHubPresentationUID): Promise<IDocHubPresentationComponent>;
+    /**
+     * Возвращает список зарегистрированных типов презентаций
+     * @returns             - Массив типов презентаций
+     */
+    fetch(): Promise<string[]>
 }
