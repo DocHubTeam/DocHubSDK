@@ -50,6 +50,45 @@ export enum DocHubContainerZoomActions {
     reset = 'reset'
 }
 
+export interface IDocHubContainerAction {
+    action: DocHubContainerZoomActions
+}
+
+
+export type IDocHubComponentMenuHandle = () => void;
+
+
+/**
+ * Пункт меню
+ */
+export interface IDocHubComponentMenuItem {
+    title: string;                              // Заголовок меню
+    handle: IDocHubComponentMenuHandle;         // Обработчик клика на меню
+    icon?: string;                              // Иконка
+    group?: string;                             // Группировка элементов меню
+    subitems?: IDocHubComponentMenuItem[];      // Вложенные пункты
+}
+
+/**
+ * Custom компонент пункта меню
+ */
+export interface IDocHubComponentMenuComponent {
+    component: IDocHubUIComponent;
+}
+
+export type IDocHubComponentMenuNode = IDocHubComponentMenuItem | IDocHubComponentMenuComponent;
+
+/**
+ * Если компонент имеет генерирует контекстное меню, он должен реализовывать этот интерфейс
+ */
+export interface IDocHubComponentMenuContext {
+    /**
+     * Генерирует контекстное меню
+     * @returns         - возвращает структуру меню
+     */
+    menuContext():Promise<IDocHubComponentMenuNode[]>;
+}
+
 /**
  * Интерфейс управления UI компонентами для предопределенных слотов
  */
