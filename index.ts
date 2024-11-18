@@ -17,6 +17,7 @@ export * from './interfaces/providers';
 export * from './interfaces/router';
 export * from './interfaces/settings';
 export * from './interfaces/ui';
+export * from './interfaces/tools';
 
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';

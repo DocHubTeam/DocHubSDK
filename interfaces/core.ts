@@ -13,6 +13,7 @@ import { IDocHubProblems } from './problems';
 import { IDocHubCollaboration } from './collaborations';
 import { DocHubEditMode, IDocHubEditors } from './editors';
 import { IDocHubPresentations } from './presentations';
+import { IDocHubTools } from './tools';
 
 /**
  * Интерфейс ядра
@@ -80,6 +81,10 @@ export interface IDocHubCore {
      * Интерфейс коллаборативного взаимодействия
      */
     collaboration: IDocHubCollaboration;
+    /** 
+     * Стандартные утилиты облегчающие разработку расширений DocHub
+     */
+    tools: IDocHubTools;
     /**
      * Версия ядра
      * @returns     - Версия ядра в формате *.*.*

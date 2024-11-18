@@ -36,6 +36,21 @@ export interface IDocHubHTMLElementMeta {
 }
 
 /**
+ * Слои доступные в UI контейнере DocHub
+ */
+export enum DocHubContainerLayers {
+    fullscreen = 'fullscreen',  // Полноэкранное представление компонента
+    zoom = 'zoom'               // Масштабирование представления
+}
+
+/**
+ * Действия контейнера для слоя масштабирования
+ */
+export enum DocHubContainerZoomActions {
+    reset = 'reset'
+}
+
+/**
  * Интерфейс управления UI компонентами для предопределенных слотов
  */
 export interface IDocHubUI {
