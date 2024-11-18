@@ -21,8 +21,6 @@ export * from './interfaces/ui';
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
 
-
-
 export const DocHub: IDocHubCore = window['DocHub'];
 export const Vue2 = () => window['Vue'];
 export const Vuetify2 = () => window['Vuetify'];
