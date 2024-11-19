@@ -98,6 +98,13 @@ export interface IDocHubUIDownloadOptions {
 }
 
 /**
+ * Опции копирования данных на клиентское устройство
+ */
+export interface IDocHubUICopyClipboardOptions {
+    contentType?: string;
+}
+
+/**
  * Интерфейс управления UI компонентами для предопределенных слотов
  */
 export interface IDocHubUI {
@@ -121,4 +128,11 @@ export interface IDocHubUI {
      * @param options           - Параметры сохранения на клиентском устройстве
      */
     download(content: string | ArrayBuffer, options?:IDocHubUIDownloadOptions): Promise<void>;
+
+    /**
+     * Копирует данные в клипборд клиентского устройства
+     * @param content           - Данные, сохраняемые в файл
+     * @param options           - Параметры сохранения на клиентском устройстве
+     */
+    copyToClipboard(content: string | ArrayBuffer, options?:IDocHubUICopyClipboardOptions): Promise<void>;
 }
