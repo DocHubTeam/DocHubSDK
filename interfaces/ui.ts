@@ -76,7 +76,7 @@ export interface IDocHubComponentMenuComponent {
     component: IDocHubUIComponent;
 }
 
-export type IDocHubComponentMenuNode = IDocHubComponentMenuItem | IDocHubComponentMenuComponent;
+export type DocHubComponentMenuNode = IDocHubComponentMenuItem | IDocHubComponentMenuComponent;
 
 /**
  * Если компонент имеет генерирует контекстное меню, он должен реализовывать этот интерфейс
@@ -86,7 +86,15 @@ export interface IDocHubComponentMenuContext {
      * Генерирует контекстное меню
      * @returns         - возвращает структуру меню
      */
-    menuContext():Promise<IDocHubComponentMenuNode[]>;
+    menuContext(): DocHubComponentMenuNode[];
+}
+
+/**
+ * Опции загрузки данных на клиентское устройство
+ */
+export interface IDocHubUIDownloadOptions {
+    contentType?: string;
+    filename?: string;
 }
 
 /**
@@ -106,4 +114,11 @@ export interface IDocHubUI {
      * @returns                 - Список UI компонентов
      */
     get(slot: DocHubUISlot | string): Promise<IDocHubUISlotItem[]>;
+
+    /**
+     * Загружает данные на клиентское устройство
+     * @param content           - Данные, сохраняемые в файл
+     * @param options           - Параметры сохранения на клиентском устройстве
+     */
+    download(content: string | ArrayBuffer, options?:IDocHubUIDownloadOptions): Promise<void>;
 }
