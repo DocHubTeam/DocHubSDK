@@ -109,6 +109,12 @@ export interface IDocHubUICopyClipboardOptions {
  */
 export interface IDocHubUI {
     /**
+     * Короткое всплывающее сообщение
+     * @param message       - Сообщение.
+     * @param timeout       - Задержка в мс по умолчанию 3000
+     */
+    toast(message: string, timeout?: number);
+    /**
      * Регистрирует UI компонент в слоте
      * @param slot              - Идентификатор слота DocHubUISlot или произвольный для кастомных слотов
      * @param component         - VUE component
