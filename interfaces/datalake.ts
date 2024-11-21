@@ -151,6 +151,14 @@ export interface IDocHubTransaction {
  */
 export interface IDocHubFileEditorComponent {}
 
+
+/**
+ * VUE компонент редактора файлов по умолчанию
+ */
+export interface IDocHubFileDefaultEditorComponent extends IDocHubFileEditorComponent {
+
+}
+
 /**
  * Метаинформация о редакторе файла
  */
@@ -332,6 +340,14 @@ export interface IDocHubDataLake {
      * @param title             - Название редактора файла
      */
     registerFileEditor(pattern: RegExp, component: IDocHubFileEditorComponent, title?: string);
+
+    /**
+     * Регистрирует редактор файлов по умолчанию. 
+     * Он вызывается в том случае, если не зарегистрирован частный редактор
+     * @param component         - VUE компонент для редактирования файла
+     * @param title             - Название редактора файла
+     */
+    registerDefaultFileEditor(component: IDocHubFileDefaultEditorComponent, title: string);
 
     /**
      * Возвращает массив зарегистрированных редакторов файлов 

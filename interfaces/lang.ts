@@ -1,5 +1,3 @@
-import { DocHubEditMode, DocHubEditorURI } from './editors';
-
 /**
  * События языковых пакетов
  */
@@ -8,10 +6,17 @@ export enum IDocHubLangEvents {
 }
 
 /**
+ * Структура языкового фрагмента
+ */
+export interface IDocHubLangFragment {
+    [lang: string]: any;
+}
+
+/**
  * Структура языкового пакета
  */
 export interface IDocHubLangPackage {
-    [bundle: string]: any;
+    [id: string]: IDocHubLangFragment;
 }
 
 /**
@@ -25,14 +30,20 @@ export interface IDocHubLang {
     currentLang() : string;
     /**
      * Регистрация языкового пакета
+     * @param id            - Идентификатор языкового пакета
      * @param pkg           - Языковой пакет
      */
-    registerPackage(pkg: IDocHubLangPackage);
+    registerPackage(id: string, pkg: any);
     
     /**
      * Генерирует текст с учетом текущего языка и переданных данных для параметров
-     * @param path          - Путь к языковой константе <bundle>.<const>[.<const>]
-     * @param context       - Контекст с учетом которого будут вычисляться выражения шаблонов
+     * @param path          - Путь к языковой константе <bundle>.<lang>.<const>[.<const>]
+     * @param params        - Параметры для шаблона 
      */
-    get(path: string, context?: any): string;
+    getText(path: string, params?: any): string;
+    /**
+     * Возвращает константу "как есть"
+     * @param path          - Путь к языковой константе
+     */
+    getConst(path: string): any;
 }
