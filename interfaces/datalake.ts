@@ -156,7 +156,6 @@ export interface IDocHubFileEditorComponent {}
  * VUE компонент редактора файлов по умолчанию
  */
 export interface IDocHubFileDefaultEditorComponent extends IDocHubFileEditorComponent {
-
 }
 
 /**
@@ -174,7 +173,7 @@ export interface IDocHubFileEditorItem {
 export interface IDocHubFileEditorContext {
     uri?: string;           // URI файла открытого на редактирование. 
                             // Если не определено берется из параметра openFileEditor
-    contentType: string;    // Тип контента файла. 
+    contentType?: string;   // Тип контента файла. 
                             // Если не определено берется из данных полученных о файле в процессе открытия.
     [key: string]: any;     // Произвольные ключи и значения
 }

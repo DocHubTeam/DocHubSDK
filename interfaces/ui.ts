@@ -5,9 +5,10 @@ export interface IDocHubUIComponent {
 }
 
 export enum DocHubUISlot {
-    avatar = 'avatar',
-    toolbar = 'toolbar',
-    explorer = 'explorer'
+    avatar = 'avatar',              // Компонент монтируется в область аватаров
+    toolbar = 'toolbar',            // Компонент монтируется в область панелей инструментов
+    explorer = 'explorer',          // Компонент монтируется в область навигации 
+    codeViewer = 'code-viewer'      // Компонент используется при рендере кода
 }
 
 export interface IDocHubUISlotOptions {
@@ -15,6 +16,12 @@ export interface IDocHubUISlotOptions {
      * Заголовок компонента
      */
     title?: string;
+    /**
+     * Актуально для слота codeViewer. Определяет поддерживаемые языки. 
+     * Если не указано, то считается, что поддерживаются все.
+     * Приоритет при выборе вьювера будет отдаваться с явно определенной поддержкой.
+     */
+    languages?: string[];           
     /**
      * Режимы, в которых данный компонент актуален
      * Если пусто, то во всех
@@ -141,4 +148,5 @@ export interface IDocHubUI {
      * @param options           - Параметры сохранения на клиентском устройстве
      */
     copyToClipboard(content: string | ArrayBuffer, options?:IDocHubUICopyClipboardOptions): Promise<void>;
+
 }
