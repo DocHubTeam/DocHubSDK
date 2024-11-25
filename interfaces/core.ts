@@ -1,6 +1,5 @@
 import { IDocHubContentProviders } from './providers';
 import { IDocHubProtocols } from './protocols';
-import { IDocHubDocuments } from './documents';
 import { IDocHubDataLake } from './datalake';
 import { IDocHubConstructors } from './constructors';
 import { IDocHubObjects } from './objects';
@@ -48,12 +47,6 @@ export interface IDocHubCore {
      * Протоколы доступа к данным
      */
     protocols: IDocHubProtocols;
-    /**
-     * !!!!!!!!!!! УСТАРЕЛО !!!!!!!!!!!
-     * См presentations
-     * Документы
-     */
-    documents: IDocHubDocuments;
     /**
      * Презентации сущностей
      */

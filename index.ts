@@ -5,7 +5,6 @@ export * from './interfaces/contexts';
 export * from './interfaces/constructors';
 export * from './interfaces/collaborations';
 export * from './interfaces/datalake';
-export * from './interfaces/documents';
 export * from './interfaces/editors';
 export * from './interfaces/eventbus';
 export * from './interfaces/localstorage';
