@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Vue, Prop, Watch, Component } from 'vue-property-decorator';
-import { DocHub, IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
+import { DocHub } from '../..';
+import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
 
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
@@ -9,7 +10,8 @@ import ajv_localize from 'ajv-i18n/localize/ru';
 export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent {
   onRefresher: any = null;          // Таймер отложенного выполнения обновления
   followURI: string | null =  null; // URI файла за которым установлено слежение 
-  error: string | null = null;      // Ошибка 
+  error: string | null = null;      // Ошибка
+  isPending = true;                 // Признак внутренней работы. Например загрузка данных.
 
   /**
    * Профиль документа
@@ -84,27 +86,29 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
    */
   async doRefresh(): Promise<void> {
     try {
+      this.isPending = true;
       await this.refreshFileFollow();
       if (this.profile?.source) {
-        DocHub.dataLake.pullData(this.profile.source, this.params).then(async(result) => {
-          // Валидируем данные по структуре
-          const rules = new ajv({ allErrors: true });
-          const validator = rules.compile(this.getSchemaData());
-          if (!validator(result)) {
-            ajv_localize(validator.errors);
-            this.error = JSON.stringify(validator.errors, null, 4);
-            return;
-          } 
-          // Если все в порядке, вызываем процессинг данных
-          this.processingData(result);
-          this.error = null;
-        });
+        const result = await DocHub.dataLake.pullData(this.profile.source, this.params);
+        // Валидируем данные по структуре
+        const rules = new ajv({ allErrors: true });
+        const validator = rules.compile(this.getSchemaData());
+        if (!validator(result)) {
+          ajv_localize(validator.errors);
+          this.error = JSON.stringify(validator.errors, null, 4);
+          return;
+        } 
+        // Если все в порядке, вызываем процессинг данных
+        this.processingData(result);
+        this.error = null;
       } else this.processingData(undefined);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
       this.error = error;
       this.processingData(undefined);
+    } finally {
+      this.isPending = false;
     }
   }
 

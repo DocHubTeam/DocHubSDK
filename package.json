@@ -1,6 +1,6 @@
 {
   "name": "dochub-sdk",
-  "version": "0.1.157",
+  "version": "0.1.160",
   "description": "The DocHub System Development Kit.",
   "private": false,
   "main": "index.ts",
@@ -25,7 +25,6 @@
   "dependencies": {
     "ajv": "8.17.1",
     "ajv-i18n": "4.2.0",
-    "axios": "0.21.4",
-    "vue-property-decorator": "9.1.2"
+    "axios": "0.21.4"
   }
 }
