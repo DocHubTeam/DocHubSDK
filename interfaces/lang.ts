@@ -46,4 +46,10 @@ export interface IDocHubLang {
      * @param path          - Путь к языковой константе
      */
     getConst(path: string): any;
+    /**
+     * Отправляет запрос на переключение языка интерфейса
+     * @param lang          - Язык на который нужно переключить
+     * @returns             - Возвращает действующий язык
+     */
+    switchTo(lang: string): Promise<string>;
 }

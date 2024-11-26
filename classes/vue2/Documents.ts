@@ -6,22 +6,12 @@ import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPrese
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
 
-/**
- * Тип в источнике данных
- */
-export enum DocumentSourceType {
-  data          = 'data',         // Объект данных не требующий обработки
-  jsonata       = 'jsonata',      // JSONata запрос
-  dataFile      = 'data-file',    // Ссылка на файл с данными
-  jsonataFile   = 'jsonata-file'  // Ссылка на файл с запросом jsonata
-};
-
 @Component
 export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent {
-  onRefresher: any = null;          // Таймер отложенного выполнения обновления
-  followURI: string | null =  null; // URI файла за которым установлено слежение 
-  error: string | null = null;      // Ошибка
-  isPending = true;                 // Признак внутренней работы. Например загрузка данных.
+  onRefresher: any = null;                // Таймер отложенного выполнения обновления
+  followURI: string | undefined;          // URI файла за которым установлено слежение 
+  error: string | null = null;            // Ошибка
+  isPending = true;                       // Признак внутренней работы. Например загрузка данных.
 
   /**
    * Профиль документа
@@ -107,7 +97,10 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
       this.isPending = true;
       await this.refreshFileFollow();
       if (this.profile?.source) {
-        const result = await DocHub.dataLake.pullData(this.profile.source, this.params);
+        const result = await DocHub.dataLake.resolveDataSetProfile(this.profile, {
+          params: this.params,
+          baseURI: this.followURI
+        });
         // Валидируем данные по структуре
         const rules = new ajv({ allErrors: true });
         const validator = rules.compile(this.getSchemaData());
@@ -135,7 +128,7 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
     // Устанавливаем слежение за файлом для оперативного обновления
     this.followURI && DocHub.dataLake.unfollowFile(this.followURI, this.onRefresh);
     if (!disable) {
-      this.followURI = (await DocHub.dataLake.getURIForPath(this.profile.$base) || []).pop() || null;
+      this.followURI = (await DocHub.dataLake.getURIForPath(this.profile.$base) || []).pop();
       this.followURI && DocHub.dataLake.followFile(this.followURI, this.onRefresh);
     }
   }
