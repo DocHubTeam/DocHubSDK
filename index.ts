@@ -19,6 +19,8 @@ export * from './interfaces/ui';
 export * from './interfaces/tools';
 export * from './interfaces/lang';
 
+export * from './interfaces/datasets';
+
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
 

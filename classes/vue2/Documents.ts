@@ -6,6 +6,16 @@ import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPrese
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
 
+/**
+ * Тип в источнике данных
+ */
+export enum DocumentSourceType {
+  data          = 'data',         // Объект данных не требующий обработки
+  jsonata       = 'jsonata',      // JSONata запрос
+  dataFile      = 'data-file',    // Ссылка на файл с данными
+  jsonataFile   = 'jsonata-file'  // Ссылка на файл с запросом jsonata
+};
+
 @Component
 export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent {
   onRefresher: any = null;          // Таймер отложенного выполнения обновления
@@ -80,6 +90,14 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
    * Необходимо переопределить.
    */
   getSchemaData(): any {}
+
+  /**
+   * Определяет тип данных 
+   * @param source 
+   */
+  getSourceType(source: any) {
+
+  }
 
   /** 
    * Для переопределения

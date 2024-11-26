@@ -1,5 +1,6 @@
-import { AxiosResponse } from "axios";
-import { IProtocolResponseOptions } from "./protocols";
+import { AxiosResponse } from 'axios';
+import { IProtocolResponseOptions } from './protocols';
+import { IDocHubDataSetProfile } from './datasets';
 
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
@@ -194,12 +195,17 @@ export type DocHubDataLakeRequest = string;
 export interface IDataLakePullFileOptions extends IProtocolResponseOptions {
 }
 
-
 /**
  *  Обработчик событий изменения файла
  */
 export type DocHubDataLakeFileFollower = () => void;
 
+/**
+ * Дополнительные параметры разрешения профиля набора данных
+ */
+export interface IDataSetResolveOptions {
+    baseURI?: string;               // Базовый URI от которого будут разрешаться все относительные пути на файлы
+}
 
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
@@ -287,6 +293,14 @@ export interface IDocHubDataLake {
      * @returns                 - Результат выполненного запроса
      */
     pullData(expression: DocHubDataLakeRequest, params?: IDocHubPullDataParams, context?: any): Promise<any>;
+
+    /**
+     * Реализует профиль набора данных (выполняет профиль)
+     * @param profile           - Профиль набора данных
+     * @param options           - Параметры реализации профиля
+     * @returns                 - Результат реализации профиля (результат выполненных запросов)
+     */
+    resolveDataSetProfile(profile: IDocHubDataSetProfile, options?: IDataSetResolveOptions): Promise<any>;
 
     /**
      * Сохраняет файла в DataLake
