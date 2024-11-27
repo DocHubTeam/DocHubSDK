@@ -1,7 +1,7 @@
 /**
  * События языковых пакетов
  */
-export enum IDocHubLangEvents {
+export enum DocHubLangEvents {
     changeLang = 'dochub-lang-change'       // Изменен язык
 }
 

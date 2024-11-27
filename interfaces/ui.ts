@@ -134,14 +134,12 @@ export interface IDocHubUI {
      * @returns                 - Список UI компонентов
      */
     get(slot: DocHubUISlot | string): Promise<IDocHubUISlotItem[]>;
-
     /**
      * Загружает данные на клиентское устройство
      * @param content           - Данные, сохраняемые в файл
      * @param options           - Параметры сохранения на клиентском устройстве
      */
     download(content: string | ArrayBuffer, options?:IDocHubUIDownloadOptions): Promise<void>;
-
     /**
      * Копирует данные в клипборд клиентского устройства
      * @param content           - Данные, сохраняемые в файл

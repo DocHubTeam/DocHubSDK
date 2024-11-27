@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Vue, Prop, Watch, Component } from 'vue-property-decorator';
-import { DocHub } from '../..';
+import { DocHub, DocHubLangEvents } from '../..';
+import { DocHubError } from '..';
 import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
 
 import ajv from 'ajv';
@@ -12,6 +13,15 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
   followURI: string | undefined;          // URI файла за которым установлено слежение 
   error: string | null = null;            // Ошибка
   isPending = true;                       // Признак внутренней работы. Например загрузка данных.
+  lang: any = null;                       // Подключенный языковой пакет
+
+  constructor(...params) {
+    super(...params);
+    // Переключаем язык сразу после инициализации
+    setTimeout(() => this.remountLangPackage(), 0);
+    // Устанавливаем контроль переключения языка
+    DocHub.eventBus.$on(DocHubLangEvents.changeLang, this.remountLangPackage);
+  }
 
   /**
    * Профиль документа
@@ -43,6 +53,13 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
     this.onRefresh();
   }
 
+  /**
+   * Монтирует языковой пакет
+   */
+  remountLangPackage() {
+    this.lang = DocHub.lang.getConst(this.getLangPackageID());
+  }
+
   mounted() {
     // При монтировании компонента в DOM, генерируем событие обновления
     this.onRefresh();
@@ -51,6 +68,8 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
   destroyed() {
     // Отключаем слежку за файлом
     this.refreshFileFollow(true);
+    // Отключаем контроль переключения языка
+    DocHub.eventBus.$off(DocHubLangEvents.changeLang, this.remountLangPackage);
   }
 
   /**
@@ -73,20 +92,24 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
    * Обработка полученных данных документа.
    * Необходимо переопределить.
    */
-  processingData(data: any | undefined) {}
+  processingData(data: any | undefined) {
+    throw new DocHubError('Not implemented.');
+  }
 
   /**
    * Возвращает схему данных для контроля структуры и состава данных.
    * Необходимо переопределить.
    */
-  getSchemaData(): any {}
+  getSchemaData(): any {
+    return {};
+  }
 
   /**
-   * Определяет тип данных 
-   * @param source 
+   * Возвращает идентификатор языкового пакета.
+   * По умолчанию "dochub".
    */
-  getSourceType(source: any) {
-
+  getLangPackageID(): string {
+    return 'dochub';
   }
 
   /** 
