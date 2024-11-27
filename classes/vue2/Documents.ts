@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { Vue, Prop, Watch, Component } from 'vue-property-decorator';
-import { DocHub, DocHubLangEvents } from '../..';
+import { Prop, Watch, Component } from 'vue-property-decorator';
+import { DocHubComponentProto } from './Components';
+import { DocHub } from '../..';
 import { DocHubError } from '..';
 import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
 
@@ -8,20 +9,11 @@ import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
 
 @Component
-export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent {
+export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
   onRefresher: any = null;                // Таймер отложенного выполнения обновления
   followURI: string | undefined;          // URI файла за которым установлено слежение 
   error: string | null = null;            // Ошибка
   isPending = true;                       // Признак внутренней работы. Например загрузка данных.
-  lang: any = null;                       // Подключенный языковой пакет
-
-  constructor(...params) {
-    super(...params);
-    // Переключаем язык сразу после инициализации
-    setTimeout(() => this.remountLangPackage(), 0);
-    // Устанавливаем контроль переключения языка
-    DocHub.eventBus.$on(DocHubLangEvents.changeLang, this.remountLangPackage);
-  }
 
   /**
    * Профиль документа
@@ -53,13 +45,6 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
     this.onRefresh();
   }
 
-  /**
-   * Монтирует языковой пакет
-   */
-  remountLangPackage() {
-    this.lang = DocHub.lang.getConst(this.getLangPackageID());
-  }
-
   mounted() {
     // При монтировании компонента в DOM, генерируем событие обновления
     this.onRefresh();
@@ -68,8 +53,6 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
   destroyed() {
     // Отключаем слежку за файлом
     this.refreshFileFollow(true);
-    // Отключаем контроль переключения языка
-    DocHub.eventBus.$off(DocHubLangEvents.changeLang, this.remountLangPackage);
   }
 
   /**
@@ -105,11 +88,10 @@ export class DocHubDocumentProto extends Vue implements IDocHubEditableComponent
   }
 
   /**
-   * Возвращает идентификатор языкового пакета.
-   * По умолчанию "dochub".
+   * Обрабатываем событие переключения языкового пакета
    */
-  getLangPackageID(): string {
-    return 'dochub';
+  onLangSwitch() {
+    this.onRefresh();
   }
 
   /** 
