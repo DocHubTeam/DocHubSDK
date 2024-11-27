@@ -16,6 +16,8 @@ export class DocHubComponentProto extends Vue {
   mounted() {
     // Монтируем языковой пакет
     this.remountLangPackage();
+    // Подключаем контроль за переключением языка
+    DocHub.eventBus.$on(DocHubLangEvents.changeLang, this.remountLangPackage);
   }
 
   destroyed() {

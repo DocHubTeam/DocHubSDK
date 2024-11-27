@@ -7,6 +7,23 @@ import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPrese
 
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
+import mustache from 'mustache';
+
+//********************************************
+// !!!!!!!  followURI не задается !!!!!
+//********************************************
+
+export enum DocHubDocumentType {
+  content = 'content',    // Работает с неструктурированными данными. 
+                          // В поле source предполагается путь к файлу с данными. 
+                          // Если есть поле template, предполагается, что в нем ссылка на шаблон, 
+                          // а в source запрос для генерации данных для его заполнения.
+                          // В результате работы вызовет метод processingContent
+
+  data = 'data'           // Работает только со структурированными данными.
+                          // Предполагается, что в source находится запрос.
+                          // В результате работы вызовет метод processingData
+}
 
 @Component
 export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
@@ -73,9 +90,17 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
 
   /**
    * Обработка полученных данных документа.
-   * Необходимо переопределить.
+   * Можно перехватывать.
    */
-  processingData(data: any | undefined) {
+  processingData(data: any): any {
+    return data;
+  }
+
+  /**
+   * Обработка полученных данных документа.
+   * Нужно переопределить для типа документа DocHubDocumentType.content
+   */
+  processingContent(content: any) {
     throw new DocHubError('Not implemented.');
   }
 
@@ -85,6 +110,13 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   getSchemaData(): any {
     return {};
+  }
+
+  /**
+   * Возвращает тип документа
+   */
+  getType(): DocHubDocumentType {
+    return DocHubDocumentType.content;
   }
 
   /**
@@ -101,23 +133,38 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     try {
       this.isPending = true;
       await this.refreshFileFollow();
-      if (this.profile?.source) {
-        const result = await DocHub.dataLake.resolveDataSetProfile(this.profile, {
+      const template = (this.getType() === DocHubDocumentType.content) && this.profile?.template 
+        && (await DocHub.dataLake.pullFile(
+          DocHub.dataLake.resolveURI(this.followURI || this.profile?.template, this.profile?.template)
+        )).data;
+      if (!this.profile?.source) throw new DocHubError('Document must have field "source" in profile!');
+      let result = (template || (this.getType() === DocHubDocumentType.data)) 
+        && await DocHub.dataLake.resolveDataSetProfile(this.profile, {
           params: this.params,
           baseURI: this.followURI
-        });
-        // Валидируем данные по структуре
+        })
+        || (await DocHub.dataLake.pullFile(
+          DocHub.dataLake.resolveURI(this.followURI || this.profile?.source as string, this.profile?.source as string)
+        )).data;
+      // Валидируем данные по структуре, если это требуется
+      if (template || (this.getType() === DocHubDocumentType.data)) {
         const rules = new ajv({ allErrors: true });
         const validator = rules.compile(this.getSchemaData());
         if (!validator(result)) {
           ajv_localize(validator.errors);
           this.error = JSON.stringify(validator.errors, null, 4);
           return;
-        } 
+        }
         // Если все в порядке, вызываем процессинг данных
-        this.processingData(result);
-        this.error = null;
-      } else this.processingData(undefined);
+        result = this.processingData(result);
+      }
+      // Транслируем по шаблону
+      if (template) {
+        result = mustache.render(template.toString(), result);
+      }
+      // Вызываем метод обработки полученного контента, если это требуется
+      (template || (this.getType() === DocHubDocumentType.content)) && this.processingContent(result);
+      this.error = null;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
