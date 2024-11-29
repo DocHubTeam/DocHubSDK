@@ -7,7 +7,8 @@ import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPrese
 
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
-import mustache from 'mustache';
+import { AxiosResponse } from 'axios';
+
 
 //********************************************
 // !!!!!!!  followURI не задается !!!!!
@@ -100,8 +101,8 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Обработка полученных данных документа.
    * Нужно переопределить для типа документа DocHubDocumentType.content
    */
-  processingContent(content: any) {
-    throw new DocHubError('Not implemented.');
+  processingContent(content: AxiosResponse) {
+    throw new DocHubError(`The document has ${this.getType()} type. It must have processingContent method. But, the method is not implemented.`);
   }
 
   /**
@@ -136,31 +137,31 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
       const template = (this.getType() === DocHubDocumentType.content) && this.profile?.template 
         && (await DocHub.dataLake.pullFile(
           DocHub.dataLake.resolveURI(this.followURI || this.profile?.template, this.profile?.template)
-        )).data;
+        ));
       if (!this.profile?.source) throw new DocHubError('Document must have field "source" in profile!');
-      let result = (template || (this.getType() === DocHubDocumentType.data)) 
-        && await DocHub.dataLake.resolveDataSetProfile(this.profile, {
+      let result: AxiosResponse = (template || (this.getType() === DocHubDocumentType.data)) 
+        && { data: await DocHub.dataLake.resolveDataSetProfile(this.profile, {
           params: this.params,
           baseURI: this.followURI
-        })
+        }) } as AxiosResponse
         || (await DocHub.dataLake.pullFile(
           DocHub.dataLake.resolveURI(this.followURI || this.profile?.source as string, this.profile?.source as string)
-        )).data;
+        ));
       // Валидируем данные по структуре, если это требуется
       if (template || (this.getType() === DocHubDocumentType.data)) {
         const rules = new ajv({ allErrors: true });
         const validator = rules.compile(this.getSchemaData());
-        if (!validator(result)) {
+        if (!validator(result.data)) {
           ajv_localize(validator.errors);
           this.error = JSON.stringify(validator.errors, null, 4);
           return;
         }
         // Если все в порядке, вызываем процессинг данных
-        result = this.processingData(result);
+        result = this.processingData(result.data);
       }
       // Транслируем по шаблону
       if (template) {
-        result = mustache.render(template.toString(), result);
+        result.data = DocHub.tools.mustache.render(template.data.toString(), result.data);
       }
       // Вызываем метод обработки полученного контента, если это требуется
       (template || (this.getType() === DocHubDocumentType.content)) && this.processingContent(result);
