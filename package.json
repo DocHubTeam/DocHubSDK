@@ -1,6 +1,6 @@
 {
   "name": "dochub-sdk",
-  "version": "0.1.178",
+  "version": "0.1.182",
   "description": "The DocHub System Development Kit.",
   "private": false,
   "main": "index.ts",

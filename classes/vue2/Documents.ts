@@ -29,7 +29,8 @@ export enum DocHubDocumentType {
 @Component
 export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
   onRefresher: any = null;                // Таймер отложенного выполнения обновления
-  followURI: string | undefined;          // URI файла за которым установлено слежение 
+  followFiles: string[] | undefined;      // Список файлов за изменениями которых нужно следить
+  baseURI: string | undefined;            // URI документа от которого должны разрешаться все относительные ссылки
   error: string | null = null;            // Ошибка
   isPending = true;                       // Признак внутренней работы. Например загрузка данных.
 
@@ -70,7 +71,7 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
 
   destroyed() {
     // Отключаем слежку за файлом
-    this.refreshFileFollow(true);
+    this.refreshFilesFollow(true);
   }
 
   /**
@@ -84,7 +85,7 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Открываем редактор
    */
   openEditor(): void {
-    this.followURI && DocHub.dataLake.openFileEditor(this.followURI, {
+    this.baseURI && DocHub.dataLake.openFileEditor(this.baseURI, {
       targetPath: this.profile.$base
     });
   }
@@ -93,7 +94,7 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Обработка полученных данных документа.
    * Можно перехватывать.
    */
-  processingData(data: any): any {
+  async processingData(data: any): Promise<any> {
     return data;
   }
 
@@ -101,8 +102,18 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Обработка полученных данных документа.
    * Нужно переопределить для типа документа DocHubDocumentType.content
    */
-  processingContent(content: AxiosResponse) {
+  async processingContent(content: AxiosResponse): Promise<void> {
     throw new DocHubError(`The document has ${this.getType()} type. It must have processingContent method. But, the method is not implemented.`);
+  }
+
+  /**
+   * Возвращает список отслеживаемых файлов.
+   * Может быть переопределен.
+   * @param files   - Список файлов которые предполагается отслеживать
+   * @returns       - Список файлов для отслеживания
+   */
+  async processingFollowFiles(files: string[]): Promise<string[]> {
+    return files;
   }
 
   /**
@@ -114,7 +125,8 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   }
 
   /**
-   * Возвращает тип документа
+   * Возвращает тип документа.
+   * Может быть переопределен.
    */
   getType(): DocHubDocumentType {
     return DocHubDocumentType.content;
@@ -132,20 +144,20 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   async doRefresh(): Promise<void> {
     try {
+      if (!this.profile?.source) throw new DocHubError('Document must have field "source" in profile!');
       this.isPending = true;
-      await this.refreshFileFollow();
+      await this.refreshFilesFollow();
       const template = (this.getType() === DocHubDocumentType.content) && this.profile?.template 
         && (await DocHub.dataLake.pullFile(
-          DocHub.dataLake.resolveURI(this.followURI || this.profile?.template, this.profile?.template)
+          DocHub.dataLake.resolveURI(this.baseURI || this.profile?.template, this.profile?.template)
         ));
-      if (!this.profile?.source) throw new DocHubError('Document must have field "source" in profile!');
       let result: AxiosResponse = (template || (this.getType() === DocHubDocumentType.data)) 
         && { data: await DocHub.dataLake.resolveDataSetProfile(this.profile, {
           params: this.params,
-          baseURI: this.followURI
+          baseURI: this.baseURI
         }) } as AxiosResponse
         || (await DocHub.dataLake.pullFile(
-          DocHub.dataLake.resolveURI(this.followURI || this.profile?.source as string, this.profile?.source as string)
+          DocHub.dataLake.resolveURI(this.baseURI || this.profile?.source as string, this.profile?.source as string)
         ));
       // Валидируем данные по структуре, если это требуется
       if (template || (this.getType() === DocHubDocumentType.data)) {
@@ -157,15 +169,19 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
           return;
         }
         // Если все в порядке, вызываем процессинг данных
-        result = this.processingData(result.data);
+        result.data = await this.processingData(result.data);
       }
       // Транслируем по шаблону
       if (template) {
-        result.data = DocHub.tools.mustache.render(template.data.toString(), result.data);
+        result = {
+          ...template,
+          data: DocHub.tools.mustache.render(template.data.toString(), result.data)
+        }
       }
+      // Очищаем информацию об ошибке
+      this.error = null;
       // Вызываем метод обработки полученного контента, если это требуется
       (template || (this.getType() === DocHubDocumentType.content)) && this.processingContent(result);
-      this.error = null;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
@@ -177,12 +193,33 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   }
 
   // Обновляет URI файла за которым установлено наблюдение
-  async refreshFileFollow(disable = false): Promise<void> {
-    // Устанавливаем слежение за файлом для оперативного обновления
-    this.followURI && DocHub.dataLake.unfollowFile(this.followURI, this.onRefresh);
-    if (!disable) {
-      this.followURI = (await DocHub.dataLake.getURIForPath(this.profile.$base) || []).pop();
-      this.followURI && DocHub.dataLake.followFile(this.followURI, this.onRefresh);
+  async refreshFilesFollow(disable = false): Promise<void> {
+    // Очищаем ранее установленные отслеживания
+    for(const uri of this.followFiles || []) {
+      DocHub.dataLake.unfollowFile(uri, this.onRefresh);
+    }
+    const followFiles: string[] = [];
+    // Если нужно только очистить отслеживание - выходим
+    if (disable) return;
+    // Иначе...
+    // Определяем базовый файл
+    this.baseURI = (await DocHub.dataLake.getURIForPath(this.profile.$base) || []).pop();
+    // Если определить его не удалось, вываливаемся в ошибку
+    if (!this.baseURI) throw new DocHubError(`Can not resolve base URI for base path [${this.profile.$base}]`);
+    // Добавляем его в отслеживание
+    this.baseURI && followFiles.push(this.baseURI);
+    // Если указан шаблон, добавляем его в отслеживаемые файлы
+    if(this.profile?.template) {
+      followFiles.push(DocHub.dataLake.resolveURI(this.baseURI, this.profile.template));
+    } else if (typeof this.profile?.source === 'string' && this.getType() === DocHubDocumentType.content) {
+      // Если шаблона нет, но документ предполагает работу с содержимым файла, то отслеживаем source
+      followFiles.push(DocHub.dataLake.resolveURI(this.baseURI, this.profile?.source));
+    }
+    // Даем возможность повлиять на список отслеживаемых файлов через переопределенный метод
+    this.followFiles = await this.processingFollowFiles(followFiles);
+    // Устанавливаем отслеживание
+    for(const uri of this.followFiles || []) {
+      DocHub.dataLake.followFile(uri, this.onRefresh);
     }
   }
 
