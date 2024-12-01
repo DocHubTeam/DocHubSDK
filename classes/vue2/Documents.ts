@@ -51,6 +51,14 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   }) readonly params: IDocHubPresentationsParams;
 
   /**
+   * Признак версии для печати
+   */
+  @Prop({
+    type: Boolean,
+    default: false
+  }) readonly isPrintVersion: boolean;
+
+  /**
    * Следим за изменением профиля документа
    */
   @Watch('profile') onProfileChanged() {
