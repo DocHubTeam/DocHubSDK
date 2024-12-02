@@ -26,14 +26,20 @@ export enum DocHubDocumentType {
                           // В результате работы вызовет метод processingData
 }
 
+export interface IDocHubDocumentUIState {
+  styleHeight: string;
+  styleWidth: string;
+  styleFilter: string;
+}
+
 @Component
 export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
-  onRefresher: any = null;                // Таймер отложенного выполнения обновления
-  followFiles: string[] | undefined;      // Список файлов за изменениями которых нужно следить
-  baseURI: string | undefined;            // URI документа от которого должны разрешаться все относительные ссылки
-  error: string | null = null;            // Ошибка
-  isPending = true;                       // Признак внутренней работы. Например загрузка данных.
-
+  onRefresher: any = null;                              // Таймер отложенного выполнения обновления
+  followFiles: string[] | undefined;                    // Список файлов за изменениями которых нужно следить
+  baseURI: string | undefined;                          // URI документа от которого должны разрешаться все относительные ссылки
+  error: string | null = null;                          // Ошибка
+  isPending = true;                                     // Признак внутренней работы. Например загрузка данных.
+  savedUIState: IDocHubDocumentUIState | null = null;   // Хранит текущее UI состояние для последующего восстановления
   /**
    * Профиль документа
    */
@@ -41,7 +47,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     type: Object,
     required: true
   }) readonly profile: IDocHubPresentationProfile;
-
   /**
    * Параметры
    */
@@ -49,7 +54,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     type: Object,
     default: {}
   }) readonly params: IDocHubPresentationsParams;
-
   /**
    * Признак версии для печати
    */
@@ -57,19 +61,24 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     type: Boolean,
     default: false
   }) readonly isPrintVersion: boolean;
-
   /**
    * Следим за изменением профиля документа
    */
   @Watch('profile') onProfileChanged() {
     this.onRefresh();
   }
-
   /**
    * Следим за изменением параметров
    */
   @Watch('params') onParamsChanged() {
     this.onRefresh();
+  }
+  /**
+   * Следим за занятостью документа
+   */
+  @Watch('isPending') onPendingChanged() {
+    if (this.isPending) this.freezeView();
+    else this.unfreezeView();
   }
 
   mounted() {
@@ -81,7 +90,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     // Отключаем слежку за файлом
     this.refreshFilesFollow(true);
   }
-
   /**
    * Подтверждаем, что презентация может редактироваться
    * @returns 
@@ -97,7 +105,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
       targetPath: this.profile.$base
     });
   }
-
   /**
    * Обработка полученных данных документа.
    * Можно перехватывать.
@@ -105,7 +112,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   async processingData(data: any): Promise<any> {
     return data;
   }
-
   /**
    * Обработка полученных данных документа.
    * Нужно переопределить для типа документа DocHubDocumentType.content
@@ -113,7 +119,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   async processingContent(content: AxiosResponse): Promise<void> {
     throw new DocHubError(`The document has ${this.getType()} type. It must have processingContent method. But, the method is not implemented.`);
   }
-
   /**
    * Возвращает список отслеживаемых файлов.
    * Может быть переопределен.
@@ -123,7 +128,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   async processingFollowFiles(files: string[]): Promise<string[]> {
     return files;
   }
-
   /**
    * Возвращает схему данных для контроля структуры и состава данных.
    * Необходимо переопределить.
@@ -131,7 +135,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   getSchemaData(): any {
     return {};
   }
-
   /**
    * Возвращает тип документа.
    * Может быть переопределен.
@@ -139,14 +142,48 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   getType(): DocHubDocumentType {
     return DocHubDocumentType.content;
   }
-
   /**
    * Обрабатываем событие переключения языкового пакета
    */
   onLangSwitch() {
     this.onRefresh();
   }
-
+  /**
+   * Сохраняет текущие параметры визуализации для исключения дерганий при обновлении контента
+   */
+  saveUISate() {
+    const element = this['$el'];
+    this.savedUIState = {
+      styleHeight: element.style.height,
+      styleWidth: element.style.styleWidth,
+      styleFilter: element.style.filter
+    }
+  }
+  /**
+   * Восстанавливает параметры визуализации из ранее сохраненных
+   */
+  loadUISate() {
+    const element = this['$el'];
+    element.style.height = this.savedUIState?.styleHeight || element.style.height;
+    element.style.width = this.savedUIState?.styleWidth || element.style.width;
+    element.style.filter = this.savedUIState?.styleFilter || element.style.filter;
+  }
+  /**
+   * "Замораживает" представление на период обновления
+   */
+  freezeView() {
+    this.saveUISate();
+    const element = this['$el'];
+    element.style.height = `${element.clientHeight}px !important`;
+    element.style.width = `${element.clientWidth}px !important`;
+    element.style.filter = 'blur(8px)';
+  }
+  /**
+   * "Размораживает" представление после загрузки
+   */
+  unfreezeView() {
+    this.loadUISate();
+  }
   /** 
    * Для переопределения
    */
