@@ -78,7 +78,7 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   @Watch('isPending') onPendingChanged() {
     if (this.isPending) this.freezeView();
-    else this.unfreezeView();
+    else this.$nextTick(() => this.unfreezeView());
   }
 
   mounted() {
@@ -152,10 +152,10 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Сохраняет текущие параметры визуализации для исключения дерганий при обновлении контента
    */
   saveUISate() {
-    const element = this['$el'];
+    const element: any = this['$el'];
     this.savedUIState = {
       styleHeight: element.style.height,
-      styleWidth: element.style.styleWidth,
+      styleWidth: element.style.width,
       styleFilter: element.style.filter
     }
   }
@@ -163,17 +163,17 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Восстанавливает параметры визуализации из ранее сохраненных
    */
   loadUISate() {
-    const element = this['$el'];
-    element.style.height = this.savedUIState?.styleHeight || element.style.height;
-    element.style.width = this.savedUIState?.styleWidth || element.style.width;
-    element.style.filter = this.savedUIState?.styleFilter || element.style.filter;
+    const element: any = this['$el'];
+    element.style.height = this.savedUIState?.styleHeight;
+    element.style.width = this.savedUIState?.styleWidth;
+    element.style.filter = this.savedUIState?.styleFilter;
   }
   /**
    * "Замораживает" представление на период обновления
    */
   freezeView() {
     this.saveUISate();
-    const element = this['$el'];
+    const element: any = this['$el'];
     element.style.height = `${element.clientHeight}px !important`;
     element.style.width = `${element.clientWidth}px !important`;
     element.style.filter = 'blur(8px)';

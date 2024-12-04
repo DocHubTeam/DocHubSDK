@@ -10,6 +10,11 @@ export enum DocHubNavigateTarget {
     top = '_top'
 }
 
+/**
+ * Обработчик изменения расположения
+ */
+export type DocHubLocationWatcher = (location: Location) => void;
+
 export interface IDocHubRouter {
     // Регистрирует роут в формате VUE2
     registerRoute(route: object);
@@ -17,4 +22,12 @@ export interface IDocHubRouter {
     registerMiddleware(middleware: object);
     // Указывает на какой роут перейти в DocHub
     navigate(url: string | DocHubNavigateCommands, target?:DocHubNavigateTarget);
+    /**
+     * Регистрирует наблюдателя за текущим location
+     */
+    registerLocationWatcher(watcher: DocHubLocationWatcher);
+    /**
+     * Удаляет наблюдателя за текущим location
+     */
+    unregisterLocationWatcher(watcher: DocHubLocationWatcher);
 }
