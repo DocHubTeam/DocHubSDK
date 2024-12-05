@@ -12,7 +12,7 @@ export class DocHubError extends Error {
 /**
  * Класс ошибок, являющихся проблемами для разрешения пользователем
  */
-export class DocHubProblem extends DocHubError implements IDocHubProblem {
+export class DocHubErrorProblem extends DocHubError implements IDocHubProblem {
   uid: string;
   title: string;
   description: string;

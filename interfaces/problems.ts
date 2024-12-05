@@ -58,9 +58,26 @@ export interface IDocHubProblem {
      * Предложения о том, как исправить проблему
      */
     correction?: string;
+    /**
+     * UID валидатра, который обнаружил проблему
+     */
+    validator?: IDocHubValidatorUID;
+}
+
+export enum IDocHubProblemsEvents {
+    // Процесс поиска проблем стартовал
+    startReview = 'dochub-problems-review-start',
+    // Валидатор завершил работу
+    validatorReviewed = 'dochub-problems-validator-reviewed',
+    // Процесс поиска проблем завершился
+    startFinish = 'dochub-problems-review-finish',
 }
 
 export interface IDocHubProblems {
+    /**
+     * Проверяет идет ли процесс поиска проблем
+     */
+    isProcessing():Promise<boolean>;
     /**
      * Очищает список зарегистрированных проблем
      */
@@ -83,4 +100,16 @@ export interface IDocHubProblems {
      * @param uid 
      */
     emit(problem: IDocHubProblem);
+    /**
+     * Возвращает зарегистрированные проблемы
+     */
+    fetchProblems(): Promise<IDocHubProblem[]>
+    /**
+     * Возвращает валидаторы
+     */
+    fetchValidators(): Promise<IDocHubValidator[]>
+    /**
+     * Возвращает исключения
+     */
+    fetchExceptions(): Promise<IDocHubException[]>
 }
