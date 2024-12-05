@@ -164,9 +164,11 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   loadUISate() {
     const element: any = this['$el'];
-    element.style.height = this.savedUIState?.styleHeight;
-    element.style.width = this.savedUIState?.styleWidth;
-    element.style.filter = this.savedUIState?.styleFilter;
+    if (element?.style) {
+      element.style.height = this.savedUIState?.styleHeight;  
+      element.style.width = this.savedUIState?.styleWidth;
+      element.style.filter = this.savedUIState?.styleFilter;
+    }
   }
   /**
    * "Замораживает" представление на период обновления

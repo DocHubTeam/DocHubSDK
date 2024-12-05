@@ -11,6 +11,13 @@ export enum DocHubUISlot {
     codeViewer = 'code-viewer'      // Компонент используется при рендере кода
 }
 
+/**
+ * События интерфейса
+ */
+export enum DocHubUIEvents {
+    mountedToSlot = 'dochub-ui-slot-mounted'        // В слот смонтирован компонент
+}
+
 export interface IDocHubUISlotOptions {
     /**
      * Заголовок компонента
@@ -27,6 +34,16 @@ export interface IDocHubUISlotOptions {
      * Если пусто, то во всех
      */
     modes?: DocHubEditMode[];
+    /**
+     * Уникальный идентификатор компонента.
+     * Нужен для автоматического сохранения параметров отображения, корреспонденции событий и т.п.
+     * Если он не определен, то разработчик должен сам заботиться о всем.
+     */
+    uid?: string;
+    /**
+     * Определяет состояние развернутого виджета при первом использовании
+     */
+    expanded?: boolean;
 }
 
 export interface IDocHubUISlotItem {
@@ -146,5 +163,4 @@ export interface IDocHubUI {
      * @param options           - Параметры сохранения на клиентском устройстве
      */
     copyToClipboard(content: string | ArrayBuffer, options?:IDocHubUICopyClipboardOptions): Promise<void>;
-
 }

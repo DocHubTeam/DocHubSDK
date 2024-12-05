@@ -13,7 +13,7 @@ export enum DocHubNavigateTarget {
 /**
  * Обработчик изменения расположения
  */
-export type DocHubLocationWatcher = (location: Location) => void;
+export type DocHubLocationWatcher = (location: URL) => void;
 
 export interface IDocHubRouter {
     // Регистрирует роут в формате VUE2
@@ -30,4 +30,8 @@ export interface IDocHubRouter {
      * Удаляет наблюдателя за текущим location
      */
     unregisterLocationWatcher(watcher: DocHubLocationWatcher);
+    /**
+     * Возвращает текущий location
+     */
+    getLocation():Promise<URL>;
 }
