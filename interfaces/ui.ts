@@ -44,6 +44,11 @@ export interface IDocHubUISlotOptions {
      * Определяет состояние развернутого виджета при первом использовании
      */
     expanded?: boolean;
+    /**
+     * Виджет реализующий минимальный функционал компонента.
+     * Используется для компактного представления в соответствии со стратегией слота.
+     */
+    widget?: IDocHubUIComponent;
 }
 
 export interface IDocHubUISlotItem {

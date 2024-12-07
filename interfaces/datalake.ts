@@ -294,13 +294,13 @@ export interface IDocHubDataLake {
     pullData(expression: DocHubDataSetProfileSource, params?: IDocHubPullDataParams, context?: any): Promise<any>;
 
     /**
-     * Реализует профиль набора данных (выполняет профиль)
+     * Реализует профиль набора данных (выполняет профиль).
      * @param profile           - Профиль набора данных
      * @param options           - Параметры реализации профиля
      * @returns                 - Результат реализации профиля (результат выполненных запросов)
      */
     resolveDataSetProfile(profile: IDocHubDataSetProfile, options?: IDataSetResolveOptions): Promise<any>;
-
+    
     /**
      * Сохраняет файла в DataLake
      * @param uri               - URI файла во внутреннем формате DocHub

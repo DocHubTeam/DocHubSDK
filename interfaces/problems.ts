@@ -4,10 +4,7 @@ import { IDocHubDataSetProfile } from "./datasets";
 export type IDocHubProblemUID = string;
 export type IDocHubValidatorUID = string;
 
-/**
- * Валидаторы проблем
- */
-export interface IDocHubValidator extends IDocHubDataSetProfile {
+export interface IDocHubValidatorBase {
     /**
      * Идентификатор валидатора
      */
@@ -17,6 +14,11 @@ export interface IDocHubValidator extends IDocHubDataSetProfile {
      */
     title: string;
 }
+
+/**
+ * Валидаторы проблем
+ */
+export interface IDocHubValidator extends IDocHubDataSetProfile, IDocHubValidatorBase {}
 /**
  * Исключения для регистрации проблем
  */
@@ -64,13 +66,23 @@ export interface IDocHubProblem {
     validator?: IDocHubValidatorUID;
 }
 
-export enum IDocHubProblemsEvents {
+export enum DocHubProblemsEvents {
     // Процесс поиска проблем стартовал
     startReview = 'dochub-problems-review-start',
     // Валидатор завершил работу
     validatorReviewed = 'dochub-problems-validator-reviewed',
     // Процесс поиска проблем завершился
-    startFinish = 'dochub-problems-review-finish',
+    finishReview = 'dochub-problems-review-finish',
+}
+
+/**
+ * Данные передаваемые с событием DocHubProblemsEvents.validatorReviewed
+ */
+export interface IDocHubProblemsEventValidatorReviewed {
+    // Данные валидатора
+    validator: IDocHubValidatorBase;
+    // Количество обнаруженных проблем
+    problems: number;
 }
 
 export interface IDocHubProblems {
@@ -103,11 +115,11 @@ export interface IDocHubProblems {
     /**
      * Возвращает зарегистрированные проблемы
      */
-    fetchProblems(): Promise<IDocHubProblem[]>
+    fetchProblems(validator?: IDocHubValidatorUID | IDocHubValidatorUID[]): Promise<IDocHubProblem[]>
     /**
      * Возвращает валидаторы
      */
-    fetchValidators(): Promise<IDocHubValidator[]>
+    fetchValidators(validator?: IDocHubValidatorUID | IDocHubValidatorUID[]): Promise<IDocHubValidator[]>
     /**
      * Возвращает исключения
      */
