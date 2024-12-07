@@ -26,12 +26,6 @@ export enum DocHubDocumentType {
                           // В результате работы вызовет метод processingData
 }
 
-export interface IDocHubDocumentUIState {
-  styleHeight: string;
-  styleWidth: string;
-  styleFilter: string;
-}
-
 @Component
 export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
   onRefresher: any = null;                              // Таймер отложенного выполнения обновления
@@ -39,7 +33,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   baseURI: string | undefined;                          // URI документа от которого должны разрешаться все относительные ссылки
   error: string | null = null;                          // Ошибка
   isPending = true;                                     // Признак внутренней работы. Например загрузка данных.
-  savedUIState: IDocHubDocumentUIState | null = null;   // Хранит текущее UI состояние для последующего восстановления
   /**
    * Профиль документа
    */
@@ -147,44 +140,6 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   onLangSwitch() {
     this.onRefresh();
-  }
-  /**
-   * Сохраняет текущие параметры визуализации для исключения дерганий при обновлении контента
-   */
-  saveUISate() {
-    const element: any = this['$el'];
-    this.savedUIState = {
-      styleHeight: element.style.height,
-      styleWidth: element.style.width,
-      styleFilter: element.style.filter
-    }
-  }
-  /**
-   * Восстанавливает параметры визуализации из ранее сохраненных
-   */
-  loadUISate() {
-    const element: any = this['$el'];
-    if (element?.style) {
-      element.style.height = this.savedUIState?.styleHeight;  
-      element.style.width = this.savedUIState?.styleWidth;
-      element.style.filter = this.savedUIState?.styleFilter;
-    }
-  }
-  /**
-   * "Замораживает" представление на период обновления
-   */
-  freezeView() {
-    this.saveUISate();
-    const element: any = this['$el'];
-    element.style.height = `${element.clientHeight}px !important`;
-    element.style.width = `${element.clientWidth}px !important`;
-    element.style.filter = 'blur(8px)';
-  }
-  /**
-   * "Размораживает" представление после загрузки
-   */
-  unfreezeView() {
-    this.loadUISate();
   }
   /** 
    * Для переопределения
