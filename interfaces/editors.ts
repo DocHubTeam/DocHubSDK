@@ -103,4 +103,11 @@ export interface IDocHubEditors {
      * @param uid   - Идентификатор контекста
      */
     getContextByUID(uid: DocHubContextUID): Promise<DocHubEditorContext | null>;
+    /**
+     * Монтирует область данных в контекст редактирования.
+     * Смонтированная область будет доступна во всех контекстах.
+     * @param prop  - Свойство в context.meta
+     * @param data  - Данные, которые будут смонтированы
+     */
+    mountContextArea(prop: string, data: any);
 }

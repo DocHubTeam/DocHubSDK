@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Prop, Watch, Component } from 'vue-property-decorator';
 import { DocHubComponentProto } from './Components';
-import { DocHubEditorContext } from '../..';
+import type { DocHubEditorContext } from '../..';
 
 @Component
 export class DocHubEditorProto extends DocHubComponentProto {
