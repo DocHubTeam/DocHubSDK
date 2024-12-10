@@ -56,7 +56,8 @@ export enum EditorEvents {
  */
 export enum DocHubEditorType {
     file = 'file',
-    object = 'object'
+    object = 'object',
+    desk = 'desk'
 }
 
 export type DocHubContextUID = DocHubUID;
@@ -88,6 +89,10 @@ export type DocHubEditorURI = string;
  */
 export type DocHubEditorContext = DocHubEditorFileContext | DocHubEditorObjectContext;
 
+/**
+ * Предопределенный идентификатор контекста рабочего стола
+ */
+export const DESK_CONTEXT_UID = '00000000-0000-0000-0000-000000000000';
 
 /**
  * Интерфейс взаимодействия с редакторами
@@ -110,4 +115,5 @@ export interface IDocHubEditors {
      * @param data  - Данные, которые будут смонтированы
      */
     mountContextArea(prop: string, data: any);
+
 }
