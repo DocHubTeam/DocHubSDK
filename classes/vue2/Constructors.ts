@@ -13,4 +13,13 @@ export class DocHubConstructorProto extends DocHubComponentProto {
     type: Object,
     required: true
   }) readonly context: DocHubEditorContext;
+  /**
+   * Идентификатор конструктора.
+   * Один компонент может быть вызван для нужд разных конструкторов.
+   * Для идентификации конструктора используется UID.
+   */
+  @Prop({
+    type: String,
+    required: true
+  }) readonly uid: string;
 }
