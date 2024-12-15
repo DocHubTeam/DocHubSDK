@@ -10,8 +10,12 @@ export enum DocHubEditMode {
     editIDE = 'edit-ide',
     view = 'view'
 }
-
-
+/**
+ * Мета информация о редактируемом объекте
+ */
+export interface IDocHubEditableMeta {
+    title: string;  // Название объекта редактирования. Выводится пользователя, например, в выпадающем меню
+}
 /**
  * Если компонент имеет возможность контекстного редактирования, он должен реализовывать данный интерфейс
  */
@@ -25,8 +29,11 @@ export interface IDocHubEditableComponent {
      * Отправляет запрос на начало редактирования
      */
     openEditor(): void;
+    /**
+     * Возвращает метаинформацию по редактированию
+     */
+    getMetaEdit(): Promise<IDocHubEditableMeta>;
 }
-
 /**
  * События, которые должен обрабатывать редактор
  */
@@ -49,8 +56,6 @@ export enum EditorEvents {
     create = '$create',                         // Требует создать новый объект
     delete = '$delete'                          // Требует удалить объект
 };
-
-
 /**
  * Тип редактора
  */
@@ -61,7 +66,6 @@ export enum DocHubEditorType {
 }
 
 export type DocHubContextUID = DocHubUID;
-
 /**
  * Контекст редактора
  */
@@ -71,7 +75,6 @@ export type DocHubEditorFileContext = {
     title?: string;
     meta: IDocHubFileEditorContext
 }
-
 /**
  * Контекст редактора объекта
  */
@@ -83,17 +86,14 @@ export type DocHubEditorObjectContext = {
 }
 
 export type DocHubEditorURI = string;
-
 /**
  * Универсальный контекст редактора
  */
 export type DocHubEditorContext = DocHubEditorFileContext | DocHubEditorObjectContext;
-
 /**
  * Предопределенный идентификатор контекста рабочего стола
  */
 export const DESK_CONTEXT_UID = '00000000-0000-0000-0000-000000000000';
-
 /**
  * Интерфейс взаимодействия с редакторами
  */
@@ -115,5 +115,4 @@ export interface IDocHubEditors {
      * @param data  - Данные, которые будут смонтированы
      */
     mountContextArea(prop: string, data: any);
-
 }
