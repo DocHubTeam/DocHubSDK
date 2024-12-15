@@ -10,12 +10,24 @@ export enum DocHubEditMode {
     editIDE = 'edit-ide',
     view = 'view'
 }
+
+export type IDocHubEditableMetaEditEntryHandle = () => void;
+
+/**
+ * Точки входя для редактирования
+ */
+export interface IDocHubEditableMetaEditEntry {
+    title: string;
+    icon?: string;
+    handle: IDocHubEditableMetaEditEntryHandle;
+}
 /**
  * Мета информация о редактируемом объекте
  */
 export interface IDocHubEditableMeta {
     title: string;  // Название объекта редактирования. Выводится пользователя, например, в выпадающем меню
     icon?: string;  // Иконка соответствующая объекту редактирования
+    entries?: IDocHubEditableMetaEditEntry[];    // Точки входя для редактирования. Если точки не определены, то используется редактор по умолчанию openEditor
 }
 /**
  * Если компонент имеет возможность контекстного редактирования, он должен реализовывать данный интерфейс
@@ -27,7 +39,7 @@ export interface IDocHubEditableComponent {
      */
     isEditable(): boolean;
     /**
-     * Отправляет запрос на начало редактирования
+     * Отправляет запрос на редактирование с использованием редактора по умолчанию
      */
     openEditor(): void;
     /**
