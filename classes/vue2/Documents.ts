@@ -3,7 +3,8 @@ import { Prop, Watch, Component } from 'vue-property-decorator';
 import { DocHubComponentProto } from './Components';
 import { DocHub } from '../..';
 import { DocHubError } from '..';
-import type { IDocHubEditableComponent, IDocHubEditableMeta, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
+import type { IDocHubEditableComponent, IDocHubEditableMeta, IDocHubEditableMetaEditEntry, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
+import { getIconByURI } from '../../helpers/icons';
 
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
@@ -103,7 +104,18 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   async getMetaEdit(): Promise<IDocHubEditableMeta> {
     return {
-      title: (this.followFiles || [])[0]
+      title: this.profile?.title || this.followFiles?.[0] || '$undefined$',
+      icon: 'mdi-file-code',
+      // Генерирует на все задействованные файлы точки редактирования
+      entries: this.followFiles?.map((uri: string): IDocHubEditableMetaEditEntry => {
+        return {
+          title: uri,
+          icon: getIconByURI(uri),
+          handle: () =>  DocHub.dataLake.openFileEditor(uri, {
+            targetPath: this.profile.$base
+          })
+        }
+      })
     }
   }
   /**
