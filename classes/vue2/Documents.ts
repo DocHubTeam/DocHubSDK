@@ -3,7 +3,7 @@ import { Prop, Watch, Component } from 'vue-property-decorator';
 import { DocHubComponentProto } from './Components';
 import { DocHub } from '../..';
 import { DocHubError } from '..';
-import type { IDocHubEditableComponent, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
+import type { IDocHubEditableComponent, IDocHubEditableMeta, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
 
 import ajv from 'ajv';
 import ajv_localize from 'ajv-i18n/localize/ru';
@@ -97,6 +97,14 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     this.baseURI && DocHub.dataLake.openFileEditor(this.baseURI, {
       targetPath: this.profile.$base
     });
+  }
+  /**
+   * Возвращает метаинформацию для режима редактирования
+   */
+  async getMetaEdit(): Promise<IDocHubEditableMeta> {
+    return {
+      title: (this.followFiles || [])[0]
+    }
   }
   /**
    * Обработка полученных данных документа.
