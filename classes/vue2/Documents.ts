@@ -4,6 +4,7 @@ import { DocHubComponentProto } from './Components';
 import { DocHub } from '../..';
 import { DocHubError } from '..';
 import type { IDocHubEditableComponent, IDocHubEditableMeta, IDocHubEditableMetaEditEntry, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
+import { DocHubUITargetWindow } from '../..';
 import { getIconByURI } from '../../helpers/icons';
 
 import ajv from 'ajv';
@@ -96,7 +97,8 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   openEditor(): void {
     this.baseURI && DocHub.dataLake.openFileEditor(this.baseURI, {
-      targetPath: this.profile.$base
+      targetPath: this.profile.$base,
+      targetWindow: (window.event as any)?.ctrlKey ? DocHubUITargetWindow._blank : DocHubUITargetWindow._self
     });
   }
   /**
