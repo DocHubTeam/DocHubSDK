@@ -157,8 +157,7 @@ export interface IDocHubFileEditorComponent {}
 /**
  * VUE компонент редактора файлов по умолчанию
  */
-export interface IDocHubFileDefaultEditorComponent extends IDocHubFileEditorComponent {
-}
+export interface IDocHubFileDefaultEditorComponent extends IDocHubFileEditorComponent {}
 
 /**
  * Метаинформация о редакторе файла
@@ -194,8 +193,59 @@ export enum DocHubDataLakeInitializedStatus {
 }
 
 
-export interface IDataLakePullFileOptions extends IProtocolResponseOptions {
+/**
+ * VUE компонент визуализатора различий файлов
+ */
+export interface IDocHubFileDifferComponent {}
+
+
+/**
+ * VUE компонент визуализатора различий файлов по умолчанию
+ */
+export interface IDocHubFileDefaultDifferComponent extends IDocHubFileDifferComponent {}
+
+/**
+ * Метаинформация о визуализаторе различий в файлах
+ */
+export interface IDocHubFileDifferItem {
+    component: IDocHubFileDifferComponent;
+    pattern: RegExp;
+    title: string;
 }
+
+/**
+ * Функция, которая должна вернуть контент версии при необходимости
+ */
+export type DocHubVersionContentResolver = () => Promise<AxiosResponse>;
+
+/**
+ * Интерфейс реализует доступ к заданной версии файла
+ */
+export interface IDocHubFileVersion {
+    version: string;                        // Идентификатор версии
+    uri: string;                            // URI файла версии
+    moment: Date;                           // Дата и время версии
+    author: string;                         // Автор версии
+    pull: DocHubVersionContentResolver;     // Функция получения контента версии
+}
+
+/**
+ * Тип отображения различий
+ */
+export enum DocHubDiffOutputFormats {
+    lineByLine = 'line-by-line',
+    sideBySide = 'side-by-side'
+}
+
+export interface IDocHubDiffOptions {
+    title?: string;                         // Название представления
+    outputFormat?: DocHubDiffOutputFormats  // Тип отображения различий
+}
+
+/**
+ * Дополнительные параметры получения файла из DataLake
+ */
+export interface IDataLakePullFileOptions extends IProtocolResponseOptions {}
 
 /**
  *  Обработчик событий изменения файла
@@ -209,6 +259,8 @@ export interface IDataSetResolveOptions {
     baseURI?: string;               // Базовый URI от которого будут разрешаться все относительные пути на файлы
     params?: IDocHubPullDataParams; // Передаваемые параметры
 }
+
+
 
 // Интерфейс доступа к DataLake
 export interface IDocHubDataLake {
@@ -349,13 +401,59 @@ export interface IDocHubDataLake {
      */
     getURIForPath(path: DataLakePath): Promise<string[]>;
 
+
+    /**********************************************************************
+     *                  Визуализация различий в файлах
+     *********************************************************************/
+
     /**
-     * Регистрирует редактор файлов
+     * Регистрация визуализатора различий файлов по умолчанию
+     * @param component         - VUE компонент для визуализации различий
+     * @param title             - Название визуализатора
+     */
+    registerDefaultFileDiffer(component: IDocHubFileDefaultDifferComponent, title?: string);
+
+    /**
+     * Регистрирует визуализатора различий файлов
      * @param pattern           - RegExp contentType файла. Например: ^.*\/markdown($|;.*$)
      * @param component         - VUE компонент для редактирования файла
      * @param title             - Название редактора файла
      */
-    registerFileEditor(pattern: RegExp, component: IDocHubFileEditorComponent, title?: string);
+    registerFileDiffer(pattern: RegExp, component: IDocHubFileDifferComponent, title?: string);
+
+    /**
+     * Возвращает массив зарегистрированных визуализаторов различий файлов по contentType
+     * @returns                 - Массив зарегистрированных редакторов объектов
+     */
+    fetchFileDiffers(): Promise<IDocHubFileDifferItem[]>;
+
+    /**
+     * Возвращает актуальный визуализатор различий файла по contentType
+     * @param contentType       - Тип контента. Например: text/markdown
+     */
+    getFileDiffer(contentType: string): Promise<IDocHubFileDifferItem | null>;
+
+    /**
+     * Запрос на открытие визуализатора различий на просмотр. Необязательно будет выполнен.
+     * @param ver1              - Версия 1
+     * @param ver2              - Версия 2
+     * @param context           - Контекст редактирования файла. Необходим для связных редакторов и конструкторов.
+     * @returns                 - Компонент редактора, если открытие оказалось успешным
+     */
+    openFileDiffer(ver1: IDocHubFileVersion, ver2: IDocHubFileVersion, options?: IDocHubDiffOptions): Promise<IDocHubFileEditorComponent>;
+
+    /**
+     * Запрос на открытие визуализатора различий на просмотр. Необязательно будет выполнен.
+     * @param uri               - URI файла для которого нужно получить список версий
+     * @param from              - С какой версии получать список
+     * @param limit             - Количество записей в возвращаемом массиве
+     * @returns                 - Список доступных версий файла
+     */
+    fetchFileVersions(uri: string, from?: IDocHubFileVersion, limit?: number): Promise<IDocHubFileVersion[]>;
+
+    /**********************************************************************
+     *                    Редактирование файлов
+     *********************************************************************/
 
     /**
      * Регистрирует редактор файлов по умолчанию. 
@@ -363,7 +461,15 @@ export interface IDocHubDataLake {
      * @param component         - VUE компонент для редактирования файла
      * @param title             - Название редактора файла
      */
-    registerDefaultFileEditor(component: IDocHubFileDefaultEditorComponent, title: string);
+    registerDefaultFileEditor(component: IDocHubFileDefaultEditorComponent, title?: string);
+
+    /**
+     * Регистрирует редактор файлов
+     * @param pattern           - RegExp contentType файла. Например: ^.*\/markdown($|;.*$)
+     * @param component         - VUE компонент для редактирования файла
+     * @param title             - Название редактора файла
+     */
+    registerFileEditor(pattern: RegExp, component: IDocHubFileEditorComponent, title?: string);
 
     /**
      * Возвращает массив зарегистрированных редакторов файлов 
@@ -392,6 +498,10 @@ export interface IDocHubDataLake {
      * @returns                 - true, если закрытие оказалось успешным
      */
     closeFileEditor(uri: string): Promise<boolean>;
+
+    /**********************************************************************
+     *                    Работа с контентом файлов
+     *********************************************************************/
 
     /**
      * Регистрирует соответствие шаблона файла типу контента.
