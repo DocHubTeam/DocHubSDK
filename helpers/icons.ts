@@ -2,10 +2,9 @@
  * Возвращает ассоциативную иконку из набора доступного в DocHub для URI
  * @param uri 
  */
-export function getIconByURI(uri: string) {
-    const url = new URL(uri, 'nul:/');
+export function getIconByURI(uri: string | undefined) {
+    const url = new URL(uri || 'default', 'null:/');
     return {
-        'default': 'mdi-file',
         'json': 'mdi-code-json',
         'md': 'mdi-language-markdown',
         'yml': 'mdi-code-array',
@@ -21,5 +20,5 @@ export function getIconByURI(uri: string) {
         'html': 'mdi-web',
         'htm': 'mdi-web',
         'c#': 'mdi-language-csharp'
-    }[url.pathname.split('.').pop() || 'default']
+    }[url.pathname.split('.').pop() || 'default'] || 'mdi-file'
 }

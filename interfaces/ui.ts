@@ -134,6 +134,16 @@ export interface IDocHubUICopyClipboardOptions {
 }
 
 /**
+ * Указывает где загружать указанный URL 
+ */
+export enum DocHubUITargetWindow {
+    _blank = '_blank',
+    _self = '_self',
+    _parent = '_parent',
+    _top = '_top'
+}
+
+/**
  * Интерфейс управления UI компонентами для предопределенных слотов
  */
 export interface IDocHubUI {

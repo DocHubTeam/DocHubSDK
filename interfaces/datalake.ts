@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { IProtocolResponseOptions } from './protocols';
 import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './datasets';
+import { DocHubUITargetWindow } from './ui';
 
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
@@ -172,14 +173,17 @@ export interface IDocHubFileEditorItem {
  * Описывает контекст открытого на редактирования файла
  */
 export interface IDocHubFileEditorContext {
-    uri?: string;           // URI файла открытого на редактирование. 
-                            // Если не определено берется из параметра openFileEditor
-    contentType?: string;   // Тип контента файла. 
-                            // Если не определено берется из данных полученных о файле в процессе открытия.
-    [key: string]: any;     // Произвольные ключи и значения
+    uri?: string;                           // URI файла открытого на редактирование. 
+                                            // Если не определено берется из параметра openFileEditor
+    contentType?: string;                   // Тип контента файла. 
+                                            // Если не определено берется из данных полученных о файле в процессе открытия.
+    targetWindow?: DocHubUITargetWindow;   // Где открывать указанный URI для редактирования
+    [key: string]: any;                     // Произвольные ключи и значения
 }
 
-
+/**
+ * События Datalake
+ */
 export enum DocHubDataLakeInitializedStatus {
     success = 'root-manifest-success',              // DataLake инициализирован
     unknown = 'root-manifest-unknown',              // Статус не определен, возможно идет загрузка платформы

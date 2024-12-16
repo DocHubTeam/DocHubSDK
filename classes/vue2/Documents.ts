@@ -105,14 +105,15 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   async getMetaEdit(): Promise<IDocHubEditableMeta> {
     return {
       title: this.profile?.title || this.followFiles?.[0] || '$undefined$',
-      icon: 'mdi-file-code',
+      icon: getIconByURI(this.baseURI || this.followFiles?.[0]),
       // Генерирует на все задействованные файлы точки редактирования
       entries: this.followFiles?.map((uri: string): IDocHubEditableMetaEditEntry => {
         return {
           title: uri,
           icon: getIconByURI(uri),
           handle: () =>  DocHub.dataLake.openFileEditor(uri, {
-            targetPath: this.profile.$base
+            targetPath: this.profile.$base,
+            
           })
         }
       })
