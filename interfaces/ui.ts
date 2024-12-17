@@ -115,7 +115,7 @@ export interface IDocHubComponentMenuContext {
      * Генерирует контекстное меню
      * @returns         - возвращает структуру меню
      */
-    menuContext(): DocHubComponentMenuNode[];
+    menuContext(): Promise<DocHubComponentMenuNode[]>;
 }
 
 /**

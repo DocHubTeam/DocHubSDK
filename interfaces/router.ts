@@ -1,3 +1,5 @@
+import { Route } from 'vue-router';
+
 export enum DocHubNavigateCommands {
     back = '$_back_$',
     root = '$_root_$'
@@ -15,12 +17,42 @@ export enum DocHubNavigateTarget {
  */
 export type DocHubLocationWatcher = (location: URL) => void;
 
+/**
+ * Обработчик middleware роутера
+ */
+export type DocHubRouterMiddlewareHandle = () => void;
+
+/**
+ * Интерфейс middleware
+ */
+export interface IDocHubRouterMiddleware {
+    beforeEach?: DocHubRouterMiddlewareHandle;
+}
+
+/**
+ * Интерфейс роута
+ */
+export interface IDocHubRouterRoute extends Route {};
+
+/**
+ * Интерфейс роутера
+ */
 export interface IDocHubRouter {
-    // Регистрирует роут в формате VUE2
-    registerRoute(route: object);
-    // Регистрирует middleware в формате VUE2
-    registerMiddleware(middleware: object);
-    // Указывает на какой роут перейти в DocHub
+    /**
+     * Регистрирует роут
+     * @param route         - Профиль роута
+     */
+    registerRoute(route: IDocHubRouterRoute);
+    /**
+     * Регистрирует middleware
+     * @param middleware    - Профиль middleware
+     */
+    registerMiddleware(middleware: IDocHubRouterMiddleware);
+    /**
+     * Указывает на какой роут перейти в DocHub
+     * @param url           - URL перехода
+     * @param target        - Целевое окно перехода (_self по умолчанию)
+     */
     navigate(url: string | DocHubNavigateCommands, target?:DocHubNavigateTarget);
     /**
      * Регистрирует наблюдателя за текущим location

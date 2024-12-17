@@ -192,12 +192,10 @@ export enum DocHubDataLakeInitializedStatus {
     other = 'root-manifest-other-error'             // Возникла неопределенная ошибка не позволяющая инициализировать DataLake
 }
 
-
 /**
  * VUE компонент визуализатора различий файлов
  */
 export interface IDocHubFileDifferComponent {}
-
 
 /**
  * VUE компонент визуализатора различий файлов по умолчанию
@@ -237,6 +235,9 @@ export enum DocHubDiffOutputFormats {
     sideBySide = 'side-by-side'
 }
 
+/**
+ * Опции отображения разницы файлов
+ */
 export interface IDocHubDiffOptions {
     title?: string;                         // Название представления
     outputFormat?: DocHubDiffOutputFormats  // Тип отображения различий
@@ -260,9 +261,9 @@ export interface IDataSetResolveOptions {
     params?: IDocHubPullDataParams; // Передаваемые параметры
 }
 
-
-
-// Интерфейс доступа к DataLake
+/**
+ * Интерфейс доступа к DataLake
+ */
 export interface IDocHubDataLake {
     /**
      * Метод определяет был ли DataLake инициализирован.
@@ -440,7 +441,7 @@ export interface IDocHubDataLake {
      * @param context           - Контекст редактирования файла. Необходим для связных редакторов и конструкторов.
      * @returns                 - Компонент редактора, если открытие оказалось успешным
      */
-    openFileDiffer(ver1: IDocHubFileVersion, ver2: IDocHubFileVersion, options?: IDocHubDiffOptions): Promise<IDocHubFileEditorComponent>;
+    openFileDiffer(ver1: IDocHubFileVersion, ver2: IDocHubFileVersion, options?: IDocHubDiffOptions): Promise<void>;
 
     /**
      * Запрос на открытие визуализатора различий на просмотр. Необязательно будет выполнен.
@@ -490,7 +491,7 @@ export interface IDocHubDataLake {
      * @param context           - Контекст редактирования файла. Необходим для связных редакторов и конструкторов.
      * @returns                 - Компонент редактора, если открытие оказалось успешным
      */
-    openFileEditor(uri: string, context?: IDocHubFileEditorContext): Promise<IDocHubFileEditorComponent>;
+    openFileEditor(uri: string, context?: IDocHubFileEditorContext): Promise<void>;
 
     /**
      * Запрос на завершение пользовательского редактирования файла. Не обязательно будет выполнен.
