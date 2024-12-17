@@ -216,17 +216,6 @@ export interface IDocHubFileDifferItem {
 export type DocHubVersionContentResolver = () => Promise<IDocHubProtocolResponse>;
 
 /**
- * Интерфейс реализует доступ к заданной версии файла
- */
-export interface IDocHubFileVersion {
-    version: string;                        // Идентификатор версии
-    uri: string;                            // URI файла версии
-    moment: Date;                           // Дата и время версии
-    author: string;                         // Автор версии
-    pull: DocHubVersionContentResolver;     // Функция получения контента версии
-}
-
-/**
  * Тип отображения различий
  */
 export enum DocHubDiffOutputFormats {
@@ -435,12 +424,12 @@ export interface IDocHubDataLake {
 
     /**
      * Запрос на открытие визуализатора различий на просмотр. Необязательно будет выполнен.
-     * @param ver1              - Версия 1
-     * @param ver2              - Версия 2
-     * @param context           - Контекст редактирования файла. Необходим для связных редакторов и конструкторов.
+     * @param uri               - URI файла
+     * @param versions          - Версии для сравнения
+     * @param options           - Опции сравнения
      * @returns                 - Компонент редактора, если открытие оказалось успешным
      */
-    openFileDiffer(ver1: IDocHubFileVersion, ver2: IDocHubFileVersion, options?: IDocHubDiffOptions): Promise<void>;
+    openFileDiffer(uri: string, versions: string[], options?: IDocHubDiffOptions): Promise<void>;
 
     /**********************************************************************
      *                    Редактирование файлов

@@ -75,6 +75,17 @@ export type DocHubResourceMetaOther = {
 export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder | DocHubResourceMetaOther;
 
 /**
+ * Информация о версии ресурса
+ */
+export interface IDocHubResourceVersion {
+    version: string;                        // Идентификатор версии в формате определенном протоколом
+    uri: string;                            // URI файла версии
+    moment: Date;                           // Дата и время версии
+    author: string;                         // Автор версии
+}
+
+
+/**
  * Методы доступные над ресурсом
  */
 export enum DocHubProtocolMethods {
@@ -87,8 +98,9 @@ export enum DocHubProtocolMethods {
     PATCH = 'PATCH',
     OPTIONS = 'OPTIONS',
     // WebDAV - Расширенные методы для работы ресурсами
-    SCAN = 'SCAN'       // Сканирует ресурс URI и возвращает о нем расширенную информацию в формате DocHubResourceMeta
-                        // Позволяет получать список файлов в папке
+    SCAN = 'SCAN',          // Сканирует ресурс URI и возвращает о нем расширенную информацию в формате DocHubResourceMeta
+                            // Позволяет получать список файлов в папке
+    VERSIONS = 'VERSIONS'   // Возвращает доступные версии ресурса в формате IDocHubResourceVersion
 };
 
 /**
