@@ -1,5 +1,4 @@
-import { AxiosResponse } from 'axios';
-import { IProtocolResponseOptions } from './protocols';
+import { IProtocolResponseOptions, IDocHubProtocolResponse } from './protocols';
 import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './datasets';
 import { DocHubUITargetWindow } from './ui';
 
@@ -214,7 +213,7 @@ export interface IDocHubFileDifferItem {
 /**
  * Функция, которая должна вернуть контент версии при необходимости
  */
-export type DocHubVersionContentResolver = () => Promise<AxiosResponse>;
+export type DocHubVersionContentResolver = () => Promise<IDocHubProtocolResponse>;
 
 /**
  * Интерфейс реализует доступ к заданной версии файла
@@ -365,7 +364,7 @@ export interface IDocHubDataLake {
      * @param contentType       - Тип контента
      * @returns                 - Статус выполненного запроса
      */
-    pushFile(uri: string, content: any, contentType: string): Promise<AxiosResponse>;
+    pushFile(uri: string, content: any, contentType: string): Promise<IDocHubProtocolResponse>;
 
     /**
      * Устанавливает слежение за изменениями в файле
@@ -386,7 +385,7 @@ export interface IDocHubDataLake {
      * @param uri               - URI файла во внутреннем формате DocHub
      * @returns                 - Результат выполнения запроса
      */
-    pullFile(uri: string, options?: IDataLakePullFileOptions): Promise<AxiosResponse>;
+    pullFile(uri: string, options?: IDataLakePullFileOptions): Promise<IDocHubProtocolResponse>;
 
     /**
      * Возвращает конечный URI на основании массива относительных и прямых URI

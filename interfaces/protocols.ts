@@ -22,14 +22,17 @@ export interface IProtocolResponseOptions {
     version?: string;     
 }
 
-export type FDocHubProtocolResponseDecoder = (response: AxiosResponse, options?: IProtocolResponseOptions) => Promise<AxiosResponse>;
+export interface IDocHubProtocolResponse extends AxiosResponse {
+    // Версия файла в формате определяемом протоколом
+    version?: string;     
+}
+
+export type FDocHubProtocolResponseDecoder = (response: IDocHubProtocolResponse, options?: IProtocolResponseOptions) => Promise<IDocHubProtocolResponse>;
 
 // Прослойка интерфейсов Axios для последующей кастомизации и поддержания совместимости
 export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {
     decoder?: FDocHubProtocolResponseDecoder;  // Декодировщик ответа
 };
-
-export interface IDocHubProtocolResponse extends AxiosResponse {};
 
 /**
  * Тип ресурса
