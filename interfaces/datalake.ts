@@ -442,15 +442,6 @@ export interface IDocHubDataLake {
      */
     openFileDiffer(ver1: IDocHubFileVersion, ver2: IDocHubFileVersion, options?: IDocHubDiffOptions): Promise<void>;
 
-    /**
-     * Запрос на открытие визуализатора различий на просмотр. Необязательно будет выполнен.
-     * @param uri               - URI файла для которого нужно получить список версий
-     * @param from              - С какой версии получать список
-     * @param limit             - Количество записей в возвращаемом массиве
-     * @returns                 - Список доступных версий файла
-     */
-    fetchFileVersions(uri: string, from?: IDocHubFileVersion, limit?: number): Promise<IDocHubFileVersion[]>;
-
     /**********************************************************************
      *                    Редактирование файлов
      *********************************************************************/
