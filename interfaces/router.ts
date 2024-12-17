@@ -1,4 +1,4 @@
-import { Route } from 'vue-router';
+import { Route, RouteConfig } from 'vue-router';
 
 export enum DocHubNavigateCommands {
     back = '$_back_$',
@@ -20,7 +20,7 @@ export type DocHubLocationWatcher = (location: URL) => void;
 /**
  * Обработчик middleware роутера
  */
-export type DocHubRouterMiddlewareHandle = () => void;
+export type DocHubRouterMiddlewareHandle = (to, from, next) => Promise<void>;
 
 /**
  * Интерфейс middleware
@@ -32,7 +32,7 @@ export interface IDocHubRouterMiddleware {
 /**
  * Интерфейс роута
  */
-export interface IDocHubRouterRoute extends Route {};
+export type IDocHubRouterRoute = RouteConfig;
 
 /**
  * Интерфейс роутера

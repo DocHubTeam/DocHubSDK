@@ -11,12 +11,15 @@ export enum ProtocolOptionsResponseTypes {
 }
 
 /**
- * Опции получения файла из DataLake
+ * Опции получения ответа из DataLake
  */
 export interface IProtocolResponseOptions {
     responseType?: ProtocolOptionsResponseTypes;
     responseEncoding?: string;
+    // Версия файла в формате определяемом драйвером
     timeout?: number;
+    // Версия файла в формате определяемом протоколом
+    version?: string;     
 }
 
 export type FDocHubProtocolResponseDecoder = (response: AxiosResponse, options?: IProtocolResponseOptions) => Promise<AxiosResponse>;
