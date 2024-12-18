@@ -1,4 +1,4 @@
-import { AxiosResponse, AxiosRequestConfig, ResponseType } from 'axios';
+import { AxiosResponse, AxiosRequestConfig, ResponseType, Method } from 'axios';
 import { IDocHubContext } from './contexts';
 
 export enum ProtocolOptionsResponseTypes {
@@ -30,9 +30,11 @@ export interface IDocHubProtocolResponse extends AxiosResponse {
 export type FDocHubProtocolResponseDecoder = (response: IDocHubProtocolResponse, options?: IProtocolResponseOptions) => Promise<IDocHubProtocolResponse>;
 
 // Прослойка интерфейсов Axios для последующей кастомизации и поддержания совместимости
-export interface IDocHubProtocolRequestConfig extends AxiosRequestConfig {
-    decoder?: FDocHubProtocolResponseDecoder;  // Декодировщик ответа
-};
+type Modify<T, R> = Omit<T, keyof R> & R;
+export interface IDocHubProtocolRequestConfig extends Modify<AxiosRequestConfig, {
+    decoder?: FDocHubProtocolResponseDecoder;   // Декодировщик ответа
+    method?: Method | DocHubProtocolMethods     // Метод запроса
+}>{};
 
 /**
  * Тип ресурса
@@ -78,8 +80,8 @@ export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFold
  * Информация о версии ресурса
  */
 export interface IDocHubResourceVersion {
-    version: string;                        // Идентификатор версии в формате определенном протоколом
-    uri: string;                            // URI файла версии
+    uid: string;                            // Идентификатор версии в формате определенном протоколом
+    uri: string;                            // URI файла в этой версии
     moment: Date;                           // Дата и время версии
     author: string;                         // Автор версии
 }

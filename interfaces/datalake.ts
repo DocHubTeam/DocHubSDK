@@ -1,4 +1,4 @@
-import { IProtocolResponseOptions, IDocHubProtocolResponse } from './protocols';
+import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersion } from './protocols';
 import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './datasets';
 import { DocHubUITargetWindow } from './ui';
 
@@ -89,26 +89,20 @@ export enum IDocHubTransactionFileAction {
 
 export type IDocHubTransactionChangeFilePut = {
     action: IDocHubTransactionFileAction.filePut;
-    uri: string;
-    contentUID: string;
 }
 
 export type IDocHubTransactionChangeFileDelete = {
     action: IDocHubTransactionFileAction.fileDelete;
-    uri: string;
 }
 
 export type IDocHubTransactionChangeFileMove = {
     action: IDocHubTransactionFileAction.fileMove;
     fromURI: string;
-    toURI: string;
 }
 
 export type IDocHubTransactionChangeFile = IDocHubTransactionChangeFilePut | IDocHubTransactionChangeFileDelete | IDocHubTransactionChangeFileMove;
 
-export interface IDocHubTransactionChangeRecord {
-    uid: string;            // UUID
-    moment: number;         // timestamp
+export interface IDocHubTransactionChangeRecord extends IDocHubResourceVersion {
     change: IDocHubTransactionChangeFile;
 }
 
@@ -116,9 +110,10 @@ export interface IDocHubTransactionChangeRecord {
  * Метаданные файла входящего в транзакцию
  */
 export type IDocHubTransactionFile = {
-    uid: string;                                // UUID записи
-    content: string;
-    headers: IDocHubTransactionFileHeaders;
+    uid: string;                                    // UUID записи
+    uri: string;                                    // URI файла
+    content: string;                                // Содержимое файла
+    headers: IDocHubTransactionFileHeaders;         // Заголовки (метаданные) файла
 }
 
 /**
@@ -134,17 +129,22 @@ export interface IDocHubTransaction {
 
     /**
      * Проверяет, что транзакция содержит файл
-     * @param uri               - URI файла или шаблон поиска
+     * @param uri               - URI файла
      * @returns                 - Возвращает массив содержимое найденных файлов
      */
-    getChangesForFile(pattern: string | RegExp): Promise<IDocHubTransactionChangeRecord>;
+    getFileVersions(uri: string): Promise<IDocHubTransactionChangeRecord>;
+
+    /**
+     * Возвращает указанную версию файла
+     * @param uid               - Идентификатор версии в транзакции
+     */
+    getFileVersion(uid: string): Promise<IDocHubTransactionFile | null>;
 
     /**
      * Удаляет запись об изменении из транзакции
      * @param uids              - массив идентификаторов изменений
-     * @returns                 - Возвращает массив удаленных изменений
      */
-    deleteChange(uids: string[]): Promise<IDocHubTransactionChangeRecord[]>;
+    deleteFileVersions(uids: string[]): Promise<void>;
 }
 
 /**
