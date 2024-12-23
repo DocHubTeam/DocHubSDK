@@ -1,5 +1,6 @@
 import { DocHubEditorURI } from './editors';
 import { DataLakePath } from './datalake';
+import { IDocHubProtocolResponse } from './protocols';
 /**
  * Содержит метаданные задекларированного объекта
  */
@@ -60,6 +61,23 @@ export interface IDocHubObjectEditorContext extends IDocHubObjectMeta {
     [key: string]: any;     // Произвольные ключи и значения
 }
 
+export enum IDocHubObjectAppletSerializationFormat {
+    svg = 'svg'
+}
+
+export interface IDocHubObjectAppletSymbolOptions {
+    width?: number;         // Задает ширину символа в пикселях
+    height?: number;        // Задает высоту символа в пикселях
+}
+
+export interface IDocHubObjectApplet {
+    /**
+     * Генерирует символ объекта для представления в различных контекстах.
+     * Формат вывода svg
+     */
+    makeSymbol(options?:IDocHubObjectAppletSymbolOptions): Promise<string>;
+    serialization(format: IDocHubObjectAppletSerializationFormat): Promise<IDocHubProtocolResponse>;
+}
 
 // Интерфейс доступа к задекларированным объектам в DataLake
 export interface IDocHubObjects {
@@ -96,7 +114,6 @@ export interface IDocHubObjects {
      * @returns             - IDocHubEditorItem
      */
     getObjectEditor(uid: string): Promise<IDocHubObjectEditorItem>;
-
     /**
      * Генерирует URL для редактирования объекта по указанному пути
      * @param path          - Путь к объекту, разделенный "/"
@@ -110,6 +127,16 @@ export interface IDocHubObjects {
      * @returns                 - Компонент редактора, если открытие оказалось успешным
      */
     openObjectEditor(path: DataLakePath, context?: IDocHubObjectEditorContext): Promise<IDocHubObjectEditorComponent>;
+    /**
+     * Выпускает апплет - самостоятельное микроприложение объекта.
+     * @param object            - URI объекта, который должен быть выпущен
+     */
+    releaseApplet(object: DocHubObjectURL): Promise<IDocHubObjectApplet>;
+    /**
+     * Создает апплет из данных (десериализация)
+     * @param data              - Необходимые данные для десериализации
+     */
+    makeApplet(data: IDocHubProtocolResponse): Promise<IDocHubObjectApplet>;
 
 }
 

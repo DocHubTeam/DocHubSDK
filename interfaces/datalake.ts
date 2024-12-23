@@ -81,22 +81,22 @@ export enum IDocHubTransactionFileDataType {
     content = 'content'
 }
 
-export enum IDocHubTransactionFileAction {
+export enum DocHubTransactionFileAction {
     filePut = 'file-put',
     fileDelete = 'file-delete',
     fileMove = 'file-move'
 }
 
 export type IDocHubTransactionChangeFilePut = {
-    action: IDocHubTransactionFileAction.filePut;
+    action: DocHubTransactionFileAction.filePut;
 }
 
 export type IDocHubTransactionChangeFileDelete = {
-    action: IDocHubTransactionFileAction.fileDelete;
+    action: DocHubTransactionFileAction.fileDelete;
 }
 
 export type IDocHubTransactionChangeFileMove = {
-    action: IDocHubTransactionFileAction.fileMove;
+    action: DocHubTransactionFileAction.fileMove;
     fromURI: string;
 }
 
@@ -132,7 +132,7 @@ export interface IDocHubTransaction {
      * @param uri               - URI файла
      * @returns                 - Возвращает массив содержимое найденных файлов
      */
-    getFileVersions(uri: string): Promise<IDocHubTransactionChangeRecord>;
+    getFileVersions(uri: string): Promise<IDocHubTransactionChangeRecord[]>;
 
     /**
      * Возвращает указанную версию файла

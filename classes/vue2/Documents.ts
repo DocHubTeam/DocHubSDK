@@ -31,8 +31,8 @@ export enum DocHubDocumentType {
 @Component
 export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
   onRefresher: any = null;                              // Таймер отложенного выполнения обновления
-  followFiles: string[] | undefined;                    // Список файлов за изменениями которых нужно следить
-  baseURI: string | undefined;                          // URI документа от которого должны разрешаться все относительные ссылки
+  followFiles: string[] | undefined = undefined;        // Список файлов за изменениями которых нужно следить
+  baseURI: string | undefined = undefined;              // URI документа от которого должны разрешаться все относительные ссылки
   error: string | null = null;                          // Ошибка
   isPending = true;                                     // Признак внутренней работы. Например загрузка данных.
   /**
