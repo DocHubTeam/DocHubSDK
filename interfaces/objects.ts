@@ -61,7 +61,7 @@ export interface IDocHubObjectEditorContext extends IDocHubObjectMeta {
     [key: string]: any;     // Произвольные ключи и значения
 }
 
-export enum IDocHubObjectAppletSerializationFormat {
+export enum DocHubObjectAppletSerializationFormat {
     svg = 'svg'
 }
 
@@ -76,7 +76,7 @@ export interface IDocHubObjectApplet {
      * Формат вывода svg
      */
     makeSymbol(options?:IDocHubObjectAppletSymbolOptions): Promise<string>;
-    serialization(format: IDocHubObjectAppletSerializationFormat): Promise<IDocHubProtocolResponse>;
+    serialization(format: DocHubObjectAppletSerializationFormat): Promise<IDocHubProtocolResponse>;
 }
 
 // Интерфейс доступа к задекларированным объектам в DataLake
