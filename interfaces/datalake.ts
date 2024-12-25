@@ -249,6 +249,27 @@ export interface IDataSetResolveOptions {
     params?: IDocHubPullDataParams; // Передаваемые параметры
 }
 
+
+export enum DocHubDataLakeDebuggerHandleActions {
+    run = 'run',    // Продолжить выполнение
+    next = 'next'   // Перейти на следующий шаг
+}
+
+export interface IDocHubDataLakeDebuggerContext {
+    source: () => Promise<string>;
+    position: number;
+    [keys: string]: any;
+}
+
+export type IDocHubDataLakeDebuggerHandle = (context: IDocHubDataLakeDebuggerContext) => Promise<DocHubDataLakeDebuggerHandleActions>;
+
+/**
+ * Интерфейс внутрисистемного отладчика
+ */
+export interface IDocHubDataLakeDebugger {
+    handle: IDocHubDataLakeDebuggerHandle;
+}
+
 /**
  * Интерфейс доступа к DataLake
  */
@@ -497,5 +518,14 @@ export interface IDocHubDataLake {
      * @returns                 - Тип контента. Например: text/markdown
      */
     getContentTypeForFile(file: string): string | null;
+
+    /*********************************************************************
+     *        Внутрисистемный отладчик запросов к DataLake
+     *********************************************************************/
+    /**
+     * Регистрирует отладчик в системе
+     * @param debug             - Объект реализующий отладчик
+     */
+    registerDebugger(debug: IDocHubDataLakeDebugger);
 }
 

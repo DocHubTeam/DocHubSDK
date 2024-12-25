@@ -58,9 +58,9 @@ export enum EditorEvents {
     /**
      * События контекста редактора
      */
-    contextAppend  = '$edit-context-append',    // Контекст добавлен 
-    contextUpdated = '$edit-context-updated',   // Контекст претерпел изменения
-    contextRemoved = '$edit-context-removed',   // Контекст удален
+    contextAppend  = '#edit-context-append',    // Контекст добавлен 
+    contextUpdated = '#edit-context-updated',   // Контекст претерпел изменения
+    contextRemoved = '#edit-context-removed',   // Контекст удален
     /**
      * События редактора
      */
