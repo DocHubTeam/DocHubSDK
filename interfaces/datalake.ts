@@ -256,18 +256,21 @@ export enum DocHubDataLakeDebuggerHandleActions {
 }
 
 export interface IDocHubDataLakeDebuggerContext {
-    source: () => Promise<string>;
-    position: number;
+    uid: string;                    // Идентификатор запроса
+    source: () => Promise<string>;  // Функция возвращающая исходный код запроса
+    position: number;               // Позиция остановки отладчика
     [keys: string]: any;
 }
-
-export type IDocHubDataLakeDebuggerHandle = (context: IDocHubDataLakeDebuggerContext) => Promise<DocHubDataLakeDebuggerHandleActions>;
 
 /**
  * Интерфейс внутрисистемного отладчика
  */
 export interface IDocHubDataLakeDebugger {
-    handle: IDocHubDataLakeDebuggerHandle;
+    /**
+     * Метод вызывается при необходимости отладочного действия
+     * @param context           - контекст исполнения кода
+     */
+    handle(context: IDocHubDataLakeDebuggerContext): Promise<DocHubDataLakeDebuggerHandleActions>;
 }
 
 /**
