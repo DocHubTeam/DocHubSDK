@@ -252,7 +252,9 @@ export interface IDataSetResolveOptions {
 
 export enum DocHubDataLakeDebuggerHandleActions {
     run = 'run',    // Продолжить выполнение
-    next = 'next'   // Перейти на следующий шаг
+    next = 'next',  // Перейти на следующий шаг
+    into = 'into',  // Войти в подпрограмму
+    stop = 'stop'   // Прервать выполнение 
 }
 
 export interface IDocHubDataLakeDebuggerContext {
