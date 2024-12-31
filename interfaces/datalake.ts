@@ -1,5 +1,5 @@
 import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersion } from './protocols';
-import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './datasets';
+import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './datasets';
 import { DocHubUITargetWindow } from './ui';
 
 export enum DataLakeChange {
@@ -257,11 +257,29 @@ export enum DocHubDataLakeDebuggerHandleActions {
     stop = 'stop'   // Прервать выполнение 
 }
 
+export type DocHubDataLakeDebuggerQuery = (expression: DocHubJSONataQuery) => Promise<any>;
+
+/**
+ * Элемент стека выполнения запросов в DataLake
+ */
+export interface IDocHubDataLakeDebuggerCallStackItem {
+    position: number;                       // Указывает на каком символе в source сейчас выполнение
+    source: () => Promise<string>;          // Возвращает исходный код запроса
+    variables: () => Promise<string[]>;     // Возвращает список переменных запроса
+    query: DocHubDataLakeDebuggerQuery;     // Выполнение произвольного запроса в контексте данного запроса
+}
+
+/**
+ * Стек запросов в DataLake
+ */
+export type DocHubDataLakeDebuggerCallStack = IDocHubDataLakeDebuggerCallStackItem[];
+
+/**
+ * Контекст запроса в DataLake
+ */
 export interface IDocHubDataLakeDebuggerContext {
-    uid: string;                    // Идентификатор запроса
-    source: () => Promise<string>;  // Функция возвращающая исходный код запроса
-    position: number;               // Позиция остановки отладчика
-    [keys: string]: any;
+    uid: string;                                                // Идентификатор запроса
+    stack: () => Promise<DocHubDataLakeDebuggerCallStack>;      // Стек выполнения запроса
 }
 
 /**
