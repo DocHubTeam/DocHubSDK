@@ -278,8 +278,9 @@ export type DocHubDataLakeDebuggerCallStack = IDocHubDataLakeDebuggerCallStackIt
  * Контекст запроса в DataLake
  */
 export interface IDocHubDataLakeDebuggerContext {
-    uid: string;                                                // Идентификатор запроса
-    stack: () => Promise<DocHubDataLakeDebuggerCallStack>;      // Стек выполнения запроса
+    uid: string;                                                    // Идентификатор запроса
+    stack?: () => Promise<DocHubDataLakeDebuggerCallStack>;         // Стек выполнения запроса
+    terminated?: boolean;                                           // Признак завершения выполнения запроса        
 }
 
 /**
