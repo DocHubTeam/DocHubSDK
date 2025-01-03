@@ -257,7 +257,14 @@ export enum DocHubDataLakeDebuggerHandleActions {
     stop = 'stop'   // Прервать выполнение 
 }
 
-export type DocHubDataLakeDebuggerQuery = (expression: DocHubJSONataQuery) => Promise<any>;
+/**
+ * Специальный тип запросов в отладчик.
+ * Если запрос начинается на $, считается, что запрос должен вернуть значение переменной из контекста выполнения
+ */
+export type DocHubDebuggerQuery = `$${string}` | DocHubJSONataQuery;
+
+export type DocHubDataLakeDebuggerQuery = (expression: DocHubDebuggerQuery) => Promise<any>;
+
 
 /**
  * Элемент стека выполнения запросов в DataLake
