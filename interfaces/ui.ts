@@ -5,10 +5,13 @@ export interface IDocHubUIComponent {
 }
 
 export enum DocHubUISlot {
-    avatar = 'avatar',              // Компонент монтируется в область аватаров
-    toolbar = 'toolbar',            // Компонент монтируется в область панелей инструментов
-    explorer = 'explorer',          // Компонент монтируется в область навигации 
-    codeViewer = 'code-viewer'      // Компонент используется при рендере кода
+    avatar = 'avatar',                              // Компонент монтируется в область аватаров
+    toolbar = 'toolbar',                            // Компонент монтируется в область панелей инструментов
+    explorer = 'explorer',                          // Компонент монтируется в область навигации 
+    codeViewer = 'code-viewer',                     // Компонент используется при рендере кода
+    transactionBegin = 'transaction-begin',         // Выводится на страницу создания транзакции на изменения в коде
+    transactionCommit = 'transaction-commit',       // Выводится на страницу применения изменений транзакции
+    transactionRollback = 'transaction-rollback'    // Выводится на страницу отмены транзакции
 }
 
 /**
