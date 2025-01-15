@@ -1,8 +1,11 @@
 import { Route, RouteConfig } from 'vue-router';
 
 export enum DocHubNavigateCommands {
-    back = '$_back_$',
-    root = '$_root_$'
+    back = '$-back',                                    // Перейти на шаг назад в истории страниц
+    root = '$-root',                                    // Перейти на корневую страницу    
+    transactionOpen = '$-transaction-open',             // Перейти на страницу открытия транзакции на изменение кода
+    transactionCommit = '$-transaction-commit',         // Перейти на страницу применения изменений кода
+    transactionRollback = '$-transaction-rollback'      // Перейти на страницу отмены изменений кода
 }
 
 export enum DocHubNavigateTarget {
