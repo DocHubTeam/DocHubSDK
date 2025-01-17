@@ -328,8 +328,9 @@ export interface IDocHubDataLake {
     /**
      * Отправляет транзакцию в DataLake
      * @param transaction   - Объект транзакции
+     * @param comment       - Комментарий к фиксируемой транзакции
      */
-    commitTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
+    commitTransaction(transaction: IDocHubTransaction, comment?: string): Promise<IDocHubTransaction>;
 
     /**
      * Отменяет транзакцию

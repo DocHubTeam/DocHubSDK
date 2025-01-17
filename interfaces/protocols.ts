@@ -1,5 +1,6 @@
 import { AxiosResponse, AxiosRequestConfig, ResponseType, Method } from 'axios';
 import { IDocHubContext } from './contexts';
+import { IDocHubTransactionFileHeaders } from './datalake';
 
 export enum ProtocolOptionsResponseTypes {
     arraybuffer = 'arraybuffer',
@@ -91,6 +92,7 @@ export interface IDocHubResourceVersion {
  */
 export interface IDocHubCommitFile {
     uri: string;
+    headers?: IDocHubTransactionFileHeaders;
     content: string | ArrayBuffer | (() => string | ArrayBuffer);
     encoded?: 'plain' | 'base64' | 'ArrayBuffer';
 }
