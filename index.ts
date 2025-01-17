@@ -1,4 +1,5 @@
 import { IDocHubCore } from './interfaces/core';
+import { dynamicProxy }  from './helpers/proxy';
 
 export * from './interfaces/core';
 export * from './interfaces/contexts';
@@ -24,8 +25,8 @@ export * from './interfaces/datasets';
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
 
-export const DocHub: IDocHubCore = window['DocHub'];
+export const DocHub: IDocHubCore = dynamicProxy(() => window['DocHub']);
 export const Vue2 = () => window['Vue'];
 export const Vuetify2 = () => window['Vuetify'];
 
-if (!DocHub) throw new Error('!!!!!!!! No found DocHub core! !!!!!!!!!');
+
