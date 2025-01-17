@@ -94,13 +94,14 @@ export interface IDocHubCommitFile {
     uri: string;
     headers?: IDocHubTransactionFileHeaders;
     content: string | ArrayBuffer | (() => string | ArrayBuffer);
-    encoded?: 'plain' | 'base64' | 'ArrayBuffer';
+    encoded?: 'plain' | 'base64' | 'ArrayBuffer'; // default: plain
 }
 
 /**
  * Данные для создания коммита
  */
-export interface IDocHubCommitBatch extends AxiosRequestConfig {
+export interface IDocHubCommitBatch extends IDocHubProtocolRequestConfig {
+    method: DocHubProtocolMethods.COMMIT,
     comment: string;
     data: IDocHubCommitFile[];
 }
