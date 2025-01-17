@@ -152,6 +152,11 @@ export interface IDocHubProtocol {
      */
     resolveURL(...args: string[]): string;
     /**
+     * Выделяет хост из URI ресурса. Для систем управления версиями в хост могут входить данные репозитория, ветки, коммита и т.п.
+     * @param uri        - идентификатор ресурса
+     */
+    extractHost(uri: string): string | null;
+    /**
      * Выполняет запрос к ресурсу по аналогии с axios
      * @param config
      * @returns          - Результат выполнения запроса
