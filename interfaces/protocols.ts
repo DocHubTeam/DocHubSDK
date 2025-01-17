@@ -86,6 +86,27 @@ export interface IDocHubResourceVersion {
     author: string;                         // Автор версии
 }
 
+/**
+ * Запись коммита о измененном файле
+ */
+export interface IDocHubCommitFile {
+    uri: string;
+    content: string | ArrayBuffer | (() => string | ArrayBuffer);
+    encoded?: 'plain' | 'base64' | 'ArrayBuffer';
+}
+
+/**
+ * Данные для создания коммита
+ */
+export interface IDocHubCommitBatch extends AxiosRequestConfig {
+    comment: string;
+    data: IDocHubCommitFile[];
+}
+
+/**
+ * Структура коммита
+ */
+export interface IDocHubCommitTree extends AxiosResponse {}
 
 /**
  * Методы доступные над ресурсом
@@ -102,7 +123,9 @@ export enum DocHubProtocolMethods {
     // WebDAV - Расширенные методы для работы ресурсами
     SCAN = 'SCAN',          // Сканирует ресурс URI и возвращает о нем расширенную информацию в формате DocHubResourceMeta
                             // Позволяет получать список файлов в папке
-    VERSIONS = 'VERSIONS'   // Возвращает доступные версии ресурса в формате IDocHubResourceVersion
+    VERSIONS = 'VERSIONS',  // Возвращает доступные версии ресурса в формате IDocHubResourceVersion
+    COMMIT = 'COMMIT',      // Аналог git commit. На вход получает IDocHubCommitBatch, возвращает 201 и IDocHubCommitTree при успешном выполнении
+    PUSH = 'PUSH'           // Аналог git push. На вход получает IDocHubCommit на выходе 201 при успешном выполнении
 };
 
 /**
