@@ -117,9 +117,39 @@ export type IDocHubTransactionFile = {
 }
 
 /**
+ * Статус транзакции
+ */
+export enum DocHubTransactionStatus {
+    open = 'open',                                  // Открыта и готова к изменениям
+    committing = 'committing',                      // В процессе применения. Не готова к изменениям.
+    canceling = 'committing',                       // В процессе отмены. Не готова к  изменениям.
+    close = 'close'                                 // Завершена. Не готова изменениям.
+}
+
+/**
+ * События, генерируемые транзакцией
+ */
+export enum DocHubTransactionEvents {
+    changeStatus = 'transaction-change-status'
+}
+
+/**
+ * Идентификатор транзакции
+ */
+export type DocHubTransactionUID = string;
+
+/**
  * Транзакция на изменения DataLake
  */
 export interface IDocHubTransaction {
+    /**
+     * Возвращает уникальный идентификатор транзакции
+     */
+    getUID(): DocHubTransactionUID;
+    /**
+     * Возвращает текущее состояние транзакции
+     */
+    getStatus(): DocHubTransactionStatus;
     /**
      * Проверяет, что транзакция содержит файл
      * @param uri               - URI файла или шаблон поиска
