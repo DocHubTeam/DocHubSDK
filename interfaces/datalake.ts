@@ -134,18 +134,9 @@ export enum DocHubTransactionEvents {
 }
 
 /**
- * Идентификатор транзакции
- */
-export type DocHubTransactionUID = string;
-
-/**
  * Транзакция на изменения DataLake
  */
 export interface IDocHubTransaction {
-    /**
-     * Возвращает уникальный идентификатор транзакции
-     */
-    getUID(): DocHubTransactionUID;
     /**
      * Возвращает текущее состояние транзакции
      */
