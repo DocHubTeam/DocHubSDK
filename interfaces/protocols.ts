@@ -107,6 +107,20 @@ export interface IDocHubCommitBatch extends IDocHubProtocolRequestConfig {
 }
 
 /**
+ * Ошибки порождаемые методом COMMIT
+ */
+export class DocHubCommitError extends Error {
+    private errors_: Error[] = [];
+    constructor(description: string, errors: Error[]) {
+      super(description, { cause: errors });
+      this.errors_ = errors;
+    }
+    get errors(): Error[] {
+        return this.errors;
+    }
+}
+
+/**
  * Структура коммита
  */
 export interface IDocHubCommitTree extends AxiosResponse {}
