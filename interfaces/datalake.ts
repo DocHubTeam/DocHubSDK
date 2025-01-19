@@ -122,7 +122,7 @@ export type IDocHubTransactionFile = {
 export enum DocHubTransactionStatus {
     open = 'open',                                  // Открыта и готова к изменениям
     committing = 'committing',                      // В процессе применения. Не готова к изменениям.
-    canceling = 'committing',                       // В процессе отмены. Не готова к  изменениям.
+    canceling = 'canceling',                        // В процессе отмены. Не готова к  изменениям.
     close = 'close'                                 // Завершена. Не готова изменениям.
 }
 
