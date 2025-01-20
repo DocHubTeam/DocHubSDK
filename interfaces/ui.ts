@@ -147,6 +147,24 @@ export enum DocHubUITargetWindow {
 }
 
 /**
+ * Вариант выбора пользователя для запроса к нему
+ */
+export interface IDocHubUIMessageChoice {
+    title: string;
+    handler: () => void;
+}
+
+/**
+ * Тип формы запроса к пользователю
+ */
+export enum DocHubUIMessageMode {
+    question = 'question',
+    info = 'info',
+    warning = 'warning',
+    error = 'error'
+}
+
+/**
  * Интерфейс управления UI компонентами для предопределенных слотов
  */
 export interface IDocHubUI {
@@ -156,6 +174,12 @@ export interface IDocHubUI {
      * @param timeout       - Задержка в мс по умолчанию 3000
      */
     toast(message: string, timeout?: number);
+    /**
+     * Выполняет сообщение пользователю в стандартном модальном окне.
+     * @param message       - Сообщение.
+     * @param choice        - Массив с вариантами выбора
+     */
+    message(message: string, choice?: IDocHubUIMessageChoice[], mode?: DocHubUIMessageMode);
     /**
      * Регистрирует UI компонент в слоте
      * @param slot              - Идентификатор слота DocHubUISlot или произвольный для кастомных слотов
