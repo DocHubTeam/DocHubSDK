@@ -123,7 +123,7 @@ export type DocHubCommitFileRename = {
 /**
  * Действие в коммите
  */
-export type DocHubCommitFile = DocHubCommitFilePost | DocHubCommitFileDelete | DocHubCommitFileRename;
+export type DocHubCommitActionRecord = DocHubCommitFilePost | DocHubCommitFileDelete | DocHubCommitFileRename;
 
 /**
  * Данные для создания коммита
@@ -131,7 +131,7 @@ export type DocHubCommitFile = DocHubCommitFilePost | DocHubCommitFileDelete | D
 export interface IDocHubCommit extends IDocHubProtocolRequestConfig {
     method: DocHubProtocolMethods.COMMIT,
     comment: string;
-    actions: DocHubCommitFile[];
+    actions: DocHubCommitActionRecord[];
 }
 
 /**
