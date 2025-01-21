@@ -88,22 +88,50 @@ export interface IDocHubResourceVersion {
 }
 
 /**
- * Запись коммита о измененном файле
+ * Тип действия в коммите
  */
-export interface IDocHubCommitFile {
+export enum DocHubCommitAction {
+    post = 'post',
+    delete = 'delete',
+    rename = 'rename'
+}
+/**
+ * Создание файла
+ */
+export type DocHubCommitFilePost = {
+    type: DocHubCommitAction.post,
     uri: string;
     headers?: IDocHubTransactionFileHeaders;
     content: string | ArrayBuffer | (() => string | ArrayBuffer);
     encoded?: 'plain' | 'base64' | 'ArrayBuffer'; // default: plain
 }
+/**
+ * Удаление файла
+ */
+export type DocHubCommitFileDelete = {
+    type: DocHubCommitAction.delete;
+    uri: string;
+}
+/**
+ * Переименование файла
+ */
+export type DocHubCommitFileRename = {
+    type: DocHubCommitAction.rename;
+    oldURI: string;
+    newURI: string;
+}
+/**
+ * Действие в коммите
+ */
+export type DocHubCommitFile = DocHubCommitFilePost | DocHubCommitFileDelete | DocHubCommitFileRename;
 
 /**
  * Данные для создания коммита
  */
-export interface IDocHubCommitBatch extends IDocHubProtocolRequestConfig {
+export interface IDocHubCommit extends IDocHubProtocolRequestConfig {
     method: DocHubProtocolMethods.COMMIT,
     comment: string;
-    data: IDocHubCommitFile[];
+    actions: DocHubCommitFile[];
 }
 
 /**
@@ -141,7 +169,7 @@ export enum DocHubProtocolMethods {
     SCAN = 'SCAN',          // Сканирует ресурс URI и возвращает о нем расширенную информацию в формате DocHubResourceMeta
                             // Позволяет получать список файлов в папке
     VERSIONS = 'VERSIONS',  // Возвращает доступные версии ресурса в формате IDocHubResourceVersion
-    COMMIT = 'COMMIT',      // Аналог git commit. На вход получает IDocHubCommitBatch, возвращает 201 и IDocHubCommitTree при успешном выполнении
+    COMMIT = 'COMMIT',      // Аналог git commit. На вход получает IDocHubCommit, возвращает 201 и IDocHubCommitTree при успешном выполнении
     PUSH = 'PUSH'           // Аналог git push. На вход получает IDocHubCommit на выходе 201 при успешном выполнении
 };
 
