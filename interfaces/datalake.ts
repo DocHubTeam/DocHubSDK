@@ -110,7 +110,6 @@ export interface IDocHubTransactionChangeRecord extends IDocHubResourceVersion {
  * Метаданные файла входящего в транзакцию
  */
 export type IDocHubTransactionFile = {
-    uid: string;                                    // UUID записи
     uri: string;                                    // URI файла
     content: string;                                // Содержимое файла
     headers: IDocHubTransactionFileHeaders;         // Заголовки (метаданные) файла
