@@ -430,6 +430,21 @@ export interface IDocHubDataLake {
     pushFile(uri: string, content: any, contentType: string): Promise<IDocHubProtocolResponse>;
 
     /**
+     * Удаляет файл из DataLake
+     * @param uri               - URI файла во внутреннем формате DocHub
+     * @returns                 - Статус выполненного запроса
+     */
+    deleteFile(uri: string): Promise<IDocHubProtocolResponse>;
+
+    /**
+     * Переименовывает файл в DataLake
+     * @param oldURI            - URI файла который переименовывается
+     * @param newURI            - URI в который файл переименовывается
+     * @returns                 - Статус выполненного запроса
+     */
+    renameFile(oldURI: string, newURI: string): Promise<IDocHubProtocolResponse>;
+
+    /**
      * Устанавливает слежение за изменениями в файле
      * @param uri               - URI файла
      * @param handler           - Обработчик события
