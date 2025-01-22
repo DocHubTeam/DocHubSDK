@@ -145,7 +145,7 @@ export interface IDocHubTransaction {
      * @param uri               - URI файла или шаблон поиска
      * @returns                 - Возвращает массив метаданных найденных файлов
      */
-    getAffectedFiles(pattern: string | RegExp): Promise<string[]>;
+    getAffectedFiles(pattern: string | RegExp): Promise<IDocHubTransactionChangeRecord[]>;
 
     /**
      * Проверяет, что транзакция содержит файл

@@ -131,7 +131,7 @@ export type DocHubCommitActionRecord = DocHubCommitFilePost | DocHubCommitFileDe
 export interface IDocHubCommit extends IDocHubProtocolRequestConfig {
     method: DocHubProtocolMethods.COMMIT,
     comment: string;
-    actions: DocHubCommitActionRecord[];
+    data: DocHubCommitActionRecord[];
 }
 
 /**
