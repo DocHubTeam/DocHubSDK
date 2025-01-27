@@ -338,31 +338,19 @@ export interface IDocHubDataLake {
      * @param immediately    - Если true, то функция не ожидает готовности DataLake к запросам, а генерирует ошибку
      */
     whenReady(immediately?:boolean): Promise<void>;
-    
-    /**
-     * Открывает транзакцию на изменения в DataLake
-     * @returns             - Объект транзакции
-     */
-    beginTransaction(): Promise<IDocHubTransaction>;
-
     /**
      * Отправляет транзакцию в DataLake
-     * @param transaction   - Объект транзакции
      * @param comment       - Комментарий к фиксируемой транзакции
      */
-    commitTransaction(transaction: IDocHubTransaction, comment?: string): Promise<IDocHubTransaction>;
-
+    commitTransaction(comment?: string): Promise<void>;
     /**
-     * Отменяет транзакцию
-     * @param transaction   - Объект транзакции
+     * Отменяет все изменения в транзакции
      */
-    rollbackTransaction(transaction: IDocHubTransaction): Promise<IDocHubTransaction>;
-
+    rollbackTransaction(): Promise<void>;
     /**
      * Возвращает актуальную транзакцию
      */
     getCurrentTransaction(): Promise<IDocHubTransaction>;
-
     /**
      * Возвращает URI текущего корневого манифеста
      * @returns             - URI корневого манифеста

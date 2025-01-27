@@ -93,10 +93,10 @@ export interface IDocHubCore {
      */
     getMode(): Promise<DocHubEditMode>;
     /**
-     * Пытается перевести портал в запрашиваемый режим.
+     * Пытается переключить портал в заданный режим.
      * При изменении режима, вызывает событие EditorEvents.modeChanged
      * @param mode      - Режим в который нужно перевести портал
      * @returns         - Режим, в который переведен портал в результате выполнения запроса
      */
-    setMode(mode: DocHubEditMode): Promise<DocHubEditMode>;
+    switchToMode(mode: DocHubEditMode): Promise<DocHubEditMode>;
 }

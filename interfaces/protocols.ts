@@ -43,6 +43,8 @@ export interface IDocHubProtocolRequestConfig extends Modify<AxiosRequestConfig,
 export enum DocHubResourceType {
     file = 'file',
     folder = 'folder',
+    repo = 'repo',
+    branch = 'branch',
     other = 'other'
 }
 
