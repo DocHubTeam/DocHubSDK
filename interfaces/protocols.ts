@@ -52,20 +52,38 @@ export enum DocHubResourceType {
  * Метаинформация о файле
  */
 export type DocHubResourceMetaFile = {
-    type: DocHubResourceType.file,
-    uri: string,
-    contentType?: string,
-    size?: number,
-    sha?: string
+    type: DocHubResourceType.file;
+    uri: string;
+    contentType?: string;
+    size?: number;
+    sha?: string;
 }
 
 /**
  * Метаинформация о папке
  */
 export type DocHubResourceMetaFolder = {
-    type: DocHubResourceType.folder,
-    uri: string,
-    files: DocHubResourceMetaFile[] | null // Если null - статус содержания файлов не определен
+    type: DocHubResourceType.folder;
+    uri: string;
+    files?: DocHubResourceMetaFile[]     // Если undefined - статус содержания файлов не определен
+}
+
+/**
+ * Метаинформация о репозиторие
+ */
+export type DocHubResourceMetaRepo = {
+    type: DocHubResourceType.repo;
+    uri: string;
+    branches?: string[];                // Если undefined - статус содержания веток неопределен
+}
+
+/**
+ * Метаинформация о ветке
+ */
+export type DocHubResourceMetaBranch = {
+    type: DocHubResourceType.branch,
+    uri: string;
+    files?: DocHubResourceMetaFile[]     // Если undefined - статус содержания файлов не определен
 }
 
 /**
@@ -77,7 +95,8 @@ export type DocHubResourceMetaOther = {
     [prop: string]: any
 }
 
-export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder | DocHubResourceMetaOther;
+
+export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder| DocHubResourceMetaBranch | DocHubResourceMetaRepo | DocHubResourceMetaOther;
 
 /**
  * Информация о версии ресурса
