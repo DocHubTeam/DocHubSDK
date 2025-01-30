@@ -22,6 +22,8 @@ export * from './interfaces/lang';
 
 export * from './interfaces/datasets';
 
+export * from './metamodel/index';
+
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
 

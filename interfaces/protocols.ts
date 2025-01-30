@@ -45,6 +45,7 @@ export enum DocHubResourceType {
     folder = 'folder',
     repo = 'repo',
     branch = 'branch',
+    host = 'host',
     other = 'other'
 }
 
@@ -65,16 +66,7 @@ export type DocHubResourceMetaFile = {
 export type DocHubResourceMetaFolder = {
     type: DocHubResourceType.folder;
     uri: string;
-    files?: DocHubResourceMetaFile[]     // Если undefined - статус содержания файлов не определен
-}
-
-/**
- * Метаинформация о репозиторие
- */
-export type DocHubResourceMetaRepo = {
-    type: DocHubResourceType.repo;
-    uri: string;
-    branches?: string[];                // Если undefined - статус содержания веток неопределен
+    files?: DocHubResourceMetaFile[]        // Если undefined - статус содержания файлов не определен
 }
 
 /**
@@ -83,7 +75,25 @@ export type DocHubResourceMetaRepo = {
 export type DocHubResourceMetaBranch = {
     type: DocHubResourceType.branch,
     uri: string;
-    files?: DocHubResourceMetaFile[]     // Если undefined - статус содержания файлов не определен
+    files?: DocHubResourceMetaFile[]        // Если undefined - статус содержания файлов не определен
+}
+
+/**
+ * Метаинформация о репозиторие
+ */
+export type DocHubResourceMetaRepo = {
+    type: DocHubResourceType.repo;
+    uri: string;
+    branches?: DocHubResourceMetaBranch[];  // Если undefined - статус содержания веток неопределен
+}
+
+/**
+ * Метаинформация о хосте
+ */
+export type DocHubResourceMetaHost = {
+    type: DocHubResourceType.host;
+    uri: string;
+    buckets?: DocHubResourceMetaRepo[];     // В зависимости от хоста может быть репозиторием и т.п.
 }
 
 /**
@@ -95,8 +105,7 @@ export type DocHubResourceMetaOther = {
     [prop: string]: any
 }
 
-
-export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder| DocHubResourceMetaBranch | DocHubResourceMetaRepo | DocHubResourceMetaOther;
+export type DocHubResourceMeta = DocHubResourceMetaFile | DocHubResourceMetaFolder| DocHubResourceMetaBranch | DocHubResourceMetaRepo | DocHubResourceMetaHost | DocHubResourceMetaOther;
 
 /**
  * Информация о версии ресурса
