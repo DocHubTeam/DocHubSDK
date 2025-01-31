@@ -1,4 +1,4 @@
-import { IDocHubFileEditorContext } from './datalake';
+import { IDocHubFileEditorOptions } from './datalake';
 import { IDocHubObjectEditorContext } from './objects';
 import { DocHubUID } from './constructors';
 
@@ -87,9 +87,7 @@ export type DocHubEditorFileContext = {
     uid: DocHubContextUID;
     type: DocHubEditorType.file,
     title?: string;
-    location?: string;                      // Указатель точного расположения цели редактирования. Например: entities/components/schema
-                                            // Формат зависит от редактора
-    meta: IDocHubFileEditorContext
+    meta: IDocHubFileEditorOptions
 }
 /**
  * Контекст редактора объекта
