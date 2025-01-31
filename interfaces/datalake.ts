@@ -195,7 +195,9 @@ export interface IDocHubFileEditorContext {
                                             // Если не определено берется из параметра openFileEditor
     contentType?: string;                   // Тип контента файла. 
                                             // Если не определено берется из данных полученных о файле в процессе открытия.
-    targetWindow?: DocHubUITargetWindow;   // Где открывать указанный URI для редактирования
+    targetWindow?: DocHubUITargetWindow;    // Где открывать указанный URI для редактирования
+    location?: string;                      // Указатель точного расположения цели редактирования. Например: entities/components/schema
+                                            // Формат зависит от редактора
     [key: string]: any;                     // Произвольные ключи и значения
 }
 
