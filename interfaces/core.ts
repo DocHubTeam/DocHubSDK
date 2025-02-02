@@ -14,11 +14,16 @@ import { DocHubEditMode, IDocHubEditors } from './editors';
 import { IDocHubPresentations } from './presentations';
 import { IDocHubTools } from './tools';
 import { IDocHubLang } from './lang';
+import { IDocHubAI } from './ai';
 
 /**
  * Интерфейс ядра
  */
 export interface IDocHubCore {
+    /**
+     * Интерфейс работы с AI
+     */
+    ai: IDocHubAI;
     /**
      * Интерфейс управления языковыми пакетами
      */
