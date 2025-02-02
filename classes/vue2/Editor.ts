@@ -16,34 +16,34 @@ export class DocHubEditorProto extends DocHubComponentProto {
 
   constructor(...params) {
     super(...params);
-    DocHub.eventBus.$on(EditorEvents.save, this.onSave);
-    DocHub.eventBus.$on(EditorEvents.saveAs, this.onSaveAs);
-    DocHub.eventBus.$on(EditorEvents.goto, this.onGoTo);
+    this.$on(EditorEvents.save, this.onSave);
+    this.$on(EditorEvents.saveAs, this.onSaveAs);
+    this.$on(EditorEvents.goto, this.onGoTo);
   }
 
   destroyed(): void {
-    DocHub.eventBus.$off(EditorEvents.save, this.onSave);
-    DocHub.eventBus.$off(EditorEvents.saveAs, this.onSaveAs);
-    DocHub.eventBus.$off(EditorEvents.goto, this.onGoTo);
+    this.$off(EditorEvents.save, this.onSave);
+    this.$off(EditorEvents.saveAs, this.onSaveAs);
+    this.$off(EditorEvents.goto, this.onGoTo);
   }
 
   /**
    * Вызывается при необходимости перейти в редакторе на заданную область
    * @param location 
    */
-  onGoTo(location: string | RegExp) {
+  async onGoTo(location: string | RegExp): Promise<void> {
     console.warn('Goto function is not implemented', location);
   }
   /**
    * Вызывается при необходимости сохранить результат редактирования
    */
-  onSave() {
+  async onSave(): Promise<void>  {
     console.warn('Save function is not implemented');
   }
   /**
    * Вызывается при необходимости сохранить результат в файле с иным названием
    */
-  onSaveAs(uri: string) {
-    console.warn('Save as function is not implemented');
+  async onSaveAs(uri: string): Promise<void>  {
+    console.warn('Save as function is not implemented', uri);
   }
 }

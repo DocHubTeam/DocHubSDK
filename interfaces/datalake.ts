@@ -161,6 +161,12 @@ export interface IDocHubTransaction {
     getFileVersion(uid: string): Promise<IDocHubTransactionFile | null>;
 
     /**
+     * Откатывает файл к указанной версии
+     * @param uid               - Идентификатор версии в транзакции. Если undefined - откатывает к версии на сервере
+     */
+    rollbackFileTo(uid: string | undefined): Promise<void>;
+
+    /**
      * Удаляет запись об изменении из транзакции
      * @param uids              - массив идентификаторов изменений
      */
