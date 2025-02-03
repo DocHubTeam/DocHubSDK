@@ -3,19 +3,27 @@
  */
 export interface IDocHubAIRequest {
     /**
+     * Возвращает локальный контекст
+     */
+    getLocalContext?: () => Promise<string>
+    /**
+     * Возвращает локальный промпт
+     */
+    getLocalPrompt?: () => Promise<string>
+    /**
      * Обрабатывает ответ от AI
      * @param answer    - Ответ от AI
      */
-    onTyping(answer: string): void;
+    onTyping?: (answer: string) => void;
     /**
      * Обрабатывает завершение ответа от AI
      */
-    onFinish(): void;
+    onFinish?: () => void;
     /**
      * Отменяет запрос
      * @returns 
      */
-    cancel?: () => void;
+    cancel();
 }
 
 /**
@@ -30,7 +38,7 @@ export interface IDocHubAIDriver {
     /**
      * 
      */
-    isAvailable(): boolean;
+    isActive(): boolean;
     /**
      * Задает вопрос AI
      * @param question    - Вопрос
