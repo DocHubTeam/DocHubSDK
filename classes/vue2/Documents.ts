@@ -97,7 +97,7 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   openEditor(uri?: string): void {
     this.baseURI && DocHub.dataLake.openFileEditor(uri || this.baseURI, {
-      targetPath: this.profile.$base,
+      location: this.profile.$base.toString(),
       targetWindow: (window.event as any)?.ctrlKey ? DocHubUITargetWindow._blank : DocHubUITargetWindow._self
     });
   }
