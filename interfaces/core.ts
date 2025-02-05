@@ -15,7 +15,7 @@ import { IDocHubPresentations } from './presentations';
 import { IDocHubTools } from './tools';
 import { IDocHubLang } from './lang';
 import { IDocHubAI } from './ai';
-
+import { IDocHubExplainer } from './explainer';
 /**
  * Интерфейс ядра
  */
@@ -24,6 +24,10 @@ export interface IDocHubCore {
      * Интерфейс работы с AI
      */
     ai: IDocHubAI;
+    /**
+     * Интерфейс подсистемы объяснения
+     */
+    explainer: IDocHubExplainer;
     /**
      * Интерфейс управления языковыми пакетами
      */

@@ -29,14 +29,14 @@ export interface IDocHubAIRequest {
 /**
  * Тип функции запроса к AI
  */
-export type DocHubAskFunction = (question: string, model?: string) => Promise<IDocHubAIRequest>;
+export type DocHubAskFunction = (question: string, driver?: string, model?: string) => Promise<IDocHubAIRequest>;
 
 /**
  * Интерфейс драйвера AI
  */
 export interface IDocHubAIDriver {
     /**
-     * 
+     * Возвращает признак активности драйвера
      */
     isActive(): boolean;
     /**
@@ -69,18 +69,18 @@ export interface IDocHubAI {
      * @param alias     - Алиас драйвера
      * @param driver    - Драйвер AI
      */
-    registerDriver(model: string, driver: IDocHubAIDriver): void;
+    registerDriver(alias: string, driver: IDocHubAIDriver): void;
     /**
      * Возвращает список доступных моделей AI
      */
-    getModels(): string[];
+    getDrivers(): string[];
     /**
-     * Возвращает дефолтную модель AI
+     * Возвращает дефолтный драйвер AI
      */
-    getDefaultModel(): string;
+    getDefaultDriver(): string;
     /**
-     * Устанавливает дефолтную модель AI
-     * @param model    - Модель AI
+     * Устанавливает дефолтный драйвер AI
+     * @param driver    - Драйвер AI
      */
-    setDefaultModel(model: string): void;
+    setDefaultDriver(alias: string): void;
 }

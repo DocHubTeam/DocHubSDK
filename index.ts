@@ -19,10 +19,10 @@ export * from './interfaces/settings';
 export * from './interfaces/ui';
 export * from './interfaces/tools';
 export * from './interfaces/lang';
-export * from './interfaces/ai';
 export * from './interfaces/datasets';
-
 export * from './metamodel/index';
+export * from './interfaces/ai';
+export * from './interfaces/explainer';
 
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
