@@ -220,16 +220,14 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     for(const uri of this.followFiles || []) {
       DocHub.dataLake.unfollowFile(uri, this.onRefresh);
     }
-    const followFiles: string[] = [];
     // Если нужно только очистить отслеживание - выходим
     if (disable) return;
+    const followFiles: string[] = [];
     // Иначе...
     // Определяем базовый файл
     this.baseURI = (await DocHub.dataLake.getURIForPath(this.profile.$base) || []).pop();
     // Если определить его не удалось, вываливаемся в ошибку
     if (!this.baseURI) throw new DocHubError(`Can not resolve base URI for base path [${this.profile.$base}]`);
-    // Добавляем его в отслеживание
-    this.baseURI && followFiles.push(this.baseURI);
     // Если указан шаблон, добавляем его в отслеживаемые файлы
     if(this.profile?.template) {
       followFiles.push(DocHub.dataLake.resolveURI(this.baseURI, this.profile.template));
