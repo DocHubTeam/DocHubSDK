@@ -38,13 +38,15 @@ export type DocHubDataLakeChanges = DocHubDataLakeChangeItem[];
 
 // События DataLake
 export enum DataLakeEvents {
-    reloadingStart = 'datalake.reloading.start',            // Начало обновления 
-    reloadingFinish = 'datalake.reloading.finish',          // Завершение обновления
+    // События временно локализованы для экземпляра браузера до переработки в SharedWorker
+    reloadingStart = '#datalake.reloading.start',            // Начало обновления 
+    reloadingFinish = '#datalake.reloading.finish',          // Завершение обновления
+    // Событие об изменении в DataLake остается глобальным
     onChanged = 'datalake.reloading.onChange',              // В DataLake произошли изменения
     
-    mountedManifest = 'datalake.manifest.mounted',          // Смонтирован манифест в DataLake
-    unmountedManifest = 'datalake.manifest.unmounted',      // Манифест отключен от DataLake
-    reloadManifests = 'datalake.manifest.reloaded',         // Манифест перезагружен
+    mountedManifest = '#datalake.manifest.mounted',          // Смонтирован манифест в DataLake
+    unmountedManifest = '#datalake.manifest.unmounted',      // Манифест отключен от DataLake
+    reloadManifests = '#datalake.manifest.reloaded',         // Манифест перезагружен
 
     transactionBegin = 'datalake.transaction.begin',        // Транзакция на изменение DataLake открыта
     transactionCommit = 'datalake.transaction.commit',      // Транзакция на изменение успешно применена к DataLake
