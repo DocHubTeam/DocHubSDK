@@ -105,11 +105,13 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    * Возвращает метаинформацию для режима редактирования
    */
   async getMetaEdit(): Promise<IDocHubEditableMeta> {
+    const entries = this.followFiles || [];
+    !entries.length && entries.push(...await DocHub.dataLake.getURIForPath(this.profile?.$base));
     return {
       title: this.profile?.title || this.profile?.$base?.toString() || this.followFiles?.[0] || '$undefined$',
       icon: getIconByURI(this.baseURI || this.followFiles?.[0]),
       // Генерирует на все задействованные файлы точки редактирования
-      entries: this.followFiles?.map((uri: string): IDocHubEditableMetaEditEntry => {
+      entries: entries.map((uri: string): IDocHubEditableMetaEditEntry => {
         return {
           title: uri,
           icon: getIconByURI(uri),
