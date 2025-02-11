@@ -108,7 +108,7 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     const entries = this.followFiles || [];
     !entries.length && entries.push(...await DocHub.dataLake.getURIForPath(this.profile?.$base));
     return {
-      title: this.profile?.title || this.profile?.$base?.toString() || this.followFiles?.[0] || '$undefined$',
+      title: this.profile?.title || this.profile?.$base?.toString() || '$undefined$',
       icon: getIconByURI(this.baseURI || this.followFiles?.[0]),
       // Генерирует на все задействованные файлы точки редактирования
       entries: entries.map((uri: string): IDocHubEditableMetaEditEntry => {

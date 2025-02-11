@@ -20,6 +20,11 @@ export interface IDocHubAIRequest {
      */
     onFinish?: () => void;
     /**
+     * Обрабатывает ошибку
+     * @param error    - Ошибка
+     */
+    onError?: (error: Error) => void;
+    /**
      * Отменяет запрос
      * @returns 
      */
