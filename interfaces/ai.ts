@@ -1,3 +1,5 @@
+import { DocHubEditorContext } from "./editors";
+
 /**
  * Интерфейс открытого запроса к AI
  */
@@ -69,6 +71,12 @@ export interface IDocHubAI {
      * @returns           - Запрос к AI
     */
     ask: DocHubAskFunction;
+    /**
+     * Создает глобальный контекст на основании встроенных механизмов
+     * @param context   - Пользовательский контекст. Если не указан, то будет использован текущий контекст
+     * @returns         - Глобальный контекст
+     */
+    makeGlobalContext(context?: DocHubEditorContext): Promise<string>;
     /**
      * Регистрирует драйвер AI
      * @param alias     - Алиас драйвера
