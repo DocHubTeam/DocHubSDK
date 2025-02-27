@@ -6,6 +6,7 @@ export interface IDocHubJSONSchemaBase {
     description?: string;       // Описание
     default?: any;              // Значение по умолчанию
     examples?: any[];           // Примеры использования
+    [customFile: string]: any;  // Пользовательские поля
 }
 
 /**
@@ -21,7 +22,7 @@ export enum DocHubJSONSchemaBasicTypes {
     object      = 'object'
 }
 
-export interface ISchemaArray extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaArray extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.array;
     items: DocHubJSONSchema;
     minItems?: number;
@@ -29,15 +30,15 @@ export interface ISchemaArray extends IDocHubJSONSchemaBase {
     uniqueItems?: boolean;
 }
 
-export interface ISchemaBoolean extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaBoolean extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.boolean;
 }
 
-export interface ISchemaNull extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaNull extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.null;
 }
 
-export enum SchemaStringFormat {
+export enum DocHubJSONSchemaStringFormat {
     date        = 'date',
     datetime    = 'date-time',
     enum        = 'enum',
@@ -47,15 +48,16 @@ export enum SchemaStringFormat {
     alert       = 'alert'
 }
 
-export interface ISchemaString extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaString extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.string;
     minLength?: number;
     maxLength?: number;
     enum?: string[];
-    format?: SchemaStringFormat;
+    format?: DocHubJSONSchemaStringFormat;
+    pattern?: string;
 }
 
-export interface ISchemaNumber extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaNumber extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.number;
     minimum?: number;
     maximum?: number;
@@ -64,7 +66,7 @@ export interface ISchemaNumber extends IDocHubJSONSchemaBase {
     multipleOf?: any;
 }
 
-export interface ISchemaInteger extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaInteger extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.integer;
     minimum?: number;
     maximum?: number;
@@ -73,23 +75,25 @@ export interface ISchemaInteger extends IDocHubJSONSchemaBase {
     multipleOf?: any;
 }
 
-export interface ISchemaObjectProperties {
+export interface IDocHubJSONSchemaObjectProperties {
     [key: string]: DocHubJSONSchema;
 }
 
-export interface ISchemaObject extends IDocHubJSONSchemaBase {
+export interface IDocHubJSONSchemaPatternProperties {
+    [key: string]: DocHubJSONSchema
+}
+
+export interface IDocHubJSONSchemaObject extends IDocHubJSONSchemaBase {
     type: DocHubJSONSchemaBasicTypes.object;
-    properties: ISchemaObjectProperties;
+    properties?: IDocHubJSONSchemaObjectProperties;
     additionalProperties?: boolean;
     required?: string[];
     minProperties?: number;
     maxProperties?: number;
-    patternProperties?: RegExp;
+    patternProperties?: IDocHubJSONSchemaPatternProperties;
     regexp?: RegExp;
     dependencies?: any;
-    // Порядок вывода полей сверху вниз и слева направо
-    order?: string[];
 }
 
-export type DocHubJSONSchema = ISchemaArray | ISchemaString | ISchemaNumber | ISchemaInteger | ISchemaObject | ISchemaBoolean;
+export type DocHubJSONSchema = IDocHubJSONSchemaArray | IDocHubJSONSchemaString | IDocHubJSONSchemaNumber | IDocHubJSONSchemaInteger | IDocHubJSONSchemaObject | IDocHubJSONSchemaBoolean;
 
