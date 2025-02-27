@@ -1,6 +1,6 @@
 import { 
-    IDocHubSchema,
-    BaseTypes,
+    DocHubJSONSchema,
+    DocHubJSONSchemaBasicTypes,
 } from './basetypes';
 
 /**
@@ -19,13 +19,13 @@ export enum DocHubYamlPatterns {
 /**
  * Схема зависимостей пакета
  */
-export const dochubYamlDependencies: IDocHubSchema = {
+export const dochubYamlDependencies: DocHubJSONSchema = {
     title: 'Зависимости пакета',
-    type: BaseTypes.object,
+    type: DocHubJSONSchemaBasicTypes.object,
     patternProperties: {
         [DocHubYamlPatterns.packageID]: {
             title: 'Выражение требуемой версии зависимости',
-            type: BaseTypes.string,
+            type: DocHubJSONSchemaBasicTypes.string,
             pattern: DocHubYamlPatterns.packageRequest
         }
     },
@@ -35,21 +35,21 @@ export const dochubYamlDependencies: IDocHubSchema = {
 /**
  * Структура репозитория
  */
-export const dochubYamlStructure: IDocHubSchema = {
+export const dochubYamlStructure: DocHubJSONSchema = {
     title: 'Структура репозитория',
-    type: BaseTypes.object,
+    type: DocHubJSONSchemaBasicTypes.object,
     patternProperties: {
         [DocHubYamlPatterns.packageStructPattern]: {
             title: 'Пространство репозитория',
-            type: BaseTypes.object,
+            type: DocHubJSONSchemaBasicTypes.object,
             properties: {
                 title: {
                     title: 'Описание пространства',
-                    type: BaseTypes.string
+                    type: DocHubJSONSchemaBasicTypes.string
                 },
                 location: {
                     title: 'Размещение в репозитории',
-                    type: BaseTypes.string,
+                    type: DocHubJSONSchemaBasicTypes.string,
                     pattern: DocHubYamlPatterns.packageStructSpace
                 }
             },
@@ -62,31 +62,31 @@ export const dochubYamlStructure: IDocHubSchema = {
 /**
  * Схема корневого манифеста
  */
-export const dochubYaml: IDocHubSchema = {
+export const dochubYaml: DocHubJSONSchema = {
     title: 'Схема файла dochub.yaml',
-    type: BaseTypes.object,
+    type: DocHubJSONSchemaBasicTypes.object,
     properties: {
         $package: {
             title: 'Манифест пакета',
-            type: BaseTypes.object,
+            type: DocHubJSONSchemaBasicTypes.object,
             patternProperties: {
                 [DocHubYamlPatterns.packageID]: {
                     title: 'Декларируемый пакет',
-                    type: BaseTypes.object,
+                    type: DocHubJSONSchemaBasicTypes.object,
                     properties: {
                         version: {
                             title: 'Версия пакета',
-                            type: BaseTypes.string,
+                            type: DocHubJSONSchemaBasicTypes.string,
                             pattern: DocHubYamlPatterns.packageVer
                         },
                         name: {
                             title: 'Наименование пакета',
-                            type: BaseTypes.string,
+                            type: DocHubJSONSchemaBasicTypes.string,
                             pattern: DocHubYamlPatterns.packageName
                         },
                         description: {
                             title: 'Описание пакета',
-                            type: BaseTypes.string,
+                            type: DocHubJSONSchemaBasicTypes.string,
                             pattern: DocHubYamlPatterns.packageDescription
                         },
                         dependencies: dochubYamlDependencies,

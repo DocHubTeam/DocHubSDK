@@ -1,7 +1,6 @@
 import { DocHubJSONataQuery } from '../interfaces/datasets';
 import { 
-    IDocHubSchema,
-    BaseTypes,
+    DocHubJSONSchema
 } from '../schemas/basetypes';
 
 
@@ -23,7 +22,7 @@ export interface IDocHubEntityObjects {
  * Структура сущностей
  */
 export interface IDocHubEntity {
-    schema?: IDocHubSchema;
+    schema?: DocHubJSONSchema;
     presentations?: IDocHubEntityPresentations;
     objects?: IDocHubEntityObjects;
     menu?: DocHubJSONataQuery;

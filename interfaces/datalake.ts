@@ -40,18 +40,24 @@ export type DocHubDataLakeChanges = DocHubDataLakeChangeItem[];
 // События DataLake
 export enum DataLakeEvents {
     // События временно локализованы для экземпляра браузера до переработки в SharedWorker
-    reloadingStart = '#datalake.reloading.start',            // Начало обновления 
-    reloadingFinish = '#datalake.reloading.finish',          // Завершение обновления
-    // Событие об изменении в DataLake остается глобальным
-    onChanged = 'datalake.reloading.onChange',              // В DataLake произошли изменения
-    
-    mountedManifest = '#datalake.manifest.mounted',          // Смонтирован манифест в DataLake
-    unmountedManifest = '#datalake.manifest.unmounted',      // Манифест отключен от DataLake
-    reloadManifests = '#datalake.manifest.reloaded',         // Манифест перезагружен
+    reloadingStart          = '#datalake.reloading.start',              // Начало обновления 
+    reloadingFinish         = '#datalake.reloading.finish',             // Завершение обновления
 
-    transactionBegin = 'datalake.transaction.begin',        // Транзакция на изменение DataLake открыта
-    transactionCommit = 'datalake.transaction.commit',      // Транзакция на изменение успешно применена к DataLake
-    transactionRollback = 'datalake.transaction.rollback',  // Транзакция на изменение отменена
+    // Событие об изменении в DataLake остается глобальным
+    dataChanged             = 'datalake.data.changed',                  // В DataLake произошли изменения
+    
+    // Монтирование манифестов в DataLake
+    manifestMounted         = '#datalake.manifest.mounted',             // Смонтирован манифест в DataLake
+    manifestUnmounted       = '#datalake.manifest.unmounted',           // Манифест отключен от DataLake
+    manifestReload          = '#datalake.manifest.reloaded',            // Манифест перезагружен
+
+    // События транзакций
+    transactionBegin        = 'datalake.transaction.begin',             // Транзакция на изменение DataLake открыта
+    transactionCommit       = 'datalake.transaction.commit',            // Транзакция на изменение успешно применена к DataLake
+    transactionRollback     = 'datalake.transaction.rollback',          // Транзакция на изменение отменена
+
+    // События схемы данных DataLake
+    schemaChanged           = 'datalake.schema.changed'                 // В схеме DataLake произошли изменения
 }
 
 /**
