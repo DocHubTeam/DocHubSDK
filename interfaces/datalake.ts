@@ -1,6 +1,7 @@
 import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersion } from './protocols';
 import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './datasets';
 import { DocHubUITargetWindow } from './ui';
+import { DocHubJSONSchema } from '../schemas/basetypes';
 
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
@@ -592,5 +593,10 @@ export interface IDocHubDataLake {
      * @param debug             - Объект реализующий отладчик
      */
     registerDebugger(debug: IDocHubDataLakeDebugger);
+
+    /**
+     * Возвращает JSONSchema DataLake
+     */
+    fetchSchema(): Promise<DocHubJSONSchema>;
 }
 

@@ -1,6 +1,6 @@
 import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './datasets';
 import { DataLakePath } from './datalake';
-import { IDocHubSchema } from './../schemas/basetypes';
+import { DocHubJSONSchema } from './../schemas/basetypes';
 
 /**
  * Идентификатор типа презентации
@@ -30,7 +30,7 @@ export interface IDocHubPresentationProfile extends IDocHubDataSetProfile {
     // Шаблон представления
     template?: string;
     // Схема требуемых параметров для презентации
-    params?: IDocHubSchema;
+    params?: DocHubJSONSchema;
     // Пользовательский конструктор профиля презентации
     $constructor?: DocHubDataSetProfileSource;
     // Базовый путь к объекту от которого будут разрешаться все относительные пути
