@@ -7,9 +7,6 @@ export interface IDocHubJSONSchemaBase {
     default?: any;              // Значение по умолчанию
     examples?: any[];           // Примеры использования
     [customFile: string]: any;  // Пользовательские поля
-    allOf?: DocHubJSONSchema[]; // Данные должны быть валидны для всех перечисленных схем
-    anyOf?: DocHubJSONSchema[]; // Данные должны быть валидны для любой из перечисленных схем
-    oneOf?: DocHubJSONSchema[]; // Данные должны быть валидны для одной из перечисленных схем
 }
 
 /**
@@ -23,6 +20,18 @@ export enum DocHubJSONSchemaBasicTypes {
     integer     = 'integer',
     array       = 'array',
     object      = 'object'
+}
+
+export interface IDocHubJSONSchemaAllOf extends IDocHubJSONSchemaBase {
+    allOf: DocHubJSONSchema[]; // Данные должны быть валидны для всех перечисленных схем
+}
+
+export interface IDocHubJSONSchemaAnyOf extends IDocHubJSONSchemaBase {
+    anyOf?: DocHubJSONSchema[]; // Данные должны быть валидны для любой из перечисленных схем
+}
+
+export interface IDocHubJSONSchemaOneOf extends IDocHubJSONSchemaBase {
+    oneOf?: DocHubJSONSchema[]; // Данные должны быть валидны для одной из перечисленных схем
 }
 
 export interface IDocHubJSONSchemaArray extends IDocHubJSONSchemaBase {
@@ -98,5 +107,14 @@ export interface IDocHubJSONSchemaObject extends IDocHubJSONSchemaBase {
     dependencies?: any;
 }
 
-export type DocHubJSONSchema = IDocHubJSONSchemaArray | IDocHubJSONSchemaString | IDocHubJSONSchemaNumber | IDocHubJSONSchemaInteger | IDocHubJSONSchemaObject | IDocHubJSONSchemaBoolean;
+export type DocHubJSONSchema = 
+    IDocHubJSONSchemaArray 
+    | IDocHubJSONSchemaString
+    | IDocHubJSONSchemaNumber
+    | IDocHubJSONSchemaInteger
+    | IDocHubJSONSchemaObject
+    | IDocHubJSONSchemaBoolean
+    | IDocHubJSONSchemaAllOf
+    | IDocHubJSONSchemaOneOf
+    | IDocHubJSONSchemaAnyOf;
 
