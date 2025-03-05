@@ -7,6 +7,9 @@ export interface IDocHubJSONSchemaBase {
     default?: any;              // Значение по умолчанию
     examples?: any[];           // Примеры использования
     [customFile: string]: any;  // Пользовательские поля
+    allOf?: DocHubJSONSchema[]; // Данные должны быть валидны для всех перечисленных схем
+    anyOf?: DocHubJSONSchema[]; // Данные должны быть валидны для любой из перечисленных схем
+    oneOf?: DocHubJSONSchema[]; // Данные должны быть валидны для одной из перечисленных схем
 }
 
 /**
