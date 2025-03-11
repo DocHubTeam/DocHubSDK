@@ -84,6 +84,7 @@ export type DocHubResourceMetaBranch = {
 export type DocHubResourceMetaRepo = {
     type: DocHubResourceType.repo;
     uri: string;
+    name?: string;
     branches?: DocHubResourceMetaBranch[];  // Если undefined - статус содержания веток неопределен
 }
 
