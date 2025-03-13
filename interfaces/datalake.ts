@@ -69,9 +69,9 @@ export interface IDataLakeChange {
     // Путь в DataLake куда вносятся изменения
     path: DataLakePath;
     // Данные, которые вносятся в DataLake
-    data: object | string | number | boolean;
+    data?: object | string | number | boolean;
     // Комментарии в манифест, где изменения будут зафиксированы
-    comment: string;
+    comment?: string;
     // URI целевого файла для изменения
     targetFile?: string;
 }
