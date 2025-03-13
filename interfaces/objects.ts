@@ -56,9 +56,9 @@ export interface IDocHubObjectEditorItem {
  * Описывает контекст редактируемого объекта
  */
 export interface IDocHubObjectEditorContext extends IDocHubObjectMeta {
-    path?: DataLakePath;    // Путь к объекту в Data Lake
-                            // Если не определено берется из параметра openObjectEditor
-    [key: string]: any;     // Произвольные ключи и значения
+    path?: DocHubObjectURL;     // Путь к объекту в Data Lake
+                                // Если не определено берется из параметра openObjectEditor
+    [key: string]: any;         // Произвольные ключи и значения
 }
 
 export enum DocHubObjectAppletSerializationFormat {
@@ -79,6 +79,30 @@ export interface IDocHubObjectApplet {
     serialization(format: DocHubObjectAppletSerializationFormat): Promise<IDocHubProtocolResponse>;
 }
 
+/**
+ * RegExp для указания пути в DataLake в DocHub
+ */
+export const ObjectPathRegExp = '^@[a-zA-Z0-9_$\.]+(\/[a-zA-Z0-9_$\.]+)+$';
+
+/**
+ * Путь к объекту в DataLake.
+ * Последовательность ключей коллекций через "/".
+ * Например: 
+ *  docs/example
+ *  components/dochub.main
+ */
+export class ObjectPath extends String {
+    constructor(...args:any) {
+        for (const value of args) {
+            if (!(new RegExp(ObjectPathRegExp)).test(value))
+                throw new Error(`Incorrect DataLakePath [${value}] The string must be in the following format ${ObjectPathRegExp}`);
+        }
+        super(...args);
+        return this;
+    }
+}
+
+
 // Интерфейс доступа к задекларированным объектам в DataLake
 export interface IDocHubObjects {
     /**
@@ -95,7 +119,7 @@ export interface IDocHubObjects {
      * Возвращает метаданные задекларированного объекта для указанного пути
      * @param path          - Путь к объекту 
      */
-    getMetaObjectByPath(path: DataLakePath): Promise<IDocHubObjectMeta | null>;
+    getMetaByPath(path: ObjectPath): Promise<IDocHubObjectMeta | null>;
     /**
      * Регистрирует редактор объекта
      * @param uid           - Идентификатор типа объекта
@@ -113,12 +137,12 @@ export interface IDocHubObjects {
      * @param uid           - Идентификатор типа объекта
      * @returns             - IDocHubEditorItem
      */
-    getObjectEditor(uid: string): Promise<IDocHubObjectEditorItem>;
+    getEditor(uid: string): Promise<IDocHubObjectEditorItem>;
     /**
      * Генерирует URL для редактирования объекта по указанному пути
-     * @param path          - Путь к объекту, разделенный "/"
+     * @param path          - Путь к объекту
      */
-    makeEditURLByPath(path: DataLakePath): Promise<DocHubEditorURI>;
+    makeEditURLByPath(path: ObjectPath): Promise<DocHubEditorURI>;
     /**
      * Запрос на открытие объекта на пользовательское редактирование. Необязательно будет выполнен.
      * Если редактор уже открыт, активирует его.
@@ -126,7 +150,13 @@ export interface IDocHubObjects {
      * @param context           - Контекст редактирования объекта. Необходим для связных редакторов и конструкторов.
      * @returns                 - Компонент редактора, если открытие оказалось успешным
      */
-    openObjectEditor(path: DataLakePath, context?: IDocHubObjectEditorContext): Promise<IDocHubObjectEditorComponent>;
+    openEditor(path: ObjectPath, context?: IDocHubObjectEditorContext): Promise<IDocHubObjectEditorComponent>;
+    /**
+     * Удаление объекта из DataLake
+     * @param path              - Путь к объекту
+     * @param targetFile        - Конкретный файл DataLake, где нужно удалить объект. Если не указан, определяется автоматически.
+     */
+    delete(path: ObjectPath, targetFile?: string): Promise<void>;
     /**
      * Выпускает апплет - самостоятельное микроприложение объекта.
      * @param object            - URI объекта, который должен быть выпущен
