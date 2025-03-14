@@ -16,15 +16,15 @@ export class DocHubEditorProto extends DocHubComponentProto {
 
   constructor(...params) {
     super(...params);
-    DocHub.eventBus.$on(EditorEvents.save, this.onSave);
-    DocHub.eventBus.$on(EditorEvents.saveAs, this.onSaveAs);
-    DocHub.eventBus.$on(EditorEvents.goto, this.onGoTo);
+    this.$on(EditorEvents.save, this.onSave);
+    this.$on(EditorEvents.saveAs, this.onSaveAs);
+    this.$on(EditorEvents.goto, this.onGoTo);
   }
 
   destroyed(): void {
-    DocHub.eventBus.$off(EditorEvents.save, this.onSave);
-    DocHub.eventBus.$off(EditorEvents.saveAs, this.onSaveAs);
-    DocHub.eventBus.$off(EditorEvents.goto, this.onGoTo);
+    this.$off(EditorEvents.save, this.onSave);
+    this.$off(EditorEvents.saveAs, this.onSaveAs);
+    this.$off(EditorEvents.goto, this.onGoTo);
   }
 
   /**
