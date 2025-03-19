@@ -372,7 +372,7 @@ export interface IDocHubDataLake {
      * Возвращает URI текущего корневого манифеста
      * @returns             - URI корневого манифеста
      */
-    getRootManifest(): string;
+    getRootManifest(): Promise<string>;
 
     /**
      * Монтирует произвольный файл в DataLake
