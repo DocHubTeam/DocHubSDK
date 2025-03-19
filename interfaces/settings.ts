@@ -18,9 +18,9 @@ export interface IDocHubSettings {
 
     // Сохраняет структуру с настройками
     //  settings    -   сохраняемая структура
-    push(settings: IDocHubSettingsCollection);
+    push(settings: IDocHubSettingsCollection): Promise<void>;
 
     // Получает настройки 
     //  fields      - требуемый массив полей
-    pull(fields: IDocHubSettingsCollection | string[]): IDocHubSettingsCollection;
+    pull(fields: IDocHubSettingsCollection | string[]): Promise<IDocHubSettingsCollection>;
 }
