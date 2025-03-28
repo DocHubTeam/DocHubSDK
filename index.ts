@@ -27,6 +27,8 @@ export * from './interfaces/explainer';
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
 
+export * from './plugins/manifest';
+
 export const DocHub: IDocHubCore = dynamicProxy(() => window['DocHub']);
 export const Vue2 = () => window['Vue'];
 export const Vuetify2 = () => window['Vuetify'];
