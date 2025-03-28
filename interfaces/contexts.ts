@@ -5,6 +5,5 @@ export interface IDocHubContextEnv {
 
 // Интерфейс контекста для выполнения плагина
 export interface IDocHubContext {
-    // Переменные среды
-    env: IDocHubContextEnv;
+    // Зарезервированно
 }
