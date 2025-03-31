@@ -47,6 +47,13 @@ export interface IDocHubPluginManifest {
         repository: string;
         support: string;
     }
+    // Информация о сборке
+    building?: {
+        // Момент сборки
+        moment: number;
+        // Коммит
+        commit: string;
+    },
     // Зависимости
     dependencies: IDocHubManifestDependencies;
     // Переменные окружения требуемые для работы плагина
