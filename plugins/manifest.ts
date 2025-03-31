@@ -1,9 +1,29 @@
+import { DocHubJSONSchema, IDocHubJSONSchemaAllOf, IDocHubJSONSchemaAnyOf, IDocHubJSONSchemaArray, IDocHubJSONSchemaBase, IDocHubJSONSchemaBoolean, IDocHubJSONSchemaInteger, IDocHubJSONSchemaNumber, IDocHubJSONSchemaObject, IDocHubJSONSchemaOneOf, IDocHubJSONSchemaString } from "../schemas/basetypes";
+
 /**
  * Зависимости плагина от свойств ядра и других плагинов
  */
-export interface IDependencies {
+export interface IDocHubManifestDependencies {
     [module: string]: string;
 }
+
+export interface IDocHubPluginEnvironmentsAllOf extends IDocHubJSONSchemaBase {
+    allOf: IDocHubJSONSchemaObject[]; 
+}
+
+export interface IDocHubPluginEnvironmentsAnyOf extends IDocHubJSONSchemaBase {
+    anyOf: IDocHubJSONSchemaObject[]; 
+}
+
+export interface IDocHubPluginEnvironmentsOneOf extends IDocHubJSONSchemaBase {
+    oneOf: IDocHubJSONSchemaObject[]; 
+}
+
+export type IDocHubPluginEnvironments = 
+    | IDocHubJSONSchemaObject
+    | IDocHubPluginEnvironmentsAllOf
+    | IDocHubPluginEnvironmentsAnyOf
+    | IDocHubPluginEnvironmentsOneOf;
 
 /**
  * Структура манифеста плагина для DocHub
@@ -28,5 +48,7 @@ export interface IDocHubPluginManifest {
         support: string;
     }
     // Зависимости
-    dependencies: IDependencies;
+    dependencies: IDocHubManifestDependencies;
+    // Переменные окружения требуемые для работы плагина
+    environments?: IDocHubPluginEnvironments;
 }

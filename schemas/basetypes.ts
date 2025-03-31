@@ -27,11 +27,11 @@ export interface IDocHubJSONSchemaAllOf extends IDocHubJSONSchemaBase {
 }
 
 export interface IDocHubJSONSchemaAnyOf extends IDocHubJSONSchemaBase {
-    anyOf?: DocHubJSONSchema[]; // Данные должны быть валидны для любой из перечисленных схем
+    anyOf: DocHubJSONSchema[]; // Данные должны быть валидны для любой из перечисленных схем
 }
 
 export interface IDocHubJSONSchemaOneOf extends IDocHubJSONSchemaBase {
-    oneOf?: DocHubJSONSchema[]; // Данные должны быть валидны для одной из перечисленных схем
+    oneOf: DocHubJSONSchema[]; // Данные должны быть валидны для одной из перечисленных схем
 }
 
 export interface IDocHubJSONSchemaArray extends IDocHubJSONSchemaBase {
