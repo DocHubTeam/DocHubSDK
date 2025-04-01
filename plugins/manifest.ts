@@ -32,17 +32,17 @@ export interface IDocHubPluginManifest {
     // Системное название плагина
     name: string;
     // Описание плагина
-    description: string;
+    description?: string;
     // Версия в формате xx.xx.xx
     version: string;
     // Ключевые слова для поиска в репозитории плагинов
-    keywords: string[];
+    keywords?: string[];
     // Автор/вендор
-    author: string;
+    author?: string;
     // Лицензия 
-    license: string;
+    license?: string;
     // Связанные ресурсы
-    urls: {
+    urls?: {
         homepage: string;
         repository: string;
         support: string;
@@ -55,7 +55,7 @@ export interface IDocHubPluginManifest {
         commit: string;
     },
     // Зависимости
-    dependencies: IDocHubManifestDependencies;
+    dependencies?: IDocHubManifestDependencies;
     // Переменные окружения требуемые для работы плагина
     environments?: IDocHubPluginEnvironments;
 }
