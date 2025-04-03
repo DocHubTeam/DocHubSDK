@@ -170,18 +170,19 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   async doRefresh(): Promise<void> {
     try {
-      if (!this.sourceURI) throw new DocHubError('Document must have field "source" in profile!');
+      if (!this.profile?.source) throw new DocHubError('Document must have field "source" in profile!');
       this.isPending = true;
       await this.refreshFilesFollow();
       // Если есть шаблон, загружаем его
       const template = (this.getType() === DocHubDocumentType.content) && this.templateURI 
         && (await DocHub.dataLake.pullFile(this.templateURI));
-      let result: AxiosResponse = (template || (this.getType() === DocHubDocumentType.data)) 
+      let result: AxiosResponse | null = (template || (this.getType() === DocHubDocumentType.data)) 
         && { data: await DocHub.dataLake.resolveDataSetProfile(this.profile, {
           params: this.params,
           baseURI: this.baseURI
         }) } as AxiosResponse
-        || await DocHub.dataLake.pullFile(this.sourceURI);
+        || (this.sourceURI ? await DocHub.dataLake.pullFile(this.sourceURI) : null);
+      if (!result) throw new DocHubError(`Can not render document [${this.profile?.$base}]`);
       // Валидируем данные по структуре, если это требуется
       if (template || (this.getType() === DocHubDocumentType.data)) {
         const rules = new ajv({ allErrors: true });
@@ -236,18 +237,20 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     const baseStruct = this.profile.$base.split('/');
     // Если указан шаблон, добавляем его в отслеживаемые файлы
     if(this.profile?.template) {
-      debugger;
       const templatePath = [...baseStruct, 'template'].join('/');
-      this.templateURI = (await DocHub.dataLake.getURIForPath(templatePath) || []).pop() 
-        || DocHub.dataLake.resolveURI(this.baseURI, this.profile.template);
+      this.templateURI = DocHub.dataLake.resolveURI(
+        (await DocHub.dataLake.getURIForPath(templatePath) || []).pop() || this.baseURI,
+        this.profile.template
+      );
       if (!this.templateURI) throw new DocHubError(`Can not resolve template URI for path [${templatePath}]`);
       followFiles.push(this.templateURI);
     } else if (typeof this.profile?.source === 'string' && this.getType() === DocHubDocumentType.content) {
-      debugger;
       // Если шаблона нет, но документ предполагает работу с содержимым файла, то отслеживаем source
       const sourcePath = [...baseStruct, 'source'].join('/');
-      this.sourceURI = (await DocHub.dataLake.getURIForPath(sourcePath) || []).pop() 
-        || DocHub.dataLake.resolveURI(this.baseURI, this.profile.source);
+      this.sourceURI = DocHub.dataLake.resolveURI(
+        (await DocHub.dataLake.getURIForPath(sourcePath) || []).pop() || this.baseURI,
+        this.profile.source
+      );
       if (!this.sourceURI) throw new DocHubError(`Can not resolve source URI for path [${sourcePath}]`);
       followFiles.push(this.sourceURI);
     }
