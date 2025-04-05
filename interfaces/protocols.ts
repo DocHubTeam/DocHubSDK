@@ -166,6 +166,20 @@ export interface IDocHubCommit extends IDocHubProtocolRequestConfig {
 }
 
 /**
+ * Данные для создания ветки
+ */
+export interface IDocHubCheckout extends IDocHubProtocolRequestConfig {
+    method: DocHubProtocolMethods.CHECKOUT,
+    comment: string;
+    data: {
+        name: string;               // Название создаваемой ветки
+        sourceName?: string;        // Название базовой ветки 
+        sourceSHA?: string;         // SHA базового коммита. Имеет преимущества перед source
+        autoInit?: boolean;         // Признак автоматической инициализации репозитория если он пуст
+    }
+}
+
+/**
  * Ошибки порождаемые методом COMMIT
  */
 export class DocHubCommitError extends Error {
@@ -201,7 +215,8 @@ export enum DocHubProtocolMethods {
                             // Позволяет получать список файлов в папке
     VERSIONS = 'VERSIONS',  // Возвращает доступные версии ресурса в формате IDocHubResourceVersion
     COMMIT = 'COMMIT',      // Аналог git commit. На вход получает IDocHubCommit, возвращает 201 и IDocHubCommitTree при успешном выполнении
-    PUSH = 'PUSH'           // Аналог git push. На вход получает IDocHubCommit на выходе 201 при успешном выполнении
+    PUSH = 'PUSH',          // Аналог git push. На вход получает IDocHubCommit на выходе 201 при успешном выполнении
+    CHECKOUT = 'CHECKOUT'   // Аналог git checkout -b. На вход получает IDocHubCheckout на выходе 201 при успешном выполнении
 };
 
 /**
