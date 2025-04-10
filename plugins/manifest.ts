@@ -19,6 +19,27 @@ export interface IDocHubPluginEnvironmentsOneOf extends IDocHubJSONSchemaBase {
     oneOf: IDocHubJSONSchemaObject[]; 
 }
 
+export interface IDocHubManifestProps {
+    building: {
+        // Момент сборки
+        moment: number;
+        // Версия SDK сборки
+        'dochub-sdk': string;
+        // Коммит
+        commit: string;
+        // Версия node при сборке
+        node: string;
+        // Версия приложения в формате xx.xx.xx
+        version: string;
+    }
+}
+
+export type IDocHubManifestPlugins = string[];
+
+export interface IDocHubManifestEnvironments {
+    [module: string]: string;
+}
+
 export type IDocHubPluginEnvironments = 
     | IDocHubJSONSchemaObject
     | IDocHubPluginEnvironmentsAllOf
@@ -33,8 +54,6 @@ export interface IDocHubPluginManifest {
     name: string;
     // Описание плагина
     description?: string;
-    // Версия в формате xx.xx.xx
-    version: string;
     // Ключевые слова для поиска в репозитории плагинов
     keywords?: string[];
     // Автор/вендор
@@ -47,15 +66,10 @@ export interface IDocHubPluginManifest {
         repository: string;
         support: string;
     }
-    // Информация о сборке
-    building?: {
-        // Момент сборки
-        moment: number;
-        // Коммит
-        commit: string;
-    },
-    // Зависимости
-    dependencies?: IDocHubManifestDependencies;
-    // Переменные окружения требуемые для работы плагина
-    environments?: IDocHubPluginEnvironments;
+    // Свойства приложения
+    app_props: IDocHubManifestProps;
+    // Подключаемые плагины
+    app_plugins?: IDocHubManifestPlugins;
+    // Переменные среды исполнения
+    app_environments?: IDocHubManifestEnvironments;
 }
