@@ -172,10 +172,9 @@ export interface IDocHubCheckout extends IDocHubProtocolRequestConfig {
     method: DocHubProtocolMethods.CHECKOUT,
     comment: string;
     data: {
-        name: string;               // Название создаваемой ветки
         sourceName?: string;        // Название базовой ветки 
         sourceSHA?: string;         // SHA базового коммита. Имеет преимущества перед source
-        autoInit?: boolean;         // Признак автоматической инициализации репозитория если он пуст
+        autoInit?: boolean;         // Признак автоматической инициализации ветки и репозитория если он пуст
     }
 }
 

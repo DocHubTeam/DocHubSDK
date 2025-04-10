@@ -7,7 +7,7 @@ import {
  * RegEx используемые в корневом манифесте
  */
 export enum DocHubYamlPatterns {
-    packageID = '^[a-z0-9_\\-]{2,128}$',
+    packageID = '^[a-z0-9\\_\\-]{2,128}$',
     packageVer = '^[0-9]{1,6}\\.[0-9]{1,6}\\.[0-9]{1,6}$',
     packageRequest = '^.{1,128}$',
     packageName = '^.{2,128}$',
