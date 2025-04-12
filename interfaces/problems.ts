@@ -1,5 +1,5 @@
 import { DataLakePath } from "./datalake";
-import { IDocHubDataSetProfile } from "./datasets";
+import { IDocHubDataSetProfile } from "./jsonata";
 
 export type IDocHubProblemUID = string;
 export type IDocHubValidatorUID = string;
