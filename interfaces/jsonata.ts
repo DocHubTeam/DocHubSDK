@@ -171,15 +171,9 @@ export interface IDocHubJSONata {
      * @param debug             - Объект реализующий отладчик
      */
     registerDebugger(debug: IDocHubDataLakeDebugger);
-
     /**
      * Создает объект запроса
      */
-    expression(query: JSONataExpression): Promise<IDocHubJSONataQuery>;
-
-    /**
-     * Метод временный на период миграции к полной асинхронности
-     */
-    expressionLocal(query: JSONataExpression): IDocHubJSONataQuery;
+    expression(query: JSONataExpression): IDocHubJSONataQuery;
 }
 
