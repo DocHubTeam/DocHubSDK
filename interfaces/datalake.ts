@@ -1,5 +1,5 @@
 import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersion } from './protocols';
-import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './datasets';
+import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './jsonata';
 import { DocHubUITargetWindow } from './ui';
 import { DocHubJSONSchema } from '../schemas/basetypes';
 
@@ -287,57 +287,6 @@ export interface IDataSetResolveOptions {
 }
 
 
-export enum DocHubDataLakeDebuggerHandleActions {
-    run = 'run',    // Продолжить выполнение
-    next = 'next',  // Перейти на следующий шаг
-    into = 'into',  // Войти в подпрограмму
-    stop = 'stop'   // Прервать выполнение 
-}
-
-/**
- * Специальный тип запросов в отладчик.
- * Если запрос начинается на $, считается, что запрос должен вернуть значение переменной из контекста выполнения
- */
-export type DocHubDebuggerQuery = `$${string}` | DocHubJSONataQuery;
-
-export type DocHubDataLakeDebuggerQuery = (expression: DocHubDebuggerQuery) => Promise<any>;
-
-
-/**
- * Элемент стека выполнения запросов в DataLake
- */
-export interface IDocHubDataLakeDebuggerCallStackItem {
-    position: number;                       // Указывает на каком символе в source сейчас выполнение
-    source: () => Promise<string>;          // Возвращает исходный код запроса
-    variables: () => Promise<string[]>;     // Возвращает список переменных запроса
-    query: DocHubDataLakeDebuggerQuery;     // Выполнение произвольного запроса в контексте данного запроса
-}
-
-/**
- * Стек запросов в DataLake
- */
-export type DocHubDataLakeDebuggerCallStack = IDocHubDataLakeDebuggerCallStackItem[];
-
-/**
- * Контекст запроса в DataLake
- */
-export interface IDocHubDataLakeDebuggerContext {
-    uid: string;                                                    // Идентификатор запроса
-    stack?: () => Promise<DocHubDataLakeDebuggerCallStack>;         // Стек выполнения запроса
-    terminated?: boolean;                                           // Признак завершения выполнения запроса        
-}
-
-/**
- * Интерфейс внутрисистемного отладчика
- */
-export interface IDocHubDataLakeDebugger {
-    /**
-     * Метод вызывается при необходимости отладочного действия
-     * @param context           - контекст исполнения кода
-     */
-    handle(context: IDocHubDataLakeDebuggerContext): Promise<DocHubDataLakeDebuggerHandleActions>;
-}
-
 /**
  * Интерфейс доступа к DataLake
  */
@@ -590,15 +539,6 @@ export interface IDocHubDataLake {
      * @returns                 - Тип контента. Например: text/markdown
      */
     getContentTypeForFile(file: string): string | null;
-
-    /*********************************************************************
-     *        Внутрисистемный отладчик запросов к DataLake
-     *********************************************************************/
-    /**
-     * Регистрирует отладчик в системе
-     * @param debug             - Объект реализующий отладчик
-     */
-    registerDebugger(debug: IDocHubDataLakeDebugger);
 
     /**
      * Возвращает JSONSchema DataLake

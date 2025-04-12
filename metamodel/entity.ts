@@ -1,4 +1,4 @@
-import { DocHubJSONataQuery } from '../interfaces/datasets';
+import { DocHubJSONataQuery } from '../interfaces/;
 import { 
     DocHubJSONSchema
 } from '../schemas/basetypes';

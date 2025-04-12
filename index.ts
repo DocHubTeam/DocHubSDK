@@ -19,7 +19,7 @@ export * from './interfaces/settings';
 export * from './interfaces/ui';
 export * from './interfaces/tools';
 export * from './interfaces/lang';
-export * from './interfaces/datasets';
+export * from './interfaces/jsonata';
 export * from './metamodel/index';
 export * from './interfaces/ai';
 export * from './interfaces/explainer';

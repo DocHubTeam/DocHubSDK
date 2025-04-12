@@ -1,4 +1,4 @@
-import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './datasets';
+import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './jsonata';
 import { DataLakePath } from './datalake';
 import { DocHubJSONSchema } from './../schemas/basetypes';
 

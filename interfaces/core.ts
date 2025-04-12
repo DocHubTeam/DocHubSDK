@@ -16,6 +16,7 @@ import { IDocHubTools } from './tools';
 import { IDocHubLang } from './lang';
 import { IDocHubAI } from './ai';
 import { IDocHubExplainer } from './explainer';
+import { IDocHubJSONata } from './jsonata';
 /**
  * Интерфейс ядра
  */
@@ -92,6 +93,10 @@ export interface IDocHubCore {
      * Стандартные утилиты облегчающие разработку расширений DocHub
      */
     tools: IDocHubTools;
+    /**
+     * Интерфейс доступа к DocHubJSONata движку
+     */
+    jsonata: IDocHubJSONata;
     /**
      * Версия ядра
      * @returns     - Версия ядра в формате *.*.*
