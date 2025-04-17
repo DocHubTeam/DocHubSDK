@@ -68,11 +68,11 @@ export interface IDocHubProblem {
 
 export enum DocHubProblemsEvents {
     // Процесс поиска проблем стартовал
-    startReview = 'dochub-problems-review-start',
+    startReview = '#dochub-problems-review-start',
     // Валидатор завершил работу
-    validatorReviewed = 'dochub-problems-validator-reviewed',
+    validatorReviewed = '#dochub-problems-validator-reviewed',
     // Процесс поиска проблем завершился
-    finishReview = 'dochub-problems-review-finish',
+    finishReview = '#dochub-problems-review-finish',
 }
 
 /**

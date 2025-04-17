@@ -12,7 +12,7 @@ class DocHubEditorExitPermitter {
   constructor(...params) {
     DocHub.router.registerMiddleware({
       beforeEach: async(to, from, next): Promise<void> => {
-        debugger;
+        this.onBeforeEach(to, from, next);
       }
     });
   }
