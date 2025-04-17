@@ -115,7 +115,7 @@ export interface IDocHubProblems {
     /**
      * Возвращает зарегистрированные проблемы
      */
-    fetchProblems(validator?: IDocHubValidatorUID | IDocHubValidatorUID[]): Promise<IDocHubProblem[]>
+    fetchProblems(validator?: IDocHubValidatorUID | IDocHubValidatorUID[] | RegExp): Promise<IDocHubProblem[]>
     /**
      * Возвращает валидаторы
      */
