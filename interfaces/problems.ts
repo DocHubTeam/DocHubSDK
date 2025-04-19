@@ -13,6 +13,10 @@ export interface IDocHubValidatorBase {
      * Название валидатора
      */
     title: string;
+    /**
+     * Описание валидатора
+     */
+    description?: string;
 }
 
 /**
