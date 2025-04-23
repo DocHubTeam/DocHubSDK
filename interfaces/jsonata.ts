@@ -1,5 +1,5 @@
 import { DocHubJSONSchema } from '../schemas/basetypes';
-import { DocHubDataLakeInitializedStatus, IDocHubTransaction } from './datalake';
+import { DataLakePath, DocHubDataLakeInitializedStatus, IDocHubTransaction } from './datalake';
 
 /**
  * Идентификатор источника данных
@@ -92,9 +92,12 @@ export type DocHubDataSetProfileOrigin = DocHubDataSetProfileSource | DocHubData
  * Интерфейс стандартизирующий источник данных
  */
 export interface IDocHubDataSetProfile {
+    // Источник
     source: DocHubDataSetProfileSource;
+    // Базовые источники
     origin?: DocHubDataSetProfileOrigin;
-    $base?: string;
+    // Базовый путь к объекту от которого будут разрешаться все относительные пути на файлы
+    $base?: DataLakePath;
 }
 
 export enum DocHubDataLakeDebuggerHandleActions {

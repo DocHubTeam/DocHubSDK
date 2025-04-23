@@ -33,8 +33,6 @@ export interface IDocHubPresentationProfile extends IDocHubDataSetProfile {
     params?: DocHubJSONSchema;
     // Пользовательский конструктор профиля презентации
     $constructor?: DocHubDataSetProfileSource;
-    // Базовый путь к объекту от которого будут разрешаться все относительные пути
-    $base: DataLakePath
 }
 
 /**
