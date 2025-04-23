@@ -92,8 +92,9 @@ export type DocHubDataSetProfileOrigin = DocHubDataSetProfileSource | DocHubData
  * Интерфейс стандартизирующий источник данных
  */
 export interface IDocHubDataSetProfile {
-    origin?: DocHubDataSetProfileOrigin;
     source: DocHubDataSetProfileSource;
+    origin?: DocHubDataSetProfileOrigin;
+    $base?: string;
 }
 
 export enum DocHubDataLakeDebuggerHandleActions {
