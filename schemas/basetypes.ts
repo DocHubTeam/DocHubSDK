@@ -105,6 +105,7 @@ export interface IDocHubJSONSchemaObject extends IDocHubJSONSchemaBase {
     patternProperties?: IDocHubJSONSchemaPatternProperties;
     regexp?: RegExp;
     dependencies?: any;
+    examples?: any[];
 }
 
 export type DocHubJSONSchema = 

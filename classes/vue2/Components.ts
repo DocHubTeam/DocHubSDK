@@ -54,7 +54,7 @@ export class DocHubComponentProto extends Vue {
       styleHeight: element.style.height,
       styleWidth: element.style.width,
       styleFilter: element.style.filter
-    }
+    };
   }
   /**
    * Восстанавливает параметры визуализации из ранее сохраненных

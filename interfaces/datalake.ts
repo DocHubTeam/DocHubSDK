@@ -6,7 +6,7 @@ import { DocHubJSONSchema } from '../schemas/basetypes';
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
     remove = 'remove',          // Удаляет данные по указанному пути
-};
+}
 
 /**
  * RegExp для указания пути в DataLake в DocHub
@@ -129,6 +129,7 @@ export type IDocHubTransactionFile = {
  */
 export enum DocHubTransactionStatus {
     open = 'open',                                  // Открыта и готова к изменениям
+    restore = 'restore',                            // Транзакция восстановлена из локального хранилища
     committing = 'committing',                      // В процессе применения. Не готова к изменениям.
     canceling = 'canceling',                        // В процессе отмены. Не готова к  изменениям.
     close = 'close'                                 // Завершена. Не готова изменениям.
@@ -191,7 +192,7 @@ export interface IDocHubFileEditorComponent {}
 /**
  * VUE компонент редактора файлов по умолчанию
  */
-export interface IDocHubFileDefaultEditorComponent extends IDocHubFileEditorComponent {}
+export type IDocHubFileDefaultEditorComponent = IDocHubFileEditorComponent
 
 /**
  * Метаинформация о редакторе файла
@@ -236,7 +237,7 @@ export interface IDocHubFileDifferComponent {}
 /**
  * VUE компонент визуализатора различий файлов по умолчанию
  */
-export interface IDocHubFileDefaultDifferComponent extends IDocHubFileDifferComponent {}
+export type IDocHubFileDefaultDifferComponent = IDocHubFileDifferComponent
 
 /**
  * Метаинформация о визуализаторе различий в файлах
@@ -271,7 +272,7 @@ export interface IDocHubDiffOptions {
 /**
  * Дополнительные параметры получения файла из DataLake
  */
-export interface IDataLakePullFileOptions extends IProtocolResponseOptions {}
+export type IDataLakePullFileOptions = IProtocolResponseOptions
 
 /**
  *  Обработчик событий изменения файла

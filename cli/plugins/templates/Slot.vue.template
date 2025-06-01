@@ -11,6 +11,9 @@
 
   @Component
   export default class Slot extends DocHubComponentProto {
+    getLangPackageID(): string {
+      return '${langId}.strings';
+    }
   }
 
 </script>

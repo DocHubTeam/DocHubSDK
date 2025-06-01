@@ -3,7 +3,7 @@ import { Prop, Watch, Component } from 'vue-property-decorator';
 import { DocHubComponentProto } from './Components';
 import { DocHub } from '../..';
 import { DocHubError } from '..';
-import type { IDocHubEditableComponent, IDocHubEditableMeta, IDocHubEditableMetaEditEntry, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
+import type { IDocHubAIContextPartition, IDocHubContextProvider, IDocHubEditableComponent, IDocHubEditableMeta, IDocHubEditableMetaEditEntry, IDocHubPresentationProfile, IDocHubPresentationsParams } from '../..';
 import { DocHubUITargetWindow } from '../..';
 import { getIconByURI } from '../../helpers/icons';
 
@@ -23,20 +23,55 @@ export enum DocHubDocumentType {
                           // а в source запрос для генерации данных для его заполнения.
                           // В результате работы вызовет метод processingContent
 
-  data = 'data'           // Работает только со структурированными данными.
+  data = 'data',          // Работает только со структурированными данными.
                           // Предполагается, что в source находится запрос.
                           // В результате работы вызовет метод processingData
+
+  custom = 'custom'       // Неопределенная структура профиля документа
+}
+
+/**
+ * Контекст-провайдер для AI агента
+ */
+export class AIDocumentContextProvider implements IDocHubContextProvider {
+  private docs: DocHubDocumentProto[] = [];
+
+  constructor() {
+    DocHub.ai.registerContextProvider('dochub-document-default', this);
+  }
+
+  register(doc: DocHubDocumentProto) {
+    !this.docs.includes(doc) && this.docs.push(doc);
+  }
+  unregister(doc: DocHubDocumentProto) {
+    this.docs = this.docs.filter((v) => v !== doc);
+  }
+  async pullPartitions(): Promise<IDocHubAIContextPartition[]> {
+    const result: IDocHubAIContextPartition[] = [];
+    for (const doc of this.docs) {
+      result.push({
+        id:  doc.profile.$base.toString(),
+        content: doc.pullAIContext,
+        path: doc.profile.$base,
+        uri: (await DocHub.dataLake.getURIForPath(doc.profile.$base)).pop()
+      });
+    }
+    return result;
+  }
 }
 
 @Component
 export class DocHubDocumentProto extends DocHubComponentProto implements IDocHubEditableComponent {
-  onRefresher: any = null;                              // Таймер отложенного выполнения обновления
-  followFiles: string[] | undefined = undefined;        // Список файлов за изменениями которых нужно следить
-  baseURI: string | undefined = undefined;              // URI документа от которого должны разрешаться все относительные ссылки
-  templateURI: string | undefined = undefined;          // URI файла шаблона, если он определен
-  sourceURI: string | undefined = undefined;            // Файла источника, если он определен как файл
-  error: string | null = null;                          // Ошибка
-  isPending = true;                                     // Признак внутренней работы. Например загрузка данных.
+  onRefresher: any = null;                                                // Таймер отложенного выполнения обновления
+  followFiles: string[] | undefined = undefined;                          // Список файлов за изменениями которых нужно следить
+  baseURI: string | undefined = undefined;                                // URI документа от которого должны разрешаться все относительные ссылки
+  templateURI: string | undefined = undefined;                            // URI файла шаблона, если он определен
+  sourceURI: string | undefined = undefined;                              // Файла источника, если он определен как файл
+  error: string | null = null;                                            // Ошибка
+  isPending = true;                                                       // Признак внутренней работы. Например загрузка данных.
+  contentData: any = null;                                                // Данные, на основе которых рендерится документ
+  private static contextProvider: AIDocumentContextProvider = null;       // Провайдер генерации контекста для AI
+
   /**
    * Профиль документа
    */
@@ -58,6 +93,12 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     type: Boolean,
     default: false
   }) readonly isPrintVersion: boolean;
+  /**
+   * Возвращает провайдер AI-контекста по умолчанию
+   */
+  get contextProvider() : AIDocumentContextProvider {
+    return DocHubDocumentProto.contextProvider ||= new AIDocumentContextProvider();
+  }
   /**
    * Следим за изменением профиля документа
    */
@@ -81,11 +122,15 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   mounted() {
     // При монтировании компонента в DOM, генерируем событие обновления
     this.onRefresh();
+    // Регистрирует документ как поставщик контекста для AI
+    this.contextProvider.register(this);
   }
 
   destroyed() {
     // Отключаем слежку за файлом
     this.refreshFilesFollow(true);
+    // Отменяет регистрацию документа как поставщика контекста для AI
+    this.contextProvider.unregister(this);    
   }
   /**
    * Подтверждаем, что презентация может редактироваться
@@ -118,9 +163,28 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
           title: uri,
           icon: getIconByURI(uri),
           handle: () =>  this.openEditor(uri)
-        }
+        };
       })
-    }
+    };
+  }
+  /**
+   * Возвращает контекст документа для AI-агента
+   * @returns 
+   */
+  async pullAIContext(): Promise<string> {
+    if (!this.contentData) return '';
+    let result = '# Пользователь просматривает/изучает документ ';
+    this.profile?.title && (result += ` \`${this.profile?.title}\`\n`);
+    result += '**Документ выведен на экран и пользователь на него смотрит.** Если пользователь говорит "этот документ", значит он имеет ввиду этот документ или другой представленный на экране.\n';
+    this.profile?.title && (result += `* Документ имеет название \`${this.profile?.title}\`\n`);
+    this.profile?.type && (result += `* Документ имеет тип \`${this.profile?.type}\`\n`);
+    this.profile?.$base && (result += `* Документ расположен в Data Lake по пути \`${this.profile?.$base}\`\n`);
+    this.profile?.template && (result += `* Документ использует шаблон для своего представления \`${this.profile?.template}\`\n`);
+    result += `* Источником информации для него служит \`${JSON.stringify(this.profile?.source)}\`\n`;
+    result += '* Содержимое документа начинается после строки `$______DOC____BEGIN_____$` и заканчивается после троки `$______DOC____END_____$` \n\n';
+    const content = typeof this.contentData === 'string' ? this.contentData : JSON.stringify(this.contentData || '');
+    result += `\`$______DOC____BEGIN_____$\`\n${content}\n\`$______DOC____END_____$\``;
+    return result;
   }
   /**
    * Обработка полученных данных документа.
@@ -135,6 +199,12 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
    */
   async processingContent(content: AxiosResponse): Promise<void> {
     throw new DocHubError(`The document has ${this.getType()} type. It must have processingContent method. But, the method is not implemented.`);
+  }
+  /**
+   * Кастомный обработчик профиля документа.
+   */
+  async processingCustom(): Promise<void> {
+    throw new DocHubError(`The document has ${this.getType()} type. It must have processingCustom method. But, the method is not implemented.`);
   }
   /**
    * Возвращает список отслеживаемых файлов.
@@ -171,46 +241,56 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
   async doRefresh(): Promise<void> {
     try {
       if (!this.profile?.source) throw new DocHubError('Document must have field "source" in profile!');
+
       this.isPending = true;
       await this.refreshFilesFollow();
-      // Если есть шаблон, загружаем его
-      const template = (this.getType() === DocHubDocumentType.content) && this.templateURI 
-        && (await DocHub.dataLake.pullFile(this.templateURI));
-      let result: AxiosResponse | null = (template || (this.getType() === DocHubDocumentType.data)) 
-        && { data: await DocHub.dataLake.resolveDataSetProfile(this.profile, {
-          params: this.params,
-          baseURI: this.baseURI
-        }) } as AxiosResponse
-        || (this.sourceURI ? await DocHub.dataLake.pullFile(this.sourceURI) : null);
-      if (!result) throw new DocHubError(`Can not render document [${this.profile?.$base}]`);
-      // Валидируем данные по структуре, если это требуется
-      if (template || (this.getType() === DocHubDocumentType.data)) {
-        const rules = new ajv({ allErrors: true });
-        const validator = rules.compile(this.getSchemaData());
-        if (!validator(result.data)) {
-          ajv_localize(validator.errors);
-          this.error = JSON.stringify(validator.errors, null, 4);
-          return;
+      const contentType = this.getType();
+      // Если тип документа кастомный, отдаем управление кастомному методу 
+      if (contentType === DocHubDocumentType.custom) {
+        await this.processingCustom();
+      } else {
+        // Если есть шаблон, загружаем его
+        const template = (contentType === DocHubDocumentType.content) && this.templateURI 
+          && (await DocHub.dataLake.pullFile(this.templateURI));
+        let result: AxiosResponse | null = (template || (contentType === DocHubDocumentType.data)) 
+          && { data: await DocHub.dataLake.resolveDataSetProfile(this.profile, {
+            params: this.params,
+            baseURI: this.baseURI
+          }) } as AxiosResponse
+          || (this.sourceURI ? await DocHub.dataLake.pullFile(this.sourceURI) : null);
+        if (!result) throw new DocHubError(`Can not render document [${this.profile?.$base}]`);
+        // Валидируем данные по структуре, если это требуется
+        if (template || (contentType === DocHubDocumentType.data)) {
+          const rules = new ajv({ allErrors: true });
+          const validator = rules.compile(this.getSchemaData());
+          if (!validator(result.data)) {
+            ajv_localize(validator.errors);
+            this.error = JSON.stringify(validator.errors, null, 4);
+            return;
+          }
+          // Если все в порядке, вызываем процессинг данных
+          result.data = await this.processingData(this.contentData = result.data);
         }
-        // Если все в порядке, вызываем процессинг данных
-        result.data = await this.processingData(result.data);
-      }
-      // Транслируем по шаблону
-      if (template) {
-        result = {
-          ...template,
-          data: DocHub.tools.mustache.render(template.data.toString(), result.data)
+        // Транслируем по шаблону
+        if (template) {
+          result = {
+            ...template,
+            data: DocHub.tools.mustache.render(template.data.toString(), result.data)
+          };
+        }
+        // Очищаем информацию об ошибке
+        this.error = null;
+        // Вызываем метод обработки полученного контента, если это требуется
+        if(template || (contentType === DocHubDocumentType.content)) {
+          this.processingContent(result);
+          this.contentData = result.data;
         }
       }
-      // Очищаем информацию об ошибке
-      this.error = null;
-      // Вызываем метод обработки полученного контента, если это требуется
-      (template || (this.getType() === DocHubDocumentType.content)) && this.processingContent(result);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
       this.error = error;
-      this.processingData(undefined);
+      this.processingData(this.contentData = undefined);
     } finally {
       this.isPending = false;
     }
@@ -238,19 +318,19 @@ export class DocHubDocumentProto extends DocHubComponentProto implements IDocHub
     // Если указан шаблон, добавляем его в отслеживаемые файлы
     if(this.profile?.template) {
       const templatePath = [...baseStruct, 'template'].join('/');
-      this.templateURI = DocHub.dataLake.resolveURI(
-        (await DocHub.dataLake.getURIForPath(templatePath) || []).pop() || this.baseURI,
-        this.profile.template
-      );
+      const baseTemplateURI = (await DocHub.dataLake.getURIForPath(templatePath) || []).pop() || this.baseURI;
+      this.templateURI = this.profile?.template === '.' // Точка является ссылкой на текущий файл
+        ? baseTemplateURI
+        : DocHub.dataLake.resolveURI(baseTemplateURI, this.profile.template);
       if (!this.templateURI) throw new DocHubError(`Can not resolve template URI for path [${templatePath}]`);
       followFiles.push(this.templateURI);
     } else if (typeof this.profile?.source === 'string' && this.getType() === DocHubDocumentType.content) {
       // Если шаблона нет, но документ предполагает работу с содержимым файла, то отслеживаем source
       const sourcePath = [...baseStruct, 'source'].join('/');
-      this.sourceURI = DocHub.dataLake.resolveURI(
-        (await DocHub.dataLake.getURIForPath(sourcePath) || []).pop() || this.baseURI,
-        this.profile.source
-      );
+      const baseSourceURI = (await DocHub.dataLake.getURIForPath(sourcePath) || []).pop() || this.baseURI;
+      this.sourceURI = this.profile.source === '.'  // Точка является ссылкой на текущий файл
+        ? baseSourceURI
+        : DocHub.dataLake.resolveURI(baseSourceURI, this.profile.source );
       if (!this.sourceURI) throw new DocHubError(`Can not resolve source URI for path [${sourcePath}]`);
       followFiles.push(this.sourceURI);
     }

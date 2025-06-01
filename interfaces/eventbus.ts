@@ -7,7 +7,7 @@ export interface IDocHubEventBus {
      * @param event     - Идентификатор события
      * @param data      - Данные события
      */
-    $emit(event: string, data: any);
+    $emit(event: string, data?: any);
     /**
      * Монтирует слушателя в шину
      * @param event     - Идентификатор события

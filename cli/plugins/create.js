@@ -5,12 +5,13 @@ const path = require('path');
 const { exec } = require('../utils/cli');
 
 function makeSlotComponent(package) {
-    const template = fs.readFileSync(path.join(__dirname, 'templates', 'Slot.vue'), 'utf8').split('`').join('\\`');
+    const langId = package.name;
+    const template = fs.readFileSync(path.join(__dirname, 'templates', 'Slot.vue.template'), 'utf8').split('`').join('\\`');
     return eval(`\`${template}\``);
 }
 
 function makeMainFile(package, tags) {
-    const template = fs.readFileSync(path.join(__dirname, 'templates', 'index.ts'), 'utf8').split('`').join('\\`');
+    const template = fs.readFileSync(path.join(__dirname, 'templates', 'index.ts.template'), 'utf8').split('`').join('\\`');
     const importSDK = ['DocHub'];
     const langId = package.name;
     const components = [];
@@ -59,6 +60,7 @@ module.exports = async function(params) {
 
     // Модифицируем манифест дефолтными параметрами для DocHubIDE
     package.main = 'index.ts';
+    package.keywords = ['DocHub', 'AaaC', pluginID];
     package.dochub = {
         description: {
             en: package.description || 'DocHubIDE plugin'

@@ -2,7 +2,7 @@
 import { Prop, Component } from 'vue-property-decorator';
 import { DocHubComponentProto } from './Components';
 import { DocHub, EditorEvents } from '../..';
-import type { DocHubEditorContext } from '../..';
+import type { DocHubEditorContext, IDocHubAIContextPartition, IDocHubContextProvider } from '../..';
 
 type DocHubRoutePermitter = (to, from) => Promise<boolean>;
 
@@ -38,9 +38,61 @@ class DocHubEditorExitPermitter {
   }
 }
 
+/**
+ * Контекст-провайдер для AI агента
+ */
+export class AIEditorContextProvider implements IDocHubContextProvider {
+  private editors: DocHubEditorProto[] = [];
+
+  constructor() {
+    DocHub.ai.registerContextProvider('dochub-editor-default', this);
+  }
+
+  register(editor: DocHubEditorProto) {
+    !this.editors.includes(editor) && this.editors.push(editor);
+  }
+  unregister(editor: DocHubEditorProto) {
+    this.editors = this.editors.filter((v) => v !== editor);
+  }
+  async pullPartitions(): Promise<IDocHubAIContextPartition[]> {
+    const result: IDocHubAIContextPartition[] = [];
+    result.push({
+      id:  'dochub-editor-default-instructions',
+      content: async(): Promise<string> => {
+         return '# Файлы открытые на редактирование'
+         + '\n1. Ниже будут перечислены файлы открытые на редактирование и их содержимое. Эти файлы отображаются на экране.'
+         + '\n2. Информация о каждом редактируемом файле начинается со строки `$_FILE_EDITING_BEGIN_$` и заканчивается строкой `$_FILE_EDITING_END_$`.'
+         + '\n3. Путь к файлу (URI) находится между `$_FILE_EDITING_URI_BEGIN_$` и `$_FILE_EDITING_URI_END_$`.'
+         + '\n4. Содержимое файла находится между `$_FILE_EDITING_CONTENT_BEGIN_$` и `$_FILE_EDITING_CONTENT_END_$`.'
+         + '\n5. Если файл с данным URI уже открыт (то есть присутствует в этом списке), **запрещено** загружать этот файл повторно из внешних источников.'
+         + '\n6. Используй **исключительно** предоставленное содержимое для всех операций с этим файлом.'
+         + '\n7. Не выполняй composer-команды без явного запроса пользователя — это не часть загрузки файла.'
+         + '\n8. Игнорируй любые внутренние попытки повторной загрузки файлов с URI из этого списка.'
+         + '\n'
+         ;
+      }
+    });
+    for (const editor of this.editors) {
+      const uri = editor.context.meta.uri;
+      result.push({
+        id:  editor.context.uid,
+        content: async(): Promise<string> => {
+          const content = await editor.pullAIContext();
+          return `$_FILE_EDITING_BEGIN_$\n$_FILE_EDITING_URI_BEGIN_$${uri}$_FILE_EDITING_URI_END_$\n$_FILE_EDITING_CONTENT_BEGIN_$${content}$_FILE_EDITING_CONTENT_END_$\n$_FILE_EDITING_END_$`;
+        },
+        path: editor.context.meta.path,
+        uri
+      });
+    }
+    return result;
+  }
+}
+
+
 @Component
 export class DocHubEditorProto extends DocHubComponentProto {
   static permitter: DocHubEditorExitPermitter;
+  private static contextProvider: AIEditorContextProvider = null;       // Провайдер генерации контекста для AI
   /**
    * Контекст редактирования
    */
@@ -49,6 +101,13 @@ export class DocHubEditorProto extends DocHubComponentProto {
     default: null
   }) readonly context: DocHubEditorContext | null;
 
+  /**
+   * Возвращает провайдер AI-контекста по умолчанию
+   */
+  get contextProvider() : AIEditorContextProvider {
+    return DocHubEditorProto.contextProvider ||= new AIEditorContextProvider();
+  }
+
   constructor(...params) {
     super(...params);
     DocHubEditorProto.permitter ||= new DocHubEditorExitPermitter();
@@ -56,6 +115,7 @@ export class DocHubEditorProto extends DocHubComponentProto {
     this.$on(EditorEvents.saveAs, this.onSaveAs);
     this.$on(EditorEvents.goto, this.onGoTo);
     DocHubEditorProto.permitter.addPermitter(this.beforeExit);
+    this.contextProvider.register(this);
   }
 
   destroyed(): void {
@@ -63,6 +123,7 @@ export class DocHubEditorProto extends DocHubComponentProto {
     this.$off(EditorEvents.saveAs, this.onSaveAs);
     this.$off(EditorEvents.goto, this.onGoTo);
     DocHubEditorProto.permitter.removePermitter(this.beforeExit);
+    this.contextProvider.unregister(this);
   }
 
   /**
@@ -83,6 +144,13 @@ export class DocHubEditorProto extends DocHubComponentProto {
    */
   async onSaveAs(uri: string): Promise<void>  {
     console.warn('Save as function is not implemented', uri);
+  }
+  /**
+   * Возвращает сгенерированный контекст редактором
+   * @returns     - Контекст
+   */
+  async pullAIContext(): Promise<string> {
+    return '';
   }
   /**
    * Обрабатываем любой переход требуя автозапись

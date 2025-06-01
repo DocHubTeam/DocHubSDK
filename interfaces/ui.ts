@@ -8,6 +8,7 @@ export enum DocHubUISlot {
     avatar = 'avatar',                              // Компонент монтируется в область аватаров
     toolbar = 'toolbar',                            // Компонент монтируется в область панелей инструментов
     explorer = 'explorer',                          // Компонент монтируется в область навигации 
+    chat = 'chat',                                  // Компонент используется при вызове комьюнити чата
     codeViewer = 'code-viewer',                     // Компонент используется при рендере кода
     transactionView = 'transaction-view'            // Выводится на страницу исследования транзакции
 }
@@ -16,7 +17,7 @@ export enum DocHubUISlot {
  * События интерфейса
  */
 export enum DocHubUIEvents {
-    mountedToSlot = 'dochub-ui-slot-mounted'        // В слот смонтирован компонент
+    mountedToSlot = '#dochub-ui-slot-mounted'        // В слот смонтирован компонент
 }
 
 export interface IDocHubUISlotOptions {
