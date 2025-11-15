@@ -23,6 +23,7 @@ export * from './interfaces/jsonata';
 export * from './metamodel/index';
 export * from './interfaces/ai';
 export * from './interfaces/explainer';
+export * from './interfaces/libraries';
 
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
