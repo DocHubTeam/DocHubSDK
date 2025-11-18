@@ -1,4 +1,7 @@
 export type IDocHubLibrary = any;
+export type DocHubLibraryID = string;
+export type DocHubLibraryVersion = string;
+export type DocHubLibraryRequireVersion = string;
 /**
  * Интерфейсы публикуемых плагинами библиотек
  */
@@ -14,13 +17,24 @@ export interface IDocHubLibraryExportProfile {
      * В результате вызова данной функции необходимо вернуть ссылку на загруженный модуль.
      */
     import(): Promise<IDocHubLibrary>;
+    /**
+     * Версия библиотеки
+     */
+    version: DocHubLibraryVersion;
 }
 
 /**
  * Декларирует публикуемые плагином библиотеки
  */
 export interface IDocHubLibrariesExport {
-    [id: string]: IDocHubLibraryExportProfile;
+    [id: DocHubLibraryID]: IDocHubLibraryExportProfile;
+}
+
+/**
+ * Структура перечисления библиотек и их версий
+ */
+export interface IDocHubLibraryRequires {
+    [id: DocHubLibraryID]: DocHubLibraryRequireVersion;
 }
 
 /**
@@ -37,12 +51,12 @@ export interface IDocHubLibraries {
      * Если загрузка хотя бы одной библиотеки не удастся, возникнет ошибка.
      * @param libraries - список необходимых библиотек
      */
-    requires(libraries: string[]): Promise<void>;
+    requires(libraries: IDocHubLibraryRequires): Promise<void>;
     /**
      * Проверяет доступна ли библиотека. 
      * Возвращает структуру где для каждой библиотеки указывается true если она доступна, либо false
      * @param libraries 
      */
-    isAvailable(libraries: string[]): Promise<{ [library: string]: boolean }>;
+    isAvailable(libraries: IDocHubLibraryRequires): Promise<{ [library: string]: boolean }>;
 }
 
