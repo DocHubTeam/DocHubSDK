@@ -24,11 +24,13 @@ export * from './metamodel/index';
 export * from './interfaces/ai';
 export * from './interfaces/explainer';
 export * from './interfaces/libraries';
+export * from './interfaces/shared';
 
 export * from './schemas/basetypes';
 export * from './schemas/dochub-yaml';
 
 export * from './plugins/manifest';
+export * from './plugins/module';
 
 export * from './environments/variables';
 

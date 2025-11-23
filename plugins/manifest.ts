@@ -1,3 +1,4 @@
+import { IDocHubLibrariesExport, IDocHubLibraryRequires } from "../interfaces/libraries";
 import { DocHubJSONSchema, IDocHubJSONSchemaAllOf, IDocHubJSONSchemaAnyOf, IDocHubJSONSchemaArray, IDocHubJSONSchemaBase, IDocHubJSONSchemaBoolean, IDocHubJSONSchemaInteger, IDocHubJSONSchemaNumber, IDocHubJSONSchemaObject, IDocHubJSONSchemaOneOf, IDocHubJSONSchemaString } from "../schemas/basetypes";
 
 /**
@@ -68,8 +69,10 @@ export interface IDocHubPluginManifest {
     }
     // Свойства приложения
     app_props: IDocHubManifestProps;
-    // Подключаемые плагины
-    app_plugins?: IDocHubManifestPlugins;
     // Переменные среды исполнения
     app_environments?: IDocHubManifestEnvironments;
+    // Зависимость от общих библиотек в DocHub
+    DocHubDependencies?: IDocHubLibraryRequires;
+    // Экспортируемые общие библиотеки в DocHub
+    DocHubExport?: IDocHubLibrariesExport;
 }

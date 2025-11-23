@@ -2,32 +2,25 @@ export type IDocHubLibrary = any;
 export type DocHubLibraryID = string;
 export type DocHubLibraryVersion = string;
 export type DocHubLibraryRequireVersion = string;
-/**
- * Интерфейсы публикуемых плагинами библиотек
- */
-export interface IDocHubLibraryExportProfile {
-    /**
-     * Если библиотека имеет исходники для сборки, здесь указывается путь к ним.
-     * Ссылка на исходники позволяет при разработке обращаться к декларациям интерфейсов и функций библиотек,
-     * а также, при необходимости внедрять библиотеки непосредственно в плагины.
-     */
-    srcPath?: string;
-    /**
-     * Реализация загрузки модуля.
-     * В результате вызова данной функции необходимо вернуть ссылку на загруженный модуль.
-     */
-    import(): Promise<IDocHubLibrary>;
-    /**
-     * Версия библиотеки
-     */
-    version: DocHubLibraryVersion;
-}
+export type DocHubLibraryExportVersion = string;
 
 /**
  * Декларирует публикуемые плагином библиотеки
  */
 export interface IDocHubLibrariesExport {
-    [id: DocHubLibraryID]: IDocHubLibraryExportProfile;
+    [id: DocHubLibraryID]: DocHubLibraryExportVersion;
+}
+
+/**
+ * Ручка для разрешения зависимости от библиотеки. Должна возвращать объект module.
+ */
+export type IDocHubLibraryResolver = (library: DocHubLibraryID) => Promise<IDocHubLibrary>;
+
+/**
+ * Интерфейс доступа к общим библиотекам, которые предоставляет плагин
+ */
+export interface IDocHubSharedLibraries {
+    resolve: IDocHubLibraryResolver;
 }
 
 /**
@@ -41,17 +34,6 @@ export interface IDocHubLibraryRequires {
  * Интерфейс управления библиотеками
  */
 export interface IDocHubLibraries {
-    /**
-     * Публикует библиотеки для всех желающих
-     * @param libraries - структура экспорта
-     */
-    export(libraries: IDocHubLibrariesExport);
-    /**
-     * При вызове будет ожидать загрузки необходимых библиотек.
-     * Если загрузка хотя бы одной библиотеки не удастся, возникнет ошибка.
-     * @param libraries - список необходимых библиотек
-     */
-    requires(libraries: IDocHubLibraryRequires): Promise<void>;
     /**
      * Проверяет доступна ли библиотека. 
      * Возвращает структуру где для каждой библиотеки указывается true если она доступна, либо false
