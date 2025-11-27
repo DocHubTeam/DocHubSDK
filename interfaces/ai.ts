@@ -4,6 +4,20 @@ import { DataLakePath } from './datalake';
 import { DocHubEditorContext } from './editors';
 
 /**
+ * События AI 
+ */
+export enum DocHubAIEvents {
+    /**
+     * Глобальные события
+     */
+    setDefaultDriver = '$ai-change-default-driver',  // Драйвер AI по умолчанию изменился
+    /**
+     * Локальные события
+     */
+    registeredDriver = '#ai-registered-driver',  // Зарегистрирован драйвер AI
+};
+
+/**
  * Фрагмент контекста
  */
 export interface IDocHubAIContextPortion {}
@@ -311,9 +325,14 @@ export interface IDocHubAI {
      */
     registerComposerProvider(alias: string, provider: IDocHubComposerProvider): void;
     /**
-     * Возвращает список доступных моделей AI
+     * Возвращает список доступных AI драйверов
      */
-    getDrivers(): string[];
+    fetchDrivers(): string[];
+    /**
+     * Возвращает интерфейс драйвера по указанному идентификатору.
+     * Если alias пусто, то вернет интерфейс к драйверу по умолчанию.
+     */
+    getDriver(alias?: string): IDocHubAIDriver;
     /**
      * Возвращает дефолтный драйвер AI
      */
