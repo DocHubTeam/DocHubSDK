@@ -50,6 +50,24 @@ export interface IDocHubAIRequest {
     next(question: string): Promise<void>;
 }
 
+export type DocHubAIAskAttachmentFileContent = string;
+
+
+/**
+ * Метаданные файла
+ */
+export interface DocHubAIAskAttachmentFile {
+    url: URL;               // Ссылка на файл, либо base64 кодированный файл
+    source?: URL;           // Источник информации для задач AI при указании ссылок на источники
+    description?: string;   // Контекстное описание файла
+}
+
+/**
+ * Структура прикрепляемых файлов к запросу
+ */
+
+export type DocHubAIAskAttachment = DocHubAIAskAttachmentFile[];
+
 /**
  * Опции выполнения AI запроса
  */
@@ -66,6 +84,10 @@ export interface IDocHubAIAskOptions {
      * Признак отображения внутреннего диалога IDE и AI-агента
      */
     trace?: boolean;
+    /**
+     * Файлы прикрепляемые к запросу
+     */
+    attachment?: DocHubAIAskAttachment;
 }
 
 /**
@@ -88,6 +110,10 @@ export interface IDocHubAIDriver {
      * @returns           - Запрос к AI
     */
     ask: DocHubAskFunction;
+    /**
+     * Возвращает информацию о способностях AI
+     */
+    getCapabilities(): Promise<IDocHubAICapabilities>;
 }
 
 export interface IDocHubAITextPartition {
@@ -186,6 +212,37 @@ export interface IDocHubAIComposerCommand extends IDocHubAIComposerCommandMeta {
 export interface IDocHubComposerProvider {
     fetchCommands(): Promise<IDocHubAIComposerCommand[]>;
 }
+
+export enum IDocHubAICapabilityID {
+    text = 'text',
+    attachment = 'attachment',
+    contextWindow = 'context-window'
+}
+
+export type DocHubAIAttachmentFileContentType = string;
+
+/**
+ * Метаинформация о возможностях AI-агента
+ */
+export interface IDocHubAICapabilities {
+    /**
+     * Текстовое резюме от AI
+     */
+    description?: string;
+    /**
+     * Способность обрабатывать прикрепленные файлы к сообщению
+     */
+    [IDocHubAICapabilityID.attachment]?: DocHubAIAttachmentFileContentType[];
+    /**
+     * Способность воспринимать текс в запросе
+     */
+    [IDocHubAICapabilityID.text]?: boolean;
+    /**
+     * Размер контекстного окна
+     */
+    [IDocHubAICapabilityID.contextWindow]?: number;
+}
+
 
 /**
  * Интерфейс AI ассистента
