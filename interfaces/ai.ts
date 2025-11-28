@@ -227,7 +227,7 @@ export interface IDocHubComposerProvider {
     fetchCommands(): Promise<IDocHubAIComposerCommand[]>;
 }
 
-export enum IDocHubAICapabilityID {
+export enum DocHubAICapabilityID {
     text = 'text',
     attachment = 'attachment',
     contextWindow = 'context-window'
@@ -246,15 +246,15 @@ export interface IDocHubAICapabilities {
     /**
      * Способность обрабатывать прикрепленные файлы к сообщению
      */
-    [IDocHubAICapabilityID.attachment]?: DocHubAIAttachmentFileContentType[];
+    [DocHubAICapabilityID.attachment]?: DocHubAIAttachmentFileContentType[];
     /**
      * Способность воспринимать текс в запросе
      */
-    [IDocHubAICapabilityID.text]?: boolean;
+    [DocHubAICapabilityID.text]?: boolean;
     /**
      * Размер контекстного окна
      */
-    [IDocHubAICapabilityID.contextWindow]?: number;
+    [DocHubAICapabilityID.contextWindow]?: number;
 }
 
 
