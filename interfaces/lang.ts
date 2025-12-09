@@ -1,4 +1,17 @@
 /**
+ * Строковое значение для нескольких языков
+ */
+export type DocHubLangStringMultilang = {
+    [lang: string]: string;
+}
+
+/**
+ * Строковое значение для организации мультиязычности.
+ * Если имеет простой тип string - предполагается, что строка на английском. 
+ */
+export type DocHubLangString = string | DocHubLangStringMultilang;
+
+/**
  * События языковых пакетов
  */
 export enum DocHubLangEvents {
@@ -52,4 +65,5 @@ export interface IDocHubLang {
      * @returns             - Возвращает действующий язык
      */
     switchTo(lang: string): Promise<string>;
+
 }

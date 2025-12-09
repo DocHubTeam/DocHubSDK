@@ -1,7 +1,7 @@
-import { description } from '@front/lang/en/validators';
 import { DocHubJSONSchema } from '../schemas/basetypes';
 import { DataLakePath } from './datalake';
 import { DocHubEditorContext } from './editors';
+import { DocHubLangString } from './lang';
 
 /**
  * События AI 
@@ -10,11 +10,15 @@ export enum DocHubAIEvents {
     /**
      * Глобальные события
      */
-    setDefaultDriver = '$ai-change-default-driver',  // Драйвер AI по умолчанию изменился
+    changedDefaultDriver = '$ai-changed-default-driver',    // Драйвер AI по умолчанию изменился
+    /**
+     * Изменены настройки AI-агента
+     */
+    changedDriverConfig = '$ai-changed-driver-config',      // Изменилась конфигурация драйвера
     /**
      * Локальные события
      */
-    registeredDriver = '#ai-registered-driver',  // Зарегистрирован драйвер AI
+    registeredDriver = '#ai-registered-driver',             // Зарегистрирован драйвер AI
 };
 
 /**
@@ -61,7 +65,7 @@ export interface IDocHubAIRequest {
      * Отправляет следующий запрос в AI
      * @returns 
      */
-    next(question: string): Promise<void>;
+    next(question: string, attachment?: DocHubAIAskAttachment): Promise<void>;
 }
 
 export type DocHubAIAskAttachmentFileContent = string;
@@ -233,16 +237,16 @@ export enum DocHubAICapabilityID {
     contextWindow = 'context-window'
 }
 
-export type DocHubAIAttachmentFileContentType = string;
+export type DocHubAIAttachmentFileContentType = string; // Тип файла в формате расширения (.png) или в формате MIME type (image/*)
 
 /**
  * Метаинформация о возможностях AI-агента
  */
 export interface IDocHubAICapabilities {
     /**
-     * Текстовое резюме от AI
+     * Текстовое резюме от AI о себе
      */
-    description?: string;
+    description?: DocHubLangString;
     /**
      * Способность обрабатывать прикрепленные файлы к сообщению
      */
@@ -256,7 +260,6 @@ export interface IDocHubAICapabilities {
      */
     [DocHubAICapabilityID.contextWindow]?: number;
 }
-
 
 /**
  * Интерфейс AI ассистента

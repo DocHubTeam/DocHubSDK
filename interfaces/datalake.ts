@@ -1,7 +1,8 @@
 import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersion } from './protocols';
 import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './jsonata';
 import { DocHubUITargetWindow } from './ui';
-import { DocHubJSONSchema } from '../schemas/basetypes';
+import { DocHubJSONSchema, DocHubJSONSchemaPath, DocHubJSONSchemaPathPattern, DocHubJSONSchemaPathResolver } from '../schemas/basetypes';
+import { DocHubJSONSchemaFormat, DocHubJSONSchemaFormatCollection, DocHubJSONSchemaFormatController } from '../schemas/formats';
 
 export enum DataLakeChange {
     update = 'update',          // Обновление данных по указанному пути  
@@ -539,11 +540,29 @@ export interface IDocHubDataLake {
      * @param file              - Полный путь к файлу. Например: README.md
      * @returns                 - Тип контента. Например: text/markdown
      */
-    getContentTypeForFile(file: string): string | null;
+    getContentTypeForFile(uri: string): string | null;
+
+    /**********************************************************************
+     *                    Работа с схемой данных DataLake
+     *********************************************************************/
+
 
     /**
      * Возвращает JSONSchema DataLake
+     * @param path              - Путь к необходимому сегменту схемы
      */
-    fetchSchema(): Promise<DocHubJSONSchema>;
+    fetchSchema(path?: DocHubJSONSchemaPath): Promise<DocHubJSONSchema>;
+
+    /**
+     * Регистрирует кастомный формат для валидации JSONSchema и реализации подсказок в редакторах
+     * @param pattern           - Шаблон пути по которому подключается резолвер
+     * @param context           - Контекст работы резолвера   
+     */
+    registerSchemaFormat(format: DocHubJSONSchemaFormat, controller: DocHubJSONSchemaFormatController);
+
+    /**
+     * Возвращает коллекцию доступных форматов
+     */
+    fetchSchemaFormats(): Promise<DocHubJSONSchemaFormatCollection>;
 }
 

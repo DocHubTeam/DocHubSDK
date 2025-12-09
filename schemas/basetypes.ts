@@ -108,6 +108,7 @@ export interface IDocHubJSONSchemaObject extends IDocHubJSONSchemaBase {
     examples?: any[];
 }
 
+
 export type DocHubJSONSchema = 
     IDocHubJSONSchemaArray 
     | IDocHubJSONSchemaString
@@ -118,4 +119,3 @@ export type DocHubJSONSchema =
     | IDocHubJSONSchemaAllOf
     | IDocHubJSONSchemaOneOf
     | IDocHubJSONSchemaAnyOf;
-
