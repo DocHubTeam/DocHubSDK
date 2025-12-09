@@ -29,6 +29,7 @@ export * from './interfaces/shared';
 export * from './schemas/basetypes';
 export * from './schemas/formats';
 export * from './schemas/dochub-yaml';
+export * from './schemas/schema';
 
 export * from './plugins/manifest';
 export * from './plugins/module';
