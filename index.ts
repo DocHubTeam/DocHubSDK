@@ -27,7 +27,7 @@ export * from './interfaces/libraries';
 export * from './interfaces/shared';
 
 export * from './schemas/basetypes';
-export * from './schemas/formats';
+export * from './schemas/fields/suggester';
 export * from './schemas/dochub-yaml';
 export * from './schemas/schema';
 

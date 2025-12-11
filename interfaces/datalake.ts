@@ -2,7 +2,7 @@ import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersi
 import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './jsonata';
 import { DocHubUITargetWindow } from './ui';
 import { DocHubJSONSchema } from '../schemas/basetypes';
-import { DocHubJSONSchemaFormat, DocHubJSONSchemaFormatCollection, DocHubJSONSchemaFormatController } from '../schemas/formats';
+import { DocHubJSONSchemaFormat, DocHubJSONSchemaFormatCollection, DocHubJSONSchemaFormatController } from '../schemas/fields/suggester';
 import { IDocHubDataLakeSchema } from '../schemas/schema';
 
 export enum DataLakeChange {

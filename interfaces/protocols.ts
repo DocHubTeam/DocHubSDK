@@ -66,7 +66,7 @@ export type DocHubResourceMetaFile = {
 export type DocHubResourceMetaFolder = {
     type: DocHubResourceType.folder;
     uri: string;
-    files?: DocHubResourceMetaFile[]        // Если undefined - статус содержания файлов не определен
+    files?: DocHubResourceMetaFile[] | DocHubResourceMetaFolder[]        // Если undefined - статус содержания файлов не определен
 }
 
 /**
@@ -75,7 +75,7 @@ export type DocHubResourceMetaFolder = {
 export type DocHubResourceMetaBranch = {
     type: DocHubResourceType.branch,
     uri: string;
-    files?: DocHubResourceMetaFile[]        // Если undefined - статус содержания файлов не определен
+    files?: DocHubResourceMetaFile[] | DocHubResourceMetaFolder[]        // Если undefined - статус содержания файлов не определен
 }
 
 /**

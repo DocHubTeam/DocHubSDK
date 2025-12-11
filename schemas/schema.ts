@@ -1,9 +1,9 @@
 import { DocHubJSONSchema } from "./basetypes";
 import {
-    DocHubJSONSchemaFormat,
-    DocHubJSONSchemaFormatCollection,
-    DocHubJSONSchemaFormatController
-} from "./formats";
+    DocHubJSONSchemaSuggestController,
+    DocHubJSONSchemaSuggesterCollection,
+    DocHubJSONSchemaSuggesterID
+} from "./fields/suggester";
 
 /**
  * Схема данных DataLake
@@ -16,14 +16,18 @@ export interface IDocHubDataLakeSchema {
     fetch(): Promise<DocHubJSONSchema>;
 
     /**
-     * Регистрирует кастомный формат для валидации JSONSchema и реализации подсказок в редакторах
+     * Регистрирует кастомный подсказчик для JSONSchema
      * @param format            - Идентификатор формата
      * @param controller        - Контроллер обрабатывающий запросы к формату
      */
-    registerSchemaFormat(format: DocHubJSONSchemaFormat, controller: DocHubJSONSchemaFormatController);
+    registerSuggester(suggester: DocHubJSONSchemaSuggesterID, controller: DocHubJSONSchemaSuggestController);
 
     /**
-     * Возвращает коллекцию доступных форматов
+     * Возвращает список доступных подсказчиков 
      */
-    fetchSchemaFormats(): Promise<DocHubJSONSchemaFormatCollection>;
+    fetchSuggesters(): Promise<DocHubJSONSchemaSuggesterID[]>;
+    /**
+     * Возвращает контроллер подсказчика
+     */
+    getSuggester(suggesterId: DocHubJSONSchemaSuggesterID): Promise<DocHubJSONSchemaSuggestController>;
 }
