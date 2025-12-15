@@ -15,6 +15,8 @@ export interface DocHubJSONSchemaSuggest {
     apply?: string;
     // Детальное описание для выбора подсказки
     detail?: string;
+    // Расширенная информация
+    info?: string;
 }
 
 /**
@@ -30,16 +32,16 @@ export type DocHubJSONSchemaSuggestFetch = (limit?: number) => Promise<DocHubJSO
 export type DocHubJSONSchemaSuggests = (DocHubJSONSchemaSuggest | DocHubJSONSchemaSuggestFetch)[];
 
 export interface DocHubJSONSchemaSuggestControllerParams {
-    // Значение
-    value: any;
-    // Схема, которая применяется к значению
-    valueSchema: DocHubJSONSchema;
-    // URI ресурса, который редактируется
+    // Текст имеющий отношение к подсказке
+    line: string;
+    // JSONSchema описывающий контекст
+    contextSchema: DocHubJSONSchema;
+    // Идентификатор свойства
+    prop?: string;
+    // URI ресурса, редактирование которого ведется
     uri?: string;
-    // Контекст в котором происходит валидация значения
-    context?: any;
-    // Схема контекста
-    contextSchema?: DocHubJSONSchema;
+    // Путь к области редактирования
+    path?: string[];
 }
 
 /**

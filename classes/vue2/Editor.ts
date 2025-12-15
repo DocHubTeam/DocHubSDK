@@ -60,25 +60,21 @@ export class AIEditorContextProvider implements IDocHubContextProvider {
       id:  'dochub-editor-default-instructions',
       content: async(): Promise<string> => {
          return '# Файлы открытые на редактирование'
-         + '\n1. Ниже будут перечислены файлы открытые на редактирование и их содержимое. Эти файлы отображаются на экране.'
+         + '\n1. Ниже будут перечислены файлы открытые на редактирование. Над этими файлами пользователь работает - редактирует.'
          + '\n2. Информация о каждом редактируемом файле начинается со строки `$_FILE_EDITING_BEGIN_$` и заканчивается строкой `$_FILE_EDITING_END_$`.'
          + '\n3. Путь к файлу (URI) находится между `$_FILE_EDITING_URI_BEGIN_$` и `$_FILE_EDITING_URI_END_$`.'
-         + '\n4. Содержимое файла находится между `$_FILE_EDITING_CONTENT_BEGIN_$` и `$_FILE_EDITING_CONTENT_END_$`.'
-         + '\n5. Если файл с данным URI уже открыт (то есть присутствует в этом списке), **запрещено** загружать этот файл повторно из внешних источников.'
-         + '\n6. Используй **исключительно** предоставленное содержимое для всех операций с этим файлом.'
-         + '\n7. Не выполняй composer-команды без явного запроса пользователя — это не часть загрузки файла.'
-         + '\n8. Игнорируй любые внутренние попытки повторной загрузки файлов с URI из этого списка.'
-         + '\n'
+         + '\n4. Если в информации редактируемом файле есть признак $_VIEW_$, это значит, что пользователь прямо сейчас смотрит на его содержимое.'
+         + '\n Список файлов отрытых на редактирование:\n'
          ;
       }
     });
+    const currContext = await DocHub.editors.getCurrentContext();
     for (const editor of this.editors) {
       const uri = editor.context.meta.uri;
       result.push({
         id:  editor.context.uid,
         content: async(): Promise<string> => {
-          const content = await editor.pullAIContext();
-          return `$_FILE_EDITING_BEGIN_$\n$_FILE_EDITING_URI_BEGIN_$${uri}$_FILE_EDITING_URI_END_$\n$_FILE_EDITING_CONTENT_BEGIN_$${content}$_FILE_EDITING_CONTENT_END_$\n$_FILE_EDITING_END_$`;
+          return `$_FILE_EDITING_BEGIN_$\n$_FILE_EDITING_URI_BEGIN_$${uri}$_FILE_EDITING_URI_END_$\n${currContext?.uid === editor.context.uid ? '$_VIEW_$' : ''}$_FILE_EDITING_END_$`;
         },
         path: editor.context.meta.path,
         uri
