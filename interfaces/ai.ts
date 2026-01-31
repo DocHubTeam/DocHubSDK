@@ -55,17 +55,17 @@ export interface IDocHubAIRequest {
     /**
      * Очищает накопившийся контекст
      */
-    clearContext();
+    clearContext(): void;
     /**
      * Отменяет запрос
      * @returns 
      */
-    cancel();
+    cancel(): void;
     /**
      * Отправляет следующий запрос в AI
      * @returns 
      */
-    next(question: string, attachment?: DocHubAIAskAttachment): Promise<void>;
+    next(question: string): Promise<void>;
 }
 
 export type DocHubAIAskAttachmentFileContent = string;
@@ -232,21 +232,37 @@ export interface IDocHubComposerProvider {
 }
 
 export enum DocHubAICapabilityID {
+    roles = 'roles',
     text = 'text',
     attachment = 'attachment',
-    contextWindow = 'context-window'
+    contextWindow = 'context-window',
+    temperature = 'temperature'
 }
 
-export type DocHubAIAttachmentFileContentType = string; // Тип файла в формате расширения (.png) или в формате MIME type (image/*)
+export type DocHubAIAttachmentFileContentType = string;
+
+/**
+ * Роли, которые AI может выполнять
+ */
+export enum DocHubAIRole {
+    coder           = 'coder',          // Помогает кодировать
+    agent           = 'agent',          // Выполняет задания
+    mentor          = 'mentor',         // Обладает знаниями, способными дать важную информацию
+    analyst         = 'analyst'         // Умеет анализировать и делать выводы
+}
 
 /**
  * Метаинформация о возможностях AI-агента
  */
 export interface IDocHubAICapabilities {
     /**
-     * Текстовое резюме от AI о себе
+     * Текстовое резюме от AI
      */
-    description?: DocHubLangString;
+    description?: string;
+    /**
+     * Роли, которые AI-агент может выполнять
+     */
+    [DocHubAICapabilityID.roles]?: DocHubAIRole[];
     /**
      * Способность обрабатывать прикрепленные файлы к сообщению
      */
@@ -259,6 +275,10 @@ export interface IDocHubAICapabilities {
      * Размер контекстного окна
      */
     [DocHubAICapabilityID.contextWindow]?: number;
+    /**
+     * Доступен парамаметр креативности
+     */
+    [DocHubAICapabilityID.temperature]?: boolean;
 }
 
 /**

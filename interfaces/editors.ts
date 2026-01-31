@@ -108,6 +108,27 @@ export type DocHubEditorContext = DocHubEditorFileContext | DocHubEditorObjectCo
  * Предопределенный идентификатор контекста рабочего стола
  */
 export const DESK_CONTEXT_UID = '00000000-0000-0000-0000-000000000000';
+
+/**
+ * Интерфейс динамически вычисляемой области контекста
+ */
+export interface IDocHubContextArea {
+    /**
+     * Метод должен вернуть актуальные данные области контекста.
+     * Должен быть реализован при вызове функции mountAreaToContext владельцем области.
+     */
+    pullData(): Promise<any>;
+    /**
+     * Демонтирует область. 
+     * Реализуется ядром DocHub.
+     */
+    unmount?: () => Promise<void>;
+    /**
+     * Вызывается владельцем области при изменении ее данных, если это необходимо.
+     * Реализуется ядром DocHub.
+     */
+    onChange?: () => Promise<void>;
+}
 /**
  * Интерфейс взаимодействия с редакторами
  */
@@ -127,10 +148,10 @@ export interface IDocHubEditors {
      */
     fetchContexts(): Promise<DocHubEditorContext[] | null>;
     /**
-     * Монтирует область данных в контекст редактирования.
-     * Смонтированная область будет доступна ВО ВСЕХ контекстах.
+     * Монтирует динамически вычисляемую область данных в контекст.
+     * @param uid   - Идентификатор контекста, куда нужно смонтировать вычисляемую область
      * @param prop  - Свойство в context.meta
-     * @param data  - Данные, которые будут смонтированы
+     * @param area  - Интерфейс доступа к 
      */
-    mountContextArea(prop: string, data: any);
+    mountAreaToContext(uid: DocHubContextUID, prop: string, area: IDocHubContextArea): Promise<void>;
 }
