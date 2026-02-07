@@ -1,7 +1,7 @@
 import { DocHubJSONSchema } from '../schemas/basetypes';
 import { DataLakePath } from './datalake';
 import { DocHubEditorContext } from './editors';
-import { DocHubLangString } from './lang';
+
 
 /**
  * События AI 
@@ -27,6 +27,35 @@ export enum DocHubAIEvents {
 export interface IDocHubAIContextPortion {}
 
 /**
+ * Причина вывода моделью
+ */
+export enum DocHubAIRequestTypingReason {
+    /**
+     * Размышления модели
+     */
+    thinking = 'thinking',
+    /**
+     * Использование инструмента
+     */
+    command = 'command',
+    /**
+     * Использование знаний
+     */
+    knowledge = 'knowledge',
+    /**
+     * Ответ модели
+     */
+    response = 'response'
+}
+
+export interface IDocHubAIRequestTypingMeta {
+    reason: DocHubAIRequestTypingReason;
+    payload?: IDocHubAIComposerCommandMeta | IDocHubAIComposerKnowledgeMeta;
+}
+
+export type DocHubAIRequestTyping = (text: string, meta: IDocHubAIRequestTypingMeta) => void;
+
+/**
  * Интерфейс открытого запроса к AI
  */
 export interface IDocHubAIRequest {
@@ -41,8 +70,9 @@ export interface IDocHubAIRequest {
     /**
      * Обрабатывает ответ от AI
      * @param answer    - Ответ от AI
+     * @param meta      - Метаинформация о выводе
      */
-    onTyping?: (answer: string) => void;
+    onTyping?: DocHubAIRequestTyping;
     /**
      * Обрабатывает завершение ответа от AI
      */
@@ -280,6 +310,7 @@ export interface IDocHubAICapabilities {
      */
     [DocHubAICapabilityID.temperature]?: boolean;
 }
+
 
 /**
  * Интерфейс AI ассистента
