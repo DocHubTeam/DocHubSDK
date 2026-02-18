@@ -45,10 +45,15 @@ export enum DocHubAIRequestTypingReason {
     /**
      * Ответ модели
      */
-    response = 'response'
+    response = 'response',
+    /**
+     * Сервисная информация (отладочная, лимиты и т.п.)
+     */
+    service = 'service'
 }
 
 export interface IDocHubAIRequestTypingMeta {
+    // 
     reason: DocHubAIRequestTypingReason;
     payload?: IDocHubAIComposerCommandMeta | IDocHubAIComposerKnowledgeMeta;
 }
@@ -87,6 +92,10 @@ export interface IDocHubAIRequest {
      */
     clearContext(): void;
     /**
+     * Вытягивает актуальные данные контекста из запроса во внутреннем формате (~OpenAI)
+     */
+    pullContext(): Promise<string>;
+    /**
      * Отменяет запрос
      * @returns 
      */
@@ -95,7 +104,7 @@ export interface IDocHubAIRequest {
      * Отправляет следующий запрос в AI
      * @returns 
      */
-    next(question: string): Promise<void>;
+    next(question: string, attachment?: DocHubAIAskAttachment): Promise<void>;
 }
 
 export type DocHubAIAskAttachmentFileContent = string;
@@ -136,12 +145,16 @@ export interface IDocHubAIAskOptions {
      * Файлы прикрепляемые к запросу
      */
     attachment?: DocHubAIAskAttachment;
+    /**
+     * Данные контекста во внутреннем формате (~OpenAI)
+     */
+    context?: string;
 }
 
 /**
  * Тип функции запроса к AI
  */
-export type DocHubAskFunction = (question: string, options?: IDocHubAIAskOptions) => Promise<IDocHubAIRequest>;
+export type DocHubAskFunction = (question?: string, options?: IDocHubAIAskOptions) => Promise<IDocHubAIRequest>;
 
 /**
  * Интерфейс драйвера AI
