@@ -1,8 +1,6 @@
 import { IProtocolResponseOptions, IDocHubProtocolResponse, IDocHubResourceVersion } from './protocols';
-import { DocHubDataSetProfileSource, DocHubJSONataQuery, IDocHubDataSetProfile } from './jsonata';
+import { DocHubDataSetProfileSource, IDocHubDataSetProfile } from './jsonata';
 import { DocHubUITargetWindow } from './ui';
-import { DocHubJSONSchema } from '../schemas/basetypes';
-import { DocHubJSONSchemaFormat, DocHubJSONSchemaFormatCollection, DocHubJSONSchemaFormatController } from '../schemas/fields/suggester';
 import { IDocHubDataLakeSchema } from '../schemas/schema';
 
 export enum DataLakeChange {
@@ -183,6 +181,10 @@ export interface IDocHubTransaction {
      * @param uids              - массив идентификаторов изменений
      */
     deleteFileVersions(uids: string[]): Promise<void>;
+    /**
+     * Ожидает готовности транзакции к взаимодействию 
+     */
+    whenReady(): Promise<void>
 }
 
 /**

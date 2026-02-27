@@ -96,6 +96,11 @@ export interface IDocHubAIRequest {
      */
     pullContext(): Promise<string>;
     /**
+     * Добавляет к текущему контексту сегмент (мерджит)
+     * @param context 
+     */
+    appendContext(context: string): Promise<void>;
+    /**
      * Отменяет запрос
      * @returns 
      */
@@ -230,6 +235,8 @@ export interface IDocHubKnowledgeProvider {
 
 export type IDocHubAIComposerCommandPayload = any;
 
+export type IDocHubAIComposerCommandPullSchema = () => Promise<DocHubJSONSchema>;
+
 export interface IDocHubAIComposerCommandMeta {
     /**
      * Уникальный идентификатор команды
@@ -238,7 +245,7 @@ export interface IDocHubAIComposerCommandMeta {
     /**
      * Схема определяющая payload команды
      */
-    schema: DocHubJSONSchema;
+    schema: DocHubJSONSchema | IDocHubAIComposerCommandPullSchema;
 }
 
 /**
@@ -255,6 +262,23 @@ export interface IDocHubAIComposerKnowledgeMeta {
     description: string;
 }
 
+export type DocHubAIComposerCommandStatus = (payload: any) => void;
+
+/**
+ * Метаданные исполнения команды
+ */
+export interface IDocHubAIComposerCommandOptions {
+    /**
+     * Тэг операции. Если он определен, то результат операции должен быть помечен данным тэгом.
+     * Например, созданные или измененные файлы должны иметь тэги данной операции.
+     */
+    tag?: string;
+    /**
+     * Обработчик внутренних событий команды для отражения статуса ее выполнения
+     */
+    onStatus?: DocHubAIComposerCommandStatus;
+}
+
 /**
  * Интерфейс декларирующий доступную команду для AI
  */
@@ -264,7 +288,7 @@ export interface IDocHubAIComposerCommand extends IDocHubAIComposerCommandMeta {
      * @param payload   - Данны для выполнения команды
      * @returns         - Результат выполнения команды для включения в контекст
      */
-    execute(payload: IDocHubAIComposerCommandPayload): Promise<string>;
+    execute(payload: IDocHubAIComposerCommandPayload, options?: IDocHubAIComposerCommandOptions): Promise<string>;
 }
 
 /**
