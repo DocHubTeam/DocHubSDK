@@ -377,7 +377,7 @@ export interface IDocHubAI {
      * @param payload   - Данные передающиеся для исполнения команды
      * @returns         - Результат исполнения команды, который станет частью контекста
      */
-    execComposerCommand(commandId: string, payload: IDocHubAIComposerCommandPayload): Promise<string>;
+    execComposerCommand(commandId: string, payload: IDocHubAIComposerCommandPayload, options?: IDocHubAIComposerCommandOptions): Promise<string>;
     /**
      * Возвращает все зарегистрированные команды композера
      */
