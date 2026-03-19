@@ -122,6 +122,7 @@ export type IDocHubTransactionFile = {
     uri: string;                                    // URI файла
     content: string;                                // Содержимое файла
     headers: IDocHubTransactionFileHeaders;         // Заголовки (метаданные) файла
+    tags?: string[];                                // Метки 
 }
 
 /**
@@ -163,6 +164,13 @@ export interface IDocHubTransaction {
      * @returns                 - Возвращает массив содержимое найденных файлов
      */
     getFileVersions(uri: string): Promise<IDocHubTransactionChangeRecord[]>;
+
+    /**
+     * Находит версии файлов по тэгам
+     * @param tags              - Массив тэгов для отбора или RegExp 
+     * @returns                 - Возвращает массив версий файлов удовлетворяющих фильтру
+     */
+    getFileVersionsByTags(tags: (string | RegExp)[]): Promise<IDocHubTransactionChangeRecord[]>;
 
     /**
      * Возвращает указанную версию файла
@@ -291,7 +299,10 @@ export interface IDataSetResolveOptions {
     params?: IDocHubPullDataParams; // Передаваемые параметры
 }
 
-
+export interface IDocHubDataLakeChangeMeta {
+    // Метки, для идентификации изменений
+    tags?: string[];
+}
 /**
  * Интерфейс доступа к DataLake
  */
@@ -357,9 +368,10 @@ export interface IDocHubDataLake {
     /**
      * Внесение изменений в DataLake
      * @param changes           - Массив изменений вносимых в DataLake
+     * @param meta              - Метаинформация об изменениях
      * @returns                 - Массив выполненных преобразований
      */
-    pushData(changes: IDataLakeChange[]): Promise<IDataLakeChange[]>;
+    pushData(changes: IDataLakeChange[], meta?: IDocHubDataLakeChangeMeta): Promise<IDataLakeChange[]>;
 
     /**
      * Выполняет запрос к DataLake
@@ -383,24 +395,27 @@ export interface IDocHubDataLake {
      * @param uri               - URI файла во внутреннем формате DocHub
      * @param content           - Содержимое файла
      * @param contentType       - Тип контента
+     * @param meta              - Метаинформация об изменениях
      * @returns                 - Статус выполненного запроса
      */
-    pushFile(uri: string, content: any, contentType: string): Promise<IDocHubProtocolResponse>;
+    pushFile(uri: string, content: any, contentType: string, meta?: IDocHubDataLakeChangeMeta): Promise<IDocHubProtocolResponse>;
 
     /**
      * Удаляет файл из DataLake
      * @param uri               - URI файла во внутреннем формате DocHub
+     * @param meta              - Метаинформация об изменениях
      * @returns                 - Статус выполненного запроса
      */
-    deleteFile(uri: string): Promise<IDocHubProtocolResponse>;
+    deleteFile(uri: string, meta?: IDocHubDataLakeChangeMeta): Promise<IDocHubProtocolResponse>;
 
     /**
      * Переименовывает файл в DataLake
      * @param oldURI            - URI файла который переименовывается
      * @param newURI            - URI в который файл переименовывается
+     * @param meta              - Метаинформация об изменениях
      * @returns                 - Статус выполненного запроса
      */
-    renameFile(oldURI: string, newURI: string): Promise<IDocHubProtocolResponse>;
+    renameFile(oldURI: string, newURI: string, meta?: IDocHubDataLakeChangeMeta): Promise<IDocHubProtocolResponse>;
 
     /**
      * Устанавливает слежение за изменениями в файле

@@ -151,9 +151,9 @@ export interface IDocHubAIAskOptions {
      */
     attachment?: DocHubAIAskAttachment;
     /**
-     * Данные контекста во внутреннем формате (~OpenAI)
+     * URI - рабочее пространство для контекста диалога
      */
-    context?: string;
+    workspace?: string;
 }
 
 /**
@@ -272,7 +272,7 @@ export interface IDocHubAIComposerCommandOptions {
      * Тэг операции. Если он определен, то результат операции должен быть помечен данным тэгом.
      * Например, созданные или измененные файлы должны иметь тэги данной операции.
      */
-    tag?: string;
+    tags?: string[];
     /**
      * Обработчик внутренних событий команды для отражения статуса ее выполнения
      */
